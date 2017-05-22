@@ -17,9 +17,8 @@ class CreatePublicationsTable extends Migration
         Schema::create('publications', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->string('image');
+            $table->string('image')->default('/images/publications/publication_default.jpg');
             $table->date('finish_date');
-            $table->date('creation_date');
             $table->string('content');
             $table->boolean('active')->default(true);
             $table->integer('city_id')->unsigned();

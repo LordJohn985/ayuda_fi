@@ -11,11 +11,11 @@
     <title>Recommend | Dashboard</title>
 
     <!-- Vendor styles -->
-    <link rel="stylesheet" href="css/vendor/fontawesome/css/font-awesome.css"/>
-    <link rel="stylesheet" href="css/vendor/animate.css/animate.css"/>
-    <link rel="stylesheet" href="css/vendor/bootstrap/css/bootstrap.css"/>
-    <link rel="stylesheet" href="css/vendor/datatables/datatables.min.css"/>
-    <link rel="stylesheet" href="css/vendor/toastr/toastr.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/fontawesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="/css/vendor/animate.css/animate.css"/>
+    <link rel="stylesheet" href="/css/vendor/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="/css/vendor/datatables/datatables.min.css"/>
+    <link rel="stylesheet" href="/css/vendor/toastr/toastr.min.css"/>
 
     <!-- App styles -->
     <link rel="stylesheet" href="/css/pe-icons/pe-icon-7-stroke.css"/>

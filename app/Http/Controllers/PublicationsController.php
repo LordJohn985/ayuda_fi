@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Publication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 
@@ -14,7 +18,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class PublicationsController extends Controller
 {
 
-    
+
     #CREATE
     public function getCreatePublication(){
 
@@ -25,50 +29,66 @@ class PublicationsController extends Controller
 
     public function postCreatePublication(Request $request){
 
+        if(!Auth::check()){
+            Redirect::to('/login');
+        }
         #VALIDATE DATA
         $rules = [
-            'title' => 'required|max:255|unique:users,name',
-            'role' => 'required|exist:roles,id',
-            'user_email' => 'required|max:255|unique:users,email',
-            'user_password' => 'required|max:12',
+            'title' => 'required|max:255',
+            'category' => 'required|exists:categories,id',
+            'publication_city' => 'required|exists:cities,id',
+            'finish_date' => 'required|date|after:tomorrow',
         ];
 
         $fields = [
-            'user_name' => $request->user_name,
-            'role' => $request->user_role,
-            'user_email' => $request->user_password,
-            'user_password' => $request->user_password,
+            'title' => $request->title,
+            'category' => $request->category,
+            'publication_city' => $request->city,
+            'finish_date' => $request->finish_date,
 
         ];
         $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
 
         if($validator->fails()){
             $errors = $validator->errors()->all();
-            Session::flash('error', $errors);
-            return Redirect::to('dashboard/publications/list');
+            \Session::flash('error', implode(',',$errors));
+            $publicationIsNew = true;
+            return view('pages.admin.publications.single' ,compact('publicationIsNew','errors'));
         }
 
 
 
-        #CREATE USER
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->role = $request->role;
+        #CREATE PUBLICATION
+        $publication = new Publication();
+        $publication->title = $request->title;
+        $publication->finish_date = $request->finish_date;
+        $publication->content = $request->body_content;
+        $publication->city_id = $request->city;
+        $publication->title = $request->title;
+        $publication->category_id = $request->category;
+        $publication->image = 'algo.jpg';
+        $publication->user_id = Auth::user()->id;
 
-        #SAVE USER
+
+
+        #SAVE PUBLICATION
         try{
-            $user->save();
+            $publication->save();
             $success = 'The operation has succeed';
-            Session::flash('success', $success);
+            \Session::flash('success', $success);
         }catch (\PDOException $e){
             $error = 'The operation has failed';
-            Session::flash('error', $error);
-            Log::info($user);
+            \Session::flash('error', $error);
+            Log::info($e);
         }
 
-        return Redirect::to('dashboard/publications/list');
+        if( $request->hasFile('image') ) {
+            $file = $request->file('image');
+            // Now you have your file in a variable that you can do things with
+            Storage::disk('local')->put('publications/images/'.$publication->id.'jpg', $file);
+        }
+
+        return Redirect::to('dashboard/users/list');
 
     }
 

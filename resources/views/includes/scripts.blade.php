@@ -1,11 +1,12 @@
 
 
     <!-- Vendor scripts -->
-    <script src="css/vendor/pacejs/pace.min.js"></script>
-    <script src="css/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="css/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script src="css/vendor/datatables/datatables.min.js"></script>
-    <script src="css/vendor/toastr/toastr.min.js"></script>
+    <script src="/css/vendor/pacejs/pace.min.js"></script>
+    <script src="/css/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/css/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/css/vendor/datatables/datatables.min.js"></script>
+    <script src="/css/vendor/toastr/toastr.min.js"></script>
+    <script src="{{ asset('/vendors/ckeditor/ckeditor.js') }}"></script>
 
 
     <!-- App scripts -->
