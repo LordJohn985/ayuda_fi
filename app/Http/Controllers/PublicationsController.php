@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Postulation;
 use App\Publication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class PublicationsController extends Controller
 {
-
 
     #CREATE
     public function getCreatePublication(){
@@ -88,7 +88,7 @@ class PublicationsController extends Controller
             Storage::disk('local')->put('publications/images/'.$publication->id.'jpg', $file);
         }
 
-        return Redirect::to('dashboard/users/list');
+        return Redirect::to('home');
 
     }
 
@@ -100,7 +100,9 @@ class PublicationsController extends Controller
     }
 
     public function getShowPublication($publicationId){
-
+        $publication = Publication::find($publicationId);
+        $users = Postulation::where('publication_id', $publicationId)->join('users','users.id','=','postulations.id')->select('users.name')->get();
+        return view("pages.admin.publications.show", compact("users", "publication"));
     }
 
     #UPDATE
@@ -116,6 +118,47 @@ class PublicationsController extends Controller
     public function getDeletePublication($publicationId){
 
     }
+
+    #APLY
+    public function getAplyPublication($publicationId, Request $request){
+
+        #VALIDATE DATA
+        $rules = [
+            'comment' => 'required|max:255',
+        ];
+
+        $fields = [
+            'comment' => $request->comment,
+        ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
+
+        if($validator->fails()){
+            $errors = $validator->errors()->all();
+            \Session::flash('error', implode(',',$errors));
+            return view('home' ,compact('errors'));
+        }
+
+        #CREATE POSTULATION
+        $postulation = new Postulation();
+        $postulation->publication_id=$publicationId;
+        $postulation->user_id=auth::id();
+        $postulation->comment=$request->comment;
+
+        #SAVE POSTULATION
+        try{
+            $postulation->save();
+            $success = 'The operation has succeed';
+            \Session::flash('success', $success);
+        }catch (\PDOException $e){
+            $errors = $e->getMessage();
+            \Session::flash('error', $errors);
+            return view('home' ,compact('errors'));
+        }
+
+        return Redirect::to('home');
+    }
+
 
 
 

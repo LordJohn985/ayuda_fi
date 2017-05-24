@@ -52,7 +52,7 @@
 
             <div class=form-group>
                 <label>Contenido</label>
-                <textarea class="form-control ckeditor" rows="10" cols="100" name="body_content" placeholder="Describa su publicación" value="{{isset($publication->content)?$publication->content:''}}" required></textarea>
+                <textarea class="form-control" rows="10" cols="100" name="body_content" placeholder="Describa su publicación" value="{{isset($publication->content)?$publication->content:''}}" required></textarea>
             </div>
 
             <input class="btn btn-accent pull-right" type="submit" value="Save">

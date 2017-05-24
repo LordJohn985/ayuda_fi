@@ -14,6 +14,7 @@
                     <li><a href="/dashboard/publications/create">Crear</a></li>
                     <li><a href="#">Ver mi listado</a></li>
                     <li><a href="dashboard/publications/list">Ver todas</a></li>
+                    <li><a href="/dashboard/publications/show/{{1}}">Ver gauchada</a></li>
                 </ul>
             </li>
 

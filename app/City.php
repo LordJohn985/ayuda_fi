@@ -25,4 +25,12 @@ class City extends Model
     protected $hidden = [
 
     ];
+
+    #RELATIONSHIPS
+
+    public function publication()
+    {
+        return $this->hasMany('App\Publication');
+    }
+
 }

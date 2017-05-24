@@ -27,10 +27,11 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('dashboard/publications/create','PublicationsController@getCreatePublication');
     Route::post('dashboard/publications/create/','PublicationsController@postCreatePublication');
     Route::get('dashboard/publications/list','PublicationsController@getListPublication');
-    Route::get('dashboard/publications/show/','PublicationsController@getShowPublication');
+    Route::get('dashboard/publications/show/{id}','PublicationsController@getShowPublication');
     Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
     Route::post('dashboard/publications/edit/','PublicationsController@postUpdatePublication');
-    Route::get('dashboard/publications/delete/{id}','PublicationsController@postDeletePublication');
+    Route::get('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
+    Route::get('dashboard/publications/aply/{id}','PublicationsController@getAplyPublication');
     #                               END   PUBLICATIONS                               #
 
 

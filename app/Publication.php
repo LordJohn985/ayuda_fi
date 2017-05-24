@@ -31,4 +31,17 @@ class Publication extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    public function city()
+    {
+        return $this->belongsTo('App\City');
+    }
+    public function category()
+    {
+        return $this->belongsTo('App\Category');
+    }
+    public function postulations()
+    {
+        return $this->hasMany('App\Postulation');
+    }
 }

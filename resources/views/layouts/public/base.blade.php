@@ -21,6 +21,7 @@
 
 <body>
 <div class="wrapper">
+    @include('includes.header')
 
     @yield('content')
 

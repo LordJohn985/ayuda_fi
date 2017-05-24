@@ -18,7 +18,16 @@ class UserTableSeeder extends Seeder
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
-        
+        App\User::create([
+            'name' => 'usuario',
+            'last_name' => 'tester',
+            'email' => 'test@test.com',
+            'password' => bcrypt('123'),
+            'role_id' => 2,
+            'picture'=> '/images/users/default.jpg',
+            'phone' => '3570584',
+            'born_date' => '1987-07-03'
+        ]);
         //factory('App\User', 15)->create();
 
     }
