@@ -9,9 +9,15 @@
                     </a>
                 </div>
             </div>
-            <a class="navbar-brand" href="/">
-                Una Gauchada
-            </a>
+            @if(Auth::user())
+                <a class="navbar-brand" href="home">
+                    Una Gauchada
+                </a>
+            @else
+                <a class="navbar-brand" href="/">
+                    Una Gauchada
+                </a>
+            @endif
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <div class="left-nav-toggle">
@@ -21,30 +27,30 @@
             </div>
         @if (Auth::user()   ) <!-- header when user is logged in-->
             <div class="collapse navbar-collapse" id="myNavbarON">
-                @if(auth::id()==1)
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Usuarios<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/dashboard/users/create">Crear</a></li>
-                                <li><a href="/dashboard/users/list">Listar</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Categorías<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/dashboard/categories/create">Crear</a></li>
-                                <li><a href="/dashboard/categories/list">Listar</a></li>
-                            </ul></li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Publicaciones<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/dashboard/publications/create">Crear</a></li>
-                                <li><a href="/dashboard/publications/list">Listar</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                @endif
+            @if(auth::id()==1)<!-- header when user is admin-->
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Usuarios<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/dashboard/users/create">Crear</a></li>
+                            <li><a href="/dashboard/users/list">Listar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Categorías<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/dashboard/categories/create">Crear</a></li>
+                            <li><a href="/dashboard/categories/list">Listar</a></li>
+                        </ul></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Publicaciones<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/dashboard/publications/create">Crear</a></li>
+                            <li><a href="/dashboard/publications/list">Listar</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            @endif <!-- header when a commmon user is logged in-->
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -64,7 +70,6 @@
                     <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 </ul>
             </div>
-
             @endif
         </div>
 

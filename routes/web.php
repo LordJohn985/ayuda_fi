@@ -27,7 +27,6 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('dashboard/publications/create','PublicationsController@getCreatePublication');
     Route::post('dashboard/publications/create/','PublicationsController@postCreatePublication');
     Route::get('dashboard/publications/list','PublicationsController@getListPublication');
-    Route::get('dashboard/publications/show/{id}','PublicationsController@getShowPublication');
     Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
     Route::post('dashboard/publications/edit/','PublicationsController@postUpdatePublication');
     Route::get('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
@@ -77,9 +76,12 @@ Route::get('/news', 'HomeController@getNews');
 
 
 
+
 ##PUBLICATIONS
 Route::get('publications/list/','PublicationsController@getListPublication');
 Route::get('publications/show/{id}','PublicationsController@getShowPublication');
+Route::get('dashboard/publications/show/{id}','PublicationsController@getShowPublication');
+
 #                               END   PUBLIC ROUTES                               #
 
 
