@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Application;
+use App\Calification;
 use App\Http\Controllers\Controller;
 use App\Postulation;
 use App\Publication;
@@ -101,7 +103,7 @@ class PublicationsController extends Controller
 
     public function getShowPublication($publicationId){
         $publication = Publication::find($publicationId);
-        $users = Postulation::where('publication_id', $publicationId)->join('users','users.id','=','postulations.id')->select('users.name')->get();
+        $users = Postulation::where('publication_id', $publicationId)->join('users','users.id','=','postulations.id')->get();
         return view("pages.admin.publications.show", compact("users", "publication"));
     }
 
@@ -120,7 +122,7 @@ class PublicationsController extends Controller
     }
 
     #APLY
-    public function getAplyPublication($publicationId, Request $request){
+    public function postAplyPublication($publicationId, Request $request){
 
         #VALIDATE DATA
         $rules = [
@@ -144,10 +146,36 @@ class PublicationsController extends Controller
         $postulation->publication_id=$publicationId;
         $postulation->user_id=auth::id();
         $postulation->comment=$request->comment;
+        \Log::info($postulation);
+
 
         #SAVE POSTULATION
         try{
             $postulation->save();
+            $success = 'The operation has succeed';
+            \Session::flash('success', $success);
+        }catch (\PDOException $e){
+            $errors = $e->getMessage();
+            \Session::flash('error', $errors);
+            \Log::info($e);
+            return view('home' ,compact('errors'));
+        }
+
+        return Redirect::to('home');
+    }
+
+
+    #SELECT CANDIDATE
+    public function getSelectCandidate($userId, $publicationId){
+
+        #CREATE CANDIDACY
+        $calification = new Calification();
+        $calification->publication_id=$publicationId;
+        $calification->selected_user_id=$userId;
+
+        #SAVE CANDIDACY
+        try{
+            $calification->save();
             $success = 'The operation has succeed';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
@@ -158,9 +186,6 @@ class PublicationsController extends Controller
 
         return Redirect::to('home');
     }
-
-
-
 
 
 

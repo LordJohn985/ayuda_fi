@@ -30,7 +30,7 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
     Route::post('dashboard/publications/edit/','PublicationsController@postUpdatePublication');
     Route::get('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
-    Route::get('dashboard/publications/aply/{id}','PublicationsController@getAplyPublication');
+    Route::get('dashboard/publications/selectCandidate/{user_id}/{publication_id}','PublicationsController@getSelectCandidate');
     #                               END   PUBLICATIONS                               #
 
 
@@ -63,6 +63,11 @@ Route::group(['middleware' => 'checkRole'], function () {
 
 
 
+});
+
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::post('dashboard/publications/aply/{id}', 'PublicationsController@postAplyPublication');
 });
 
 

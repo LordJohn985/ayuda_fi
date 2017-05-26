@@ -44,4 +44,8 @@ class Publication extends Model
     {
         return $this->hasMany('App\Postulation');
     }
+    public function califications()
+    {
+        return $this->hasMany('App\Calification');
+    }
 }

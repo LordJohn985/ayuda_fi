@@ -2,27 +2,24 @@
 
 namespace App;
 
-
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Calification extends Model
+
+
+class Application extends Model
 {
 
-    use softDeletes;
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'content',
+        'comment'
     ];
 
     /**
@@ -31,7 +28,7 @@ class Calification extends Model
      * @var array
      */
     protected $hidden = [
-
+      
     ];
 
     #RELATIONSHIPS
@@ -43,4 +40,5 @@ class Calification extends Model
     {
         return $this->belongsTo('App\Publication');
     }
+
 }

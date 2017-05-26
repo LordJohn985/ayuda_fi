@@ -35,15 +35,15 @@ use App\City;
             <label>Contenido</label>
             <div class="panel-body" >{{$publication->content}}</div>
         </div>
-        @if(!auth::id()==1)
-            <form action="/dashboard/publications/aply/{{$publication->id}}" method="GET" id="form-update">
+        @if(auth::check() && auth::id()!=$publication->user->id)
+            <form action="/dashboard/publications/aply/{{$publication->id}}" method="POST" id="form-update">
                 <input type="submit" value="Postularse">
                 <label>Comentario de postulacion:</label>
                 <input type="textarea" name="comment" required>
-                <input type="hidden" name="_method" value="GET">
+                <input type="hidden" name="_method" value="POST">
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             </form>
-        @else
+        @elseif(auth::id()==$publication->user->id)
             <div class="table-responsive">
                 <table id="tableExample2" class="table table-striped table-hover">
                     <thead>
@@ -59,11 +59,10 @@ use App\City;
                     @foreach( $users as $user)
                         <tr>
                             <td>{{$user->name}}</td>
-                            <td>{{$user->}}</td>
-                            <td>{{$user->image}}</td>
+                            <td>{{$user->comment}}</td>
+                            <td>{{$user->score}}</td>
                             <td>
-                                <a href="/dashboard/update-article/{{$article->id}}">Edit</a>
-                                <a href="/dashboard/delete-article/{{$article->id}}">Delete</a>
+                                <a href="/dashboard/publications/selectCandidate/{{$user->id}}/{{$publication->id}}">Elegir</a>
                             </td>
                         </tr>
                     @endforeach

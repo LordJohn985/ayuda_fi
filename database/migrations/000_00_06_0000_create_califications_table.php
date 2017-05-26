@@ -22,9 +22,10 @@ class CreateCalificationsTable extends Migration
             $table->foreign('selected_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('publication_id')->unsigned();
             $table->foreign('publication_id')->references('id')->on('publications')->onDelete('cascade');
-            $table->integer('label_id')->unsigned();
+            $table->integer('label_id')->unsigned()->default(1);
             $table->foreign('label_id')->references('id')->on('labels')->onDelete('cascade');
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
