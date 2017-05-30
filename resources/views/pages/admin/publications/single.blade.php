@@ -34,9 +34,13 @@
                 <label>Ciudad</label>
                 <select class="form-control" name="city">
                     @foreach(\App\City::all() as $city)
-                        <option value="{{$city->id}}">{{$city->name}}</option>
-                    @endforeach
-                    <option value="{{isset($publication->city)?$publication->city->id:''}}" selected="selected">{{isset($publication->city)?$publication->city->name:''}} </option>
+                        @if($publicationIsNew)
+                            <option value="{{$city->id}}">{{$city->name}}</option>
+                        @else
+                            <option value="{{$city->id}}" selected="selected">{{$city->name}}</option>
+                        @endif
+                            @endforeach
+                    {{--<option value="{{isset($publication->city)?$publication->city->id:''}}" selected="selected">{{isset($publication->city)?$publication->city->name:''}} </option>--}}
                 </select>
             </div>
 
@@ -44,9 +48,13 @@
                 <label>Categoría</label>
                 <select class="form-control" name="category">
                     @foreach(\App\Category::all() as $category)
-                        <option value="{{$category->id}}">{{$category->name}}</option>
+                        @if($publicationIsNew)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @else
+                            <option value="{{$category->id}}" selected="selected">{{$category->name}}</option>
+                        @endif
                     @endforeach
-                    <option value="{{isset($publication->category)?$publication->category->id:''}}" selected="selected">{{isset($publication->category)?$publication->category->name:''}} </option>
+                    {{--<option value="{{isset($publication->category)?$publication->category->id:''}}" selected="selected">{{isset($publication->category)?$publication->category->name:''}} </option>--}}
                 </select>
             </div>
 

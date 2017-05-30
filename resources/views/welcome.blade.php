@@ -1,19 +1,33 @@
 @extends('layouts.public.base')
 
 @section('content')
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                  <h1>
-
-
-
-
-
-                  </h1>
-                </div>
-            </div>
-        </div>
+    <div class="content table-responsive">
+        <table id="tableExample2" class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Fecha Creacion</th>
+                <th>Autor</th>
+                <th>Titulo</th>
+                <th>Categoría</th>
+                <th>Ciudad</th>
+                <th class="no-sort" >Imagen</th>
+                <th>Postulantes</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach( $publications as $publication)
+                <tr>
+                    <td>{{$publication->created_at}}</td>
+                    <td>{{$publication->user->name}}</td>
+                    <td><a href=/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
+                    <td>{{$publication->category->name}}</td>
+                    <td>{{$publication->city}}</td>
+                    <td>{{$publication->picture}}</td>
+                    <td>{{$publication->postulations->count()}}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
     </div>
+    {{-- $publications->links()--}}
 @endsection

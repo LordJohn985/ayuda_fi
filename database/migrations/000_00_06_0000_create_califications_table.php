@@ -17,7 +17,7 @@ class CreateCalificationsTable extends Migration
 
         Schema::create('califications', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('content');
+            $table->string('content')->nullable();
             $table->integer('selected_user_id')->unsigned();
             $table->foreign('selected_user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('publication_id')->unsigned();

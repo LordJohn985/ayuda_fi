@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateLabelsTable extends Migration
+class CreateReputationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,10 @@ class CreateLabelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('labels', function (Blueprint $table) {
+        Schema::create('reputations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->integer('necesary_score');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -30,7 +31,7 @@ class CreateLabelsTable extends Migration
     public function down()
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        Schema::dropIfExists('labels');
+        Schema::dropIfExists('reputations');
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

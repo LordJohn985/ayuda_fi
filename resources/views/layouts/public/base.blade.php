@@ -21,7 +21,7 @@
 
 <body>
 <div class="wrapper">
-    @include('includes.header')
+    @include('includes.publicHeader')
 
     @yield('content')
 
@@ -30,16 +30,16 @@
     @include('includes.components.admin.notification')
     @yield('content')
 
-    @include('includes.components.admin.footer')
+    @include('includes.components.admin.footer')--}}
 
-    @include('includes.components.admin.scripts')--}}
+    @include('includes.scripts')
 
 </div><!--/wrapper-->
 
 <!-- Vendor scripts -->
 <script src="css/vendor/pacejs/pace.min.js"></script>
-<script src="css/vendor/jquery/dist/jquery.min.js"></script>
-<script src="css/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--<script src="css/vendor/jquery/dist/jquery.min.js"></script> -->
+<!--<script src="css/vendor/bootstrap/js/bootstrap.min.js"></script> -->
 
 <!-- App scripts -->
 <script src="js/luna.js"></script>

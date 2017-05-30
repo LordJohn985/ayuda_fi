@@ -43,4 +43,8 @@ class Calification extends Model
     {
         return $this->belongsTo('App\Publication');
     }
+    public function label()
+    {
+        return $this->belongsTo('App\Label');
+    }
 }

@@ -6,7 +6,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Label extends Model
+class Reputation extends Model
 {
 
     use softDeletes;
@@ -22,7 +22,7 @@ class Label extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'name', 'necesary_score',
     ];
 
     /**
@@ -34,9 +34,4 @@ class Label extends Model
 
     ];
 
-    #RELATIONSHIPS
-    public function calification()
-    {
-        return $this->belongsTo('App\Calification');
-    }
 }

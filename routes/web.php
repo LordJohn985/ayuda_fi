@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PublicationsController@getHome');
 
 
 
@@ -24,8 +22,6 @@ Route::group(['middleware' => 'checkRole'], function () {
 
 
     #                               BEGIN PUBLICATIONS                               #
-    Route::get('dashboard/publications/create','PublicationsController@getCreatePublication');
-    Route::post('dashboard/publications/create/','PublicationsController@postCreatePublication');
     Route::get('dashboard/publications/list','PublicationsController@getListPublication');
     Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
     Route::post('dashboard/publications/edit/','PublicationsController@postUpdatePublication');
@@ -68,6 +64,12 @@ Route::group(['middleware' => 'checkRole'], function () {
 Route::group(['middleware' => 'auth'], function () {
 
     Route::post('dashboard/publications/aply/{id}', 'PublicationsController@postAplyPublication');
+    Route::post('dashboard/publications/rate/{id}', 'PublicationsController@postRateCandidate');
+    Route::get('dashboard/publications/create','PublicationsController@getCreatePublication');
+    Route::post('dashboard/publications/create/','PublicationsController@postCreatePublication');
+    Route::get('dashboard/users/buyCredits', 'UsersController@getBuyCredits');
+    Route::post('dashboard/users/buyCredits', 'UsersController@postBuyCredits');
+
 });
 
 
@@ -86,6 +88,10 @@ Route::get('/news', 'HomeController@getNews');
 Route::get('publications/list/','PublicationsController@getListPublication');
 Route::get('publications/show/{id}','PublicationsController@getShowPublication');
 Route::get('dashboard/publications/show/{id}','PublicationsController@getShowPublication');
+Route::get('dashboard/publications/filter', 'PublicationsController@getFilterPublication');
+Route::post('dashboard/publications/filter', 'PublicationsController@postFilterPublication');
+Route::get('dashboard/publications/unfilter', 'PublicationsController@getUnfilterPublication');
+Route::post('dashboard/publications/unfilter', 'PublicationsController@postUnfilterPublication');
 
 #                               END   PUBLIC ROUTES                               #
 

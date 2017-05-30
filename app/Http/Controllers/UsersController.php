@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Publication;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -193,6 +194,39 @@ class UsersController extends Controller
             return response("The action can't be performed.",500);
         }
 
+    }
+
+    public function getBuyCredits (){
+        return view('pages.admin.users.purchaseView');
+    }
+
+    public function postBuyCredits (Request $request){
+        switch ($request->credit_card){
+            case '4242424242424242':
+                $errors = 'La tarjeta no tiene saldo.';
+                \Session::flash('error', $errors);
+                return view('pages.admin.users.purchaseView', compact('errors'));
+                break;
+            case '5105105105100510':
+                $errors = 'La tarjeta es inválida.';
+                \Session::flash('error', $errors);
+                return view('pages.admin.users.purchaseView', compact('errors'));
+                break;
+            default:
+                $user = User::find(auth::id());
+                $user->credits += $request->credits;
+                try{
+                    $user->save();
+                    $success = 'La compra se realizó con éxito';
+                    \Session::flash('success', $success);
+                }catch(\PDOException $e){
+                    $error = 'The operation has failed';
+                    \Session::flash('error', $error);
+                }
+                $publications = Publication::all();
+                return view('home', compact('success', 'publications'));
+                break;
+        }
     }
 
     

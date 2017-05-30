@@ -2,15 +2,15 @@
 
 use Illuminate\Database\Seeder;
 
-class CategoryTableSeeder extends Seeder
+class LabelTableSeeder extends Seeder
 {
 
     public function run()
     {
-        App\Category::create(['name' => 'sin calificar']);
-        App\Category::create(['name' => 'negativo']);
-        App\Category::create(['name' => 'neutral']);
-        App\Category::create(['name' => 'positivo']);
+        App\Label::create(['name' => 'sin calificar']);
+        App\Label::create(['name' => 'negativo']);
+        App\Label::create(['name' => 'neutral']);
+        App\Label::create(['name' => 'positivo']);
     }
 
 }
