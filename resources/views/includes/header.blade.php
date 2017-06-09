@@ -52,6 +52,7 @@
                 </ul>-->
             @endif <!-- header when a commmon user is logged in-->
                 <ul class="nav navbar-nav navbar-right">
+                    <li style="padding: 20px; font-weight: bold;">Bienvenido {{auth::user()->name}}</li>
                     <li><img src="/images/institucional/logo_gauchada.png" style="height: 60px" alt=""></li>
                     <li>
                         <a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

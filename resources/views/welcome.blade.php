@@ -21,7 +21,7 @@
                     <td>{{$publication->user->name}}</td>
                     <td><a href=/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
                     <td>{{$publication->category->name}}</td>
-                    <td>{{$publication->city}}</td>
+                    <td>{{$publication->city->name}}</td>
                     <td>{{$publication->picture}}</td>
                     <td>{{$publication->postulations->count()}}</td>
                 </tr>

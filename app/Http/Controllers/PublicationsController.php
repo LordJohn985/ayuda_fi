@@ -288,24 +288,12 @@ class PublicationsController extends Controller
 
         if(Auth::check()){
             $publications = Publication::with('user')->paginate(5);
-            return Redirect::to('home', compact('publications'));
+            return VIEW('home', compact('publications'));
         }else{
             $publications = Publication::all();
             return view('welcome', compact('publications'));
         }
     }
-
-    public function getFilterPublication(Request $request)
-    {
-
-    }
-
-    public function getUnfilterPublication(Request $request)
-    {
-        $publications = Publication::all();
-        return view('home', compact('publications'));
-    }
-
 
 
 

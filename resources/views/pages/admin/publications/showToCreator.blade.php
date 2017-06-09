@@ -68,6 +68,7 @@ use App\City;
         @elseif($candidateIsRated->label->id == 1)
             {{--form to rate candidate--}}
             <form action="/dashboard/publications/rate/{{$publication->id}}" method="POST" id="form-update">
+                <label>Usuario elegido: {{$candidateSelected->user->name}}</label>
                 <input type="submit" value="Calificar">
                 <label>Comentario de calificacion:</label>
                 <input type="textarea" name="comment" required>

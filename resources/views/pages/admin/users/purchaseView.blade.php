@@ -14,7 +14,12 @@
                 <input  type="number" class="form-control"  name="credit_card" required>
             </div>
 
-            <input class="btn btn-accent pull-right" type="submit" value="Commprar">
+            <div class=form-group>
+                <label>Código de seguridad</label>
+                <input  type="number" class="form-control"  name="security_code" required>
+            </div>
+
+            <input class="btn btn-accent pull-right" type="submit" value="Comprar">
 
             {{ csrf_field() }}
 
