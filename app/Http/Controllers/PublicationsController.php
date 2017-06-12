@@ -10,6 +10,7 @@ use App\Publication;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -81,7 +82,7 @@ class PublicationsController extends Controller
         $publication->city_id = $request->city;
         $publication->title = $request->title;
         $publication->category_id = $request->category;
-        $publication->image = 'algo.jpg';
+        $publication->image = '\images\publications\default_publication_pic.jpeg';
         $publication->user_id = Auth::user()->id;
 
 
@@ -97,10 +98,23 @@ class PublicationsController extends Controller
             Log::info($e);
         }
 
+        #STORE UPLOADED IMAGE
         if( $request->hasFile('image') ) {
             $file = $request->file('image');
             // Now you have your file in a variable that you can do things with
-            Storage::disk('local')->put('publications/images/'.$publication->id.'jpg', $file);
+            $name = 'publication'.$publication->id.'.png';
+            $path = '/storage/publications/'.$name;
+            Storage::disk('public')->put('/publications/'.$name, file_get_contents($file));
+            try{
+                $publication->image=$path;
+                $publication->save();
+                $success = 'The operation has succeed';
+                \Session::flash('success', $success);
+            }catch (\PDOException $e){
+                $error = 'The operation has failed';
+                \Session::flash('error', $error);
+                Log::info($e);
+            }
         }
 
         $publications = Publication::all();

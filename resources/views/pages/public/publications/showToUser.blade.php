@@ -14,7 +14,9 @@ use App\City;
 
         <div class=form-group>
             <label>Imagen</label>
-            <div class="panel-body">{{$publication->image}}</div>
+           {{-- <div class="panel-body">{{$publication->image}}</div>--}}
+            {{--<div class="panel-body">{{$publicationImage}}</div>--}}
+            <img src="{{$publication->image}}">
         </div>
 
         <div class=form-group>
