@@ -85,6 +85,19 @@ class PublicationsController extends Controller
         $publication->image = '\images\publications\default_publication_pic.jpeg';
         $publication->user_id = Auth::user()->id;
 
+        #CHARGE PUBLICATION COST
+        $user = User::findOrFail(Auth::user()->id);
+        $user->credits --;
+        try{
+            $user->save();
+            $success = 'The operation has succeed';
+            \Session::flash('success', $success);
+        }catch (\PDOException $e){
+            $error = 'The operation has failed';
+            \Session::flash('error', $error);
+            Log::info($e);
+        }
+
 
 
         #SAVE PUBLICATION
