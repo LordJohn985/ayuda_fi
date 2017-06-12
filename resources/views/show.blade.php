@@ -13,7 +13,7 @@ use App\City;
 
         <div class=form-group>
             <label>Imagen</label>
-            <div class="panel-body">{{$publication->image}}</div>
+            <img src="{{asset($publication->image)}}">
         </div>
 
         <div class=form-group>
