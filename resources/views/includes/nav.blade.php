@@ -22,7 +22,6 @@
                 <ul id="publications" class="nav nav-second collapse">
                     <li><a href="/dashboard/publications/create">Crear</a></li>
                     <li><a href="#">Ver mis Gauchadas</a></li>
-                    <li><a href="/dashboard/publications/show/{{1}}">Ver gauchada</a></li>
                 </ul>
             </li>
             @if(auth::id()==1)
@@ -32,7 +31,7 @@
                     </a>
                     <ul id="admin" class="nav nav-second collapse">
                         <li><a href="#">Ver ganancias</a></li>
-                        <li><a href="#">Crear reputaciones</a></li>
+                        <li><a href="/reputations">Reputaciones</a></li>
                         <li><a href="#">Crear categorias</a></li>
                         <li><a href="#">Setear configuraciones</a></li>
                     </ul>

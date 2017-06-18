@@ -52,6 +52,12 @@ Route::group(['middleware' => 'checkRole'], function () {
     #                               END   USERS                               #
 
 
+    #                               BEGIN REPUTATIONS                           #
+    Route::get('reputations',"ReputationsController@getListReputations");
+    Route::get('reputations/create',"ReputationsController@getCreateReputation");
+    Route::post('reputations/create',"ReputationsController@postCreateReputation");
+    #                               END REPUTATIONS#
+
 
     #                               BEGIN LOGS                               #
     Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
