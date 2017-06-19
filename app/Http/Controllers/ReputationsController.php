@@ -117,8 +117,8 @@ class ReputationsController extends Controller
     		\Session::flash('error',$error);
     	}
     	else{
-    		try{
-	    		$reputation=Reputation::findOrFail($reputationId);
+	    	$reputation=Reputation::find($reputationId);
+	    	if($reputation!==null){
 		    	try{
 		    		$reputation->delete();
 		    		$success='Reputacion eliminada';
@@ -129,7 +129,7 @@ class ReputationsController extends Controller
 		    		\Session::flash('error',$error);
 		    	}
 	    	}
-	    	catch(\NotFoundHttpException $e){
+	    	else{
 	    		$error='La reputacion no existe';
 	    		\Session::flash('error',$error);
 	    	}
