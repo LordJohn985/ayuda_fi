@@ -112,6 +112,28 @@ class ReputationsController extends Controller
     }
 
     public function getDeleteReputation($reputationId){
-    	$
+    	if($reputationId<=2){
+    		$error='La reputacion elegida no se puede eliminar';
+    		\Session::flash('error',$error);
+    	}
+    	else{
+    		try{
+	    		$reputation=Reputation::findOrFail($reputationId);
+		    	try{
+		    		$reputation->delete();
+		    		$success='Reputacion eliminada';
+		    		\Session::flash('success',$success);
+		    	}
+		    	catch(\PDOExeption $e){
+		    		$error='No se ha podido eliminar la reputacion';
+		    		\Session::flash('error',$error);
+		    	}
+	    	}
+	    	catch(\NotFoundHttpException $e){
+	    		$error='La reputacion no existe';
+	    		\Session::flash('error',$error);
+	    	}
+    	}
+    	return self::getListReputations();
     }
 }
