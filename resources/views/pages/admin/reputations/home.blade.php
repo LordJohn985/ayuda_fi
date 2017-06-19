@@ -8,19 +8,27 @@
 		<table id="tableExample2" class="table table-striped table-hover">
 			<thead>
 				<tr>
-					<th>Nombre reputacion</th>
 					<th>Puntaje necesario</th>
+					<th>Nombre reputacion</th>
+						<th>Modificar</th>
+						<th>Eliminar</th>					
 				</tr>
 			</thead>
 			<tbody>
 				@foreach($reputations as $reputation)
 					<tr>
-						<td>{{$reputation->name}}</td>
 						<td>{{$reputation->necesary_score}}</td>
-						@if(($reputation->id)>2)
-							<td><a href="#">Modificar</a></td>
-							<td><a href="#">Eliminar</a></td>
-						@endif
+						<td>{{$reputation->name}}</td>
+							<td>
+								@if(($reputation->id)>2)
+									<a href="/reputations/edit/{{$reputation->id}}">Modificar</a>
+								@endif
+							</td>
+							<td>
+								@if(($reputation->id)>2)
+									<a href="/reputations/delete/{{$reputation->id}}" onclick="return confirm('¿Esta seguro que desea eliminar esta reputacion?')">Eliminar</a>
+								@endif
+							</td>	
 					</tr>
 				@endforeach
 			</tbody>

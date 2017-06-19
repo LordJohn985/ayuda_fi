@@ -56,6 +56,9 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('reputations',"ReputationsController@getListReputations");
     Route::get('reputations/create',"ReputationsController@getCreateReputation");
     Route::post('reputations/create',"ReputationsController@postCreateReputation");
+    Route::get('reputations/edit/{id}','ReputationsController@getEditReputation');
+    Route::post('reputations/edit/{id}',"ReputationsController@postEditReputation");
+    Route::get('reputations/delete/{id}',"ReputationsController@getDeleteReputation");
     #                               END REPUTATIONS#
 
 
