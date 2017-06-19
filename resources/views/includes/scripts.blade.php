@@ -12,6 +12,23 @@
     <!-- App scripts -->
     <script src="/js/luna.js"></script>
 
+    <script>
+        $(document).ready(function () {
+            toastr.options = {
+                "debug": false,
+                "newestOnTop": false,
+                "positionClass": "toast-bottom-right",
+                "closeButton": true,
+                "progressBar": true
+            };
+
+
+            if($('#alert-get').data('has-success')==true){
+                toastr.success("operacion exitosa")
+            }
+        });
+    </script>
+
 
 
     <script>
@@ -32,6 +49,38 @@
 
         });
 
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+
+            toastr.options = {
+                "debug": false,
+                "newestOnTop": false,
+                "positionClass": "toast-bottom-right",
+                "closeButton": true,
+                "progressBar": true
+            };
+
+            $('.homerDemo1').on('click', function(event){
+                toastr.info('Info - This is a custom LUNA info notification');
+            });
+
+            $('.homerDemo2').on('click', function(event){
+                toastr.success('Success - This is a LUNA success notification');
+            });
+
+            $('.homerDemo3').on('click', function(event){
+                toastr.warning('Warning - This is a LUNA warning notification');
+            });
+
+            $('.homerDemo4').on('click', function(event){
+                toastr.error('Error - This is a LUNA error notification');
+            });
+
+
+        });
     </script>
 
     @if((Request::path() == "dashboard"))

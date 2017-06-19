@@ -11,7 +11,7 @@
 					<th>Puntaje necesario</th>
 					<th>Nombre reputacion</th>
 						<th>Modificar</th>
-						<th>Eliminar</th>					
+						<th>Eliminar</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,7 +28,7 @@
 								@if(($reputation->id)>2)
 									<a href="/reputations/delete/{{$reputation->id}}" onclick="return confirm('¿Esta seguro que desea eliminar esta reputacion?')">Eliminar</a>
 								@endif
-							</td>	
+							</td>
 					</tr>
 				@endforeach
 			</tbody>

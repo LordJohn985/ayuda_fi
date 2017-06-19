@@ -58,11 +58,47 @@ class RegisterController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
-     *
+     * The user is created with the uploaded photo profile.
      * @param  array  $data
      * @return User
      */
-    protected function create(array $data)
+    protected function createWithPicture(array $data)
+    {
+        $user = User::create([
+            'name' => $data['name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
+            'born_date' => $data['birth'],
+            'picture' => '\images\users\defualt_photo_profile.jpeg',
+
+            'password' => bcrypt($data['password']),
+        ]);
+
+        $file = $data->file('picture');
+        // Now you have your file in a variable that you can do things with
+        $name = 'user'.$user->id.'.png';
+        $path = '/storage/users/'.$name;
+        Storage::disk('public')->put('/users/'.$name, file_get_contents($file));
+        try{
+            $user->picture=$path;
+            $user->save();
+            $success = 'The operation has succeed';
+            \Session::flash('success', $success);
+        }catch (\PDOException $e){
+            $error = 'The operation has failed';
+            \Session::flash('error', $error);
+            Log::info($e);
+        }
+        return $user;
+    }
+    /**
+     * Create a new user instance after a valid registration.
+     * The user is created with the default photo profile.
+     * @param  array  $data
+     * @return User
+     */
+    protected function createWithoutPicture(array $data)
     {
         return User::create([
             'name' => $data['name'],
@@ -70,7 +106,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
             'born_date' => $data['birth'],
-
+            'picture' => '\images\users\defualt_photo_profile.jpeg',
 
             'password' => bcrypt($data['password']),
         ]);

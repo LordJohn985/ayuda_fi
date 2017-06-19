@@ -1,7 +1,5 @@
 @if (Session::has('success'))
-    <div class="col-md-6 pull-right">
-        <div class="alert alert-success fade in">
-            <strong>{{ Session::get('success') }}</strong>
-        </div>
+    <div class="pull-right">
+        <div id="alert-get"  data-has-success="true" style="display:none">{{Session::get('success')}}</div>
     </div>
 @endif

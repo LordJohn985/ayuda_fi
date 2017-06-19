@@ -166,36 +166,6 @@ class UsersController extends Controller
 
     }
 
-    #DELETE
-    public function getDeleteUser ($user_id, Request $request){
-        $result='success';
-        $user=null;
-        #RETRIEVE USER
-        try{
-            $user = User::findOrFail($user_id);
-        }catch (ModelNotFoundException $e){
-            $error = 'User not found';
-            \Session::flash('error', $error);
-            $result='fail';
-        }
-
-        try{
-            $user->delete();
-            $error = 'success';
-        }catch (\PDOException $e){
-            $error = 'The operation has failed';
-            \Session::flash('error', $error);
-            $result='fail';
-        }
-
-        if($result=='success'){
-            return response('The user has been deleted.',200);
-        }else{
-            return response("The action can't be performed.",500);
-        }
-
-    }
-
     public function getBuyCredits (){
         return view('pages.admin.users.purchaseView');
     }
@@ -228,6 +198,38 @@ class UsersController extends Controller
                 break;
         }
     }
+
+    #DELETE
+    public function getDeleteUser ($user_id, Request $request){
+        $result='success';
+        $user=null;
+        #RETRIEVE USER
+        try{
+            $user = User::findOrFail($user_id);
+        }catch (ModelNotFoundException $e){
+            $error = 'User not found';
+            \Session::flash('error', $error);
+            $result='fail';
+        }
+
+        try{
+            $user->delete();
+            $error = 'success';
+        }catch (\PDOException $e){
+            $error = 'The operation has failed';
+            \Session::flash('error', $error);
+            $result='fail';
+        }
+
+        if($result=='success'){
+            return response('The user has been deleted.',200);
+        }else{
+            return response("The action can't be performed.",500);
+        }
+
+    }
+
+
 
     
 

@@ -14,11 +14,11 @@
     <link rel="stylesheet" href="/css/vendor/toastr/toastr.min.css"/>
 
     <!-- App styles -->
-    <link rel="stylesheet" href="css/pe-icons/pe-icon-7-stroke.css"/>
-    <link rel="stylesheet" href="css/pe-icons/helper.css"/>
-    <link rel="stylesheet" href="css/stroke-icons/style.css"/>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="/css/style-custom.css">
+    <link rel="stylesheet" href="/css/pe-icons/pe-icon-7-stroke.css"/>
+    <link rel="stylesheet" href="/css/pe-icons/helper.css"/>
+    <link rel="stylesheet" href="/css/stroke-icons/style.css"/>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/style-custom.css">
 
 </head>
 
@@ -26,14 +26,14 @@
 <div class="wrapper">
     @include('includes.publicHeader')
 
-    @yield('content')
-
     {{--@include('includes.components.admin.header')
     @include('includes.components.admin.sidebar')
-    @include('includes.components.admin.notification')
+    @include('includes.components.admin.notification')--}}
+    @include('includes.alert-error')
+    @include('includes.alert-success')
     @yield('content')
 
-    @include('includes.components.admin.footer')--}}
+    {{--@include('includes.components.admin.footer')--}}
 
     @include('includes.scripts')
 

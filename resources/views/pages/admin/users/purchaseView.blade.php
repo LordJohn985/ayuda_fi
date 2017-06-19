@@ -6,7 +6,7 @@
 
             <div class=form-group>
                 <label>Cantidad de créditos a comprar</label>
-                <input  type="number" class="form-control"  name="credits" placeholder="0" required>
+                <input  type="number" id="cant" class="form-control"  name="credits" placeholder="0" required>
             </div>
 
             <div class=form-group>
@@ -19,6 +19,11 @@
                 <input  type="number" class="form-control"  name="security_code" required>
             </div>
 
+            <div>
+                <label>Precio a pagar</label>
+                <p id="show-cant"></p>
+            </div>
+
             <input class="btn btn-accent pull-right" type="submit" value="Comprar">
 
             {{ csrf_field() }}
@@ -27,4 +32,8 @@
 
     </section>
 
+@stop
+
+@section('script')
+    <script src="{{asset('js/managePrice.js')}}"></script>
 @stop

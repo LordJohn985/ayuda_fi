@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="/css/stroke-icons/style.css"/>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/style-custom.css">
+
 </head>
 <body>
 
@@ -45,7 +46,7 @@
     @include('includes.scripts')
 
 </div>
-
+@yield('script')
 </body>
 
 </html>
