@@ -64,7 +64,7 @@ class ReputationsController extends Controller
 	       Log::info($e);
 	    }
     	$reputationIsNew=true;
-    	return view('pages.admin.reputations.single',compact('reputationIsNew'));
+    	return self::getListReputations();
     }
 
     public function getEditReputation($reputationId){

@@ -18,7 +18,6 @@ class CreateReputationsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('necesary_score');
-            //$table->softDeletes();
             $table->timestamps();
         });
     }
