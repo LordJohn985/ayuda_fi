@@ -78,9 +78,9 @@
                             </div>
 
                             <div class=form-group>
-                                <label for="picture" class="col-md-4 control-label">Imagen</label>
+                                <label class="col-md-4 control-label">Imagen</label>
                                 <div class="col-md-6">
-                                    <input  type="file" class="form-control" rows="3" name="picture" placeholder="Imagen" value="{{old('picture')}}">
+                                    <input  type="file" class="form-control" rows="3" name="picture" value="{{old('picture')}}">
                                     @if ($errors->has('picture'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('picture') }}</strong>

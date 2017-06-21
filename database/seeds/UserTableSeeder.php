@@ -15,7 +15,7 @@ class UserTableSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => bcrypt('123'),
             'role_id' => 1,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -25,7 +25,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test1@test1.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -35,7 +35,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test2@test2.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -45,7 +45,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test3@test3.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -55,7 +55,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test4@test4.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -65,7 +65,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test5@test5.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -75,7 +75,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test6@test6.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -85,7 +85,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test7@test7.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -95,7 +95,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test8@test8.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -105,7 +105,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test9@test9.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -115,7 +115,7 @@ class UserTableSeeder extends Seeder
             'email' => 'test10@test10.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -126,7 +126,7 @@ class UserTableSeeder extends Seeder
             'password' => bcrypt('123'),
             'role_id' => 2,
             'credits' => 15,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -137,7 +137,7 @@ class UserTableSeeder extends Seeder
             'password' => bcrypt('123'),
             'role_id' => 2,
             'credits' => 0,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -148,7 +148,7 @@ class UserTableSeeder extends Seeder
             'password' => bcrypt('123'),
             'role_id' => 2,
             'credits' => 15,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -160,7 +160,7 @@ class UserTableSeeder extends Seeder
             'role_id' => 2,
             'score' => 3,
             'credits' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03'
         ]);
@@ -170,7 +170,7 @@ class UserTableSeeder extends Seeder
             'email' => 'usuario@borrado.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
-            'picture'=> '/images/users/default.jpg',
+            'picture'=> '/images/users/default_photo_profile.jpg',
             'phone' => '3570584',
             'born_date' => '1987-07-03',
             'deleted_at' => Carbon::now()

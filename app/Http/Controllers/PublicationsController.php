@@ -32,7 +32,7 @@ class PublicationsController extends Controller
             \Session::flash('error', $errors);
             return view('home', compact('publications'));
         }
-        $calificationsRemaining = Publication::where('user_id', '=', $user->id)->join('califications', 'califications.publication_id', '=', 'publications.id')->where('label_id', '=', 1)->count();
+        $calificationsRemaining = Publication::where('publications.user_id', '=', $user->id)->join('califications', 'califications.publication_id', '=', 'publications.id')->where('label_id', '=', 1)->count();
         if($calificationsRemaining!=0){
             $errors='No se puede crear una gauchada debido a que tienes calificaciones pendientes.';
             \Session::flash('error', $errors);
@@ -82,7 +82,7 @@ class PublicationsController extends Controller
         $publication->city_id = $request->city;
         $publication->title = $request->title;
         $publication->category_id = $request->category;
-        $publication->image = '\images\publications\default_publication_pic.jpeg';
+        $publication->image = '/images/publications/default_publication_pic.jpg';
         $publication->user_id = Auth::user()->id;
 
         #CHARGE PUBLICATION COST
@@ -313,7 +313,8 @@ class PublicationsController extends Controller
     {
 
         if(Auth::check()){
-            $publications = Publication::with('user')->paginate(5);
+            /*$publications = Publication::with('user')->paginate(5);*/
+            $publications = Publication::all();
             return VIEW('home', compact('publications'));
         }else{
             $publications = Publication::all();

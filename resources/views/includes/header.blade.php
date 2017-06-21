@@ -9,7 +9,7 @@
                     </a>
                 </div>
             </div>
-            @if(Auth::user())
+            {{--@if(Auth::user())
                 <a class="navbar-brand" href="/home">
                     Una Gauchada
                 </a>
@@ -17,7 +17,10 @@
                 <a class="navbar-brand" href="/">
                     Una Gauchada
                 </a>
-            @endif
+            @endif--}}
+            <a class="navbar-brand" href="/">
+                Una Gauchada
+            </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <div class="left-nav-toggle">

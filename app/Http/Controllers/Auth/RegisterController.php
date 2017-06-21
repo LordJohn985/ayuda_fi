@@ -6,6 +6,10 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class RegisterController extends Controller
 {
@@ -62,22 +66,22 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function createWithPicture(array $data)
+    protected function createWithPicture(Request $request )
     {
         $user = User::create([
-            'name' => $data['name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'born_date' => $data['birth'],
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'born_date' => $request->birth,
             'picture' => '\images\users\defualt_photo_profile.jpeg',
 
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt($request->password),
         ]);
 
-        $file = $data->file('picture');
+        $file = $request->file('picture');
         // Now you have your file in a variable that you can do things with
-        $name = 'user'.$user->id.'.png';
+        $name = 'user'.'1'.'.png';
         $path = '/storage/users/'.$name;
         Storage::disk('public')->put('/users/'.$name, file_get_contents($file));
         try{
@@ -106,7 +110,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
             'born_date' => $data['birth'],
-            'picture' => '\images\users\defualt_photo_profile.jpeg',
+            'picture' => '/images/users/defualt_photo_profile.jpg',
 
             'password' => bcrypt($data['password']),
         ]);
