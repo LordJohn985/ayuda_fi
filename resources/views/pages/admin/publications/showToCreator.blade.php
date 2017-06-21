@@ -54,7 +54,7 @@ use App\City;
 
                     @foreach( $candidates as $candidate)
                         <tr>
-                            <td>{{$candidate->name}}</td>
+                            <td><a href="/user/{{$candidate->id}}">{{$candidate->name}}</a></td>
                             <td>{{$candidate->comment}}</td>
                             <td>{{\App\Reputation::where('necesary_score', '<=', $candidate->score)->orderBy('necesary_score', 'DESC')->first()->name}}</td>
                             <td>

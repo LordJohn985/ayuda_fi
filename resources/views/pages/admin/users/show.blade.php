@@ -72,13 +72,13 @@ use \App\Label
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            @foreach($califications as $calification)
+                        @foreach($califications as $calification)
+                            <tr>
                                 <td><a href="/publications/show/{{$calification->publication_id}}">{{$calification->title}}</a></td>
                                 <td>{{$calification->content}}</td>
                                 <td>{{$calification->name}}</td>
-                            @endforeach
                             </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
