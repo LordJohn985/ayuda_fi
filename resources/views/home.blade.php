@@ -18,8 +18,8 @@
             @foreach( $publications as $publication)
                 <tr>
                     <td>{{$publication->created_at}}</td>
-                    <td>{{$publication->user->name}}</td>
-                    <td><a href=/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
+                    <td><a href="/user/{{$publication->user->id}}">{{$publication->user->name}}</a></td>
+                    <td><a href="/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
                     <td>{{$publication->category->name}}</td>
                     <td>{{$publication->city->name}}</td>
                     <td><img src="{{asset($publication->image)}}" style="max-height: 350px; max-width: 350px"></td>

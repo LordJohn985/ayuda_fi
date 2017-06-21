@@ -89,7 +89,7 @@ Route::get('/home', 'HomeController@index');
 Route::get('/about-us', 'HomeController@getAboutUs');
 Route::get('/contact-us', 'HomeController@getContactUs');
 Route::get('/news', 'HomeController@getNews');
-
+Route::get('/user/{id}','UsersController@getShowUser');
 
 
 

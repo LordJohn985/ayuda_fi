@@ -54,7 +54,7 @@ use App\City;
 
                     @foreach( $candidates as $candidate)
                         <tr>
-                            <td>{{$candidate->name}}</td>
+                            <td><a href="/user/{{$candidate->id}}">{{$candidate->name}}</a></td>
                             <td>{{$candidate->comment}}</td>
                             <td>{{\App\Reputation::where('necesary_score', '<=', $candidate->score)->orderBy('necesary_score', 'DESC')->first()->name}}</td>
                             <td>
@@ -68,7 +68,7 @@ use App\City;
         @elseif($candidateIsRated->label->id == 1)
             {{--form to rate candidate--}}
             <form action="/dashboard/publications/rate/{{$publication->id}}" method="POST" id="form-update">
-                <label>Usuario elegido: {{$candidateSelected->user->name}}</label>
+                <label>Usuario elegido: {{$candidateSelected->name}}</label>
                 <input type="submit" value="Calificar">
                 <label>Comentario de calificacion:</label>
                 <input type="textarea" name="comment" required>

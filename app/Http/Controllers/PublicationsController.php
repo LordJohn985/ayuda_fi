@@ -150,8 +150,7 @@ class PublicationsController extends Controller
             if($userIsCreator){
                 #view returned to a logged user who is the creator of the publication
                 $candidates = (Postulation::where('publication_id', $publicationId))->join('users','users.id','=','postulations.user_id')->get();
-
-                $candidateSelected = Calification::where('publication_id','=', $publicationId)->join('users', 'users.id', '=', 'califications.selected_user_id')->get();
+                $candidateSelected = Calification::where('publication_id','=', $publicationId)->join('users', 'users.id', '=', 'califications.user_id')->get();
                 $candidateIsRated = (Calification::where('publication_id','=', $publicationId))->first();
                 return view("pages.admin.publications.showToCreator", compact("candidates", "candidateSelected", "candidateIsRated", "publication"));
             }else {
@@ -233,7 +232,7 @@ class PublicationsController extends Controller
         #CREATE CANDIDACY
         $calification = new Calification();
         $calification->publication_id=$publicationId;
-        $calification->selected_user_id=$userId;
+        $calification->user_id=$userId;
 
         #SAVE CANDIDACY
         try{

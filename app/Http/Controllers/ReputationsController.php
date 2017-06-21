@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Reputation;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -64,14 +64,14 @@ class ReputationsController extends Controller
 	       Log::info($e);
 	    }
     	$reputationIsNew=true;
-    	return self::getListReputations();
+    	return Redirect::to('/reputations');
     }
 
     public function getEditReputation($reputationId){
     	if($reputationId<=2){
     		$error="No se puede editar esta reputacion";
     		\Session::flash('error',$error);
-    		return self::getListReputations();
+    		return Redirect::to('/reputations');
     	}
     	$reputation=Reputation::find($reputationId);
     	$reputationIsNew=false;
@@ -93,21 +93,21 @@ class ReputationsController extends Controller
     	if($validator->fails()){
     		$error='Otra reputacion utiliza los datos ingresados';
     		\Session::flash('error',$error);
-    		return self::getEditReputation($reputationId);
+    		return Redirect::to('/reputations/edit/'.$reputationId);
     	}
 
     	try{
 	    	$reputation=Reputation::findOrFail($reputationId)->update(['name'=>$r->name,'necesary_score'=>$r->necesary_score]);
 	    	$success = 'Reputacion editada';
 	        \Session::flash('success', $success);
-	        return self::getListReputations();
+	        return Redirect::to('/reputations');
 		}
 		catch(\PDOExeption $e){
 			$error='La reputacion no pudo ser editada';
 			\Session::flash('error',$error);
 			Log::info($e);
 			$reputationIsNew=false;
-			return self::getEditReputation($reputationId);
+			return Redirect::to('/reputations/edit/'.$reputationId);
 		}
     }
 
@@ -134,6 +134,6 @@ class ReputationsController extends Controller
 	    		\Session::flash('error',$error);
 	    	}
     	}
-    	return self::getListReputations();
+    	return Redirect::to('/reputations');
     }
 }
