@@ -22,7 +22,7 @@
                     <td><a href=/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
                     <td>{{$publication->category->name}}</td>
                     <td>{{$publication->city->name}}</td>
-                    <td><img src="{{asset($publication->image)}}"></td>
+                    <td><img src="{{asset($publication->image)}}" style="max-height: 350px; max-width: 350px"></td>
                     <td>{{$publication->postulations->count()}}</td>
                 </tr>
             @endforeach
