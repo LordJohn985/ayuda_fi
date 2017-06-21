@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Reputation;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -71,7 +71,7 @@ class ReputationsController extends Controller
     	if($reputationId<=2){
     		$error="No se puede editar esta reputacion";
     		\Session::flash('error',$error);
-    		return self::getListReputations();
+    		return Redirect::to('/reputations');
     	}
     	$reputation=Reputation::find($reputationId);
     	$reputationIsNew=false;

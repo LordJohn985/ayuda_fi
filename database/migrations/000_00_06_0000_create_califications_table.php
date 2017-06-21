@@ -18,8 +18,8 @@ class CreateCalificationsTable extends Migration
         Schema::create('califications', function (Blueprint $table) {
             $table->increments('id');
             $table->string('content')->nullable();
-            $table->integer('selected_user_id')->unsigned();
-            $table->foreign('selected_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('publication_id')->unsigned();
             $table->foreign('publication_id')->references('id')->on('publications')->onDelete('cascade');
             $table->integer('label_id')->unsigned()->default(1);

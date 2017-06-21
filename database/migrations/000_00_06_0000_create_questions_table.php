@@ -22,7 +22,7 @@ class CreateQuestionsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('publication_id')->unsigned();
             $table->foreign('publication_id')->references('id')->on('publications')->onDelete('cascade');
-            $table->string('answer');
+            $table->string('answer')->nullable();
             $table->softDeletes();
         });
     }

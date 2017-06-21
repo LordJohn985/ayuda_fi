@@ -11,7 +11,7 @@
                     Cuenta<span class="sub-nav-icon"> <i class="stroke-arrow"></i> </span>
                 </a>
                 <ul id="account" class="nav nav-second collapse">
-                    <li><a href="#">Mi perfil</a></li>
+                    <li><a href="/user/{{auth::id()}}">Mi perfil</a></li>
                     <li><a href="/dashboard/users/buyCredits">Comprar créditos</a></li>
                 </ul>
             </li>
