@@ -4,6 +4,12 @@
     <section class="content">
         <form  action="/dashboard/users/buyCredits" method="POST" enctype="multipart/form-data">
 
+            <div>
+                <label>Tienes {{auth::user()->credits}} créditos</label>
+            </div>
+
+            </br>
+
             <div class=form-group>
                 <label>Cantidad de créditos a comprar</label>
                 <input  type="number" id="cant" class="form-control"  name="credits" placeholder="0" required>
@@ -19,9 +25,10 @@
                 <input  type="number" class="form-control"  name="security_code" required>
             </div>
 
-            <div>
+            <div class=form-group>
+            {{--<div id="price" style="display:none">{{$price}}</div>--}}
                 <label>Precio a pagar</label>
-                <p id="show-cant"></p>
+                <output class="form-control" id="show-cant" name="price" >0</output>
             </div>
 
             <input class="btn btn-accent pull-right" type="submit" value="Comprar">

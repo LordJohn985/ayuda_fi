@@ -4,12 +4,10 @@ namespace App;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Configuration extends Model
 {
 
-    use softDeletes;
     /**
      * The attributes that should be mutated to dates.
      *

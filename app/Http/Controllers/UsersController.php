@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 
+use App\Configuration;
 use App\Publication;
 use App\Postulation;
 use App\Calification;
 use App\Label;
+use App\Purchase;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -166,34 +168,48 @@ class UsersController extends Controller
     }
 
     public function getBuyCredits (){
-        return view('pages.admin.users.purchaseView');
+        $price = Configuration::find('1')->price;
+        return view('pages.admin.users.purchaseView', compact('price'));
     }
 
     public function postBuyCredits (Request $request){
         switch ($request->credit_card){
-            case '4242424242424242':
+            case '4242424242424242': /*tarjeta válida*/
+                if ($request->security_code == 123){ /*código de tarjeta válido*/
+                    $user = User::find(auth::id());
+                    $user->credits += $request->credits;
+                    $purchase = new Purchase();
+                    $purchase->purchase_date = Carbon::now();
+                    $purchase->count = $request->credits;
+                    $purchase->total = $request->credits * Configuration::find('1')->price;
+                    $purchase->user_id = $user->id;
+
+                    try{
+                        $user->save();
+                        $purchase->save();
+                        $success = 'La compra se realizó con éxito';
+                        \Session::flash('success', $success);
+                    }catch(\PDOException $e){
+                        $error = 'The operation has failed';
+                        \Session::flash('error', $error);
+                    }
+                    $publications = Publication::all();
+                    return view('home', compact('success', 'publications'));
+                }
+                /*código de tarjeta inválido*/
+                $errors = 'El codigo de seguridad no corresponde a la tarjeta ingresada.';
+                \Session::flash('error', $errors);
+                return view('pages.admin.users.purchaseView', compact('errors'));
+                break;
+            case '5105105105100510': /*tarjeta sin saldo*/
                 $errors = 'La tarjeta no tiene saldo.';
                 \Session::flash('error', $errors);
                 return view('pages.admin.users.purchaseView', compact('errors'));
                 break;
-            case '5105105105100510':
+            default: /*tarjeta inválida*/
                 $errors = 'La tarjeta es inválida.';
                 \Session::flash('error', $errors);
                 return view('pages.admin.users.purchaseView', compact('errors'));
-                break;
-            default:
-                $user = User::find(auth::id());
-                $user->credits += $request->credits;
-                try{
-                    $user->save();
-                    $success = 'La compra se realizó con éxito';
-                    \Session::flash('success', $success);
-                }catch(\PDOException $e){
-                    $error = 'The operation has failed';
-                    \Session::flash('error', $error);
-                }
-                $publications = Publication::all();
-                return view('home', compact('success', 'publications'));
                 break;
         }
     }
