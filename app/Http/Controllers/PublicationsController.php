@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Carbon\Carbon;
 
 
 
@@ -103,7 +104,7 @@ class PublicationsController extends Controller
         #SAVE PUBLICATION
         try{
             $publication->save();
-            $success = 'The operation has succeed';
+            $success = 'La gauchada se creó con éxito';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
             $error = 'The operation has failed';
@@ -313,11 +314,10 @@ class PublicationsController extends Controller
     {
 
         if(Auth::check()){
-            /*$publications = Publication::with('user')->paginate(5);*/
-            $publications = Publication::all();
+            $publications = Publication::all()->where('finish_date', '>=', Carbon::now());
             return VIEW('home', compact('publications'));
         }else{
-            $publications = Publication::all();
+            $publications = Publication::all()->where('finish_date', '>=', Carbon::now());
             return view('welcome', compact('publications'));
         }
     }

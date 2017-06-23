@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
-class QuestionController extends Controller
+class QuestionsController extends Controller
 {
     public function postCreateQuestion($publicationId,Request $r){
     	

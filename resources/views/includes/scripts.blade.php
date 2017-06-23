@@ -24,7 +24,10 @@
 
 
             if($('#alert-get').data('has-success')==true){
-                toastr.success("operacion exitosa")
+                toastr.success($('#alert-get').text())
+            }
+            if($('#alert-get').data('has-error')==true){
+                toastr.error($('#alert-get').text())
             }
         });
     </script>
