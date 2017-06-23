@@ -145,6 +145,8 @@ class PublicationsController extends Controller
 
     public function getShowPublication($publicationId){
         $publication = Publication::withTrashed()->find($publicationId);
+        $publicationIsExpired = $publication->finish_date < Carbon::now();
+        $canSomeoneAply = !(($publication->finish_date < Carbon::now()) || (Calification::where('publication_id','=', $publicationId)->count()!==0));
         $userIsLoggedIn = auth::check();
         if($userIsLoggedIn){
             $userIsCreator = $publication->user->id == auth::id();
@@ -152,16 +154,16 @@ class PublicationsController extends Controller
                 #view returned to a logged user who is the creator of the publication
                 $candidates = (Postulation::where('publication_id', $publicationId))->join('users','users.id','=','postulations.user_id')->get();
                 $candidateSelected = Calification::where('publication_id','=', $publicationId)->join('users', 'users.id', '=', 'califications.user_id')->get();
-                $candidateIsRated = (Calification::where('publication_id','=', $publicationId))->first();
-                return view("pages.admin.publications.showToCreator", compact("candidates", "candidateSelected", "candidateIsRated", "publication"));
+                $candidateIsRated =  Calification::where('publication_id','=', $publicationId)->first();
+                return view("pages.admin.publications.showToCreator", compact("candidates", "candidateSelected", "candidateIsRated", "publication", "publicationIsExpired"));
             }else {
                 #view returned to a logged user who is no the creator of the publication
                 $userIsCandidate = (Postulation::where('publication_id','=', $publicationId)->where('user_id','=', auth::id()))->get();
-                return view("pages.public.publications.showToUser", compact("userIsCandidate", "publication"));
+                return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication"));
             }
         }
         #view returned to a visitor, who is not logged into the system
-        return view("show", compact("publication"));
+        return view("show", compact("publication", "canSomeoneAply"));
     }
 
     #UPDATE
@@ -211,12 +213,11 @@ class PublicationsController extends Controller
         #SAVE POSTULATION
         try{
             $postulation->save();
-            $success = 'The operation has succeed';
+            $success = 'Te postulaste exitosamente a la gauchada '.Publication::find($publicationId)->title;
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $errors = $e->getMessage();
+            $errors = 'No pudiste postularte debido a un error del sistema. Intentalo nuevamente';
             \Session::flash('error', $errors);
-            \Log::info($e);
             return view('home' ,compact('errors', 'publications'));
 
         }
@@ -252,10 +253,9 @@ class PublicationsController extends Controller
     #RATE CANDIDATE
     public function postRateCandidate($publicationId, Request $request)
     {
-        $publications = Publication::all();
 
         #UPDATE CANDIDACY
-        $calification = Calification::find($publicationId);
+        $calification = Calification::where('publication_id', '=', $publicationId)->first();
         $calification->content = $request->comment;
         $calification->label_id = $request->label;
 
@@ -265,14 +265,15 @@ class PublicationsController extends Controller
             $this->updateUserOnCalification($calification);
             $publication = Publication::find($publicationId);
             $publication->delete();
-            $success = 'The operation has succeed';
+            $success = 'El usuario fue calificado exitosamente.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $errors = $e->getMessage();
+            $errors = 'El usuario no se pudo calificar';
             \Session::flash('error', $errors);
+            $publications = Publication::all();
             return view('home' ,compact('errors', 'publications'));
         }
-
+        $publications = Publication::all();
         return view('home' ,compact('publications'));
     }
 
@@ -280,30 +281,30 @@ class PublicationsController extends Controller
     {
         $publications = Publication::all();
 
-        if($calification->label == 'positivo'){
+        if($calification->label->name == 'positivo'){
             #BUSINESS RULES WHEN CALIFICATION IS POSITIVE
-            $usuario = User::find($calification->user);
+            $usuario = User::find($calification->user_id);
             $usuario->score += 2;
             $usuario->credits ++;
             try{
                 $usuario->save();
-                $success = 'The operation has succeed';
+                $success = 'Se calificó de forma positiva';
                 \Session::flash('success', $success);
             }catch (\PDOException $e){
-                $errors = $e->getMessage();
+                $errors = 'No se pudo calificar positivo';
                 \Session::flash('error', $errors);
                 return view('home' ,compact('errors', 'publications'));
             }
-        }elseif($calification->label == 'negativo'){
+        }elseif($calification->label->name == 'negativo'){
             #BUSINESS RULES WHEN CALIFICATION IS NEGATIVE
-            $usuario = User::find($calification->user);
+            $usuario = User::find($calification->user_id);
             $usuario->score --;
             try{
                 $usuario->save();
-                $success = 'The operation has succeed';
+                $success = 'Se calificó de forma negativa';
                 \Session::flash('success', $success);
             }catch (\PDOException $e){
-                $errors = $e->getMessage();
+                $errors = 'No se pudo calificar negativo';
                 \Session::flash('error', $errors);
                 return view('home' ,compact('errors', 'publications'));
             }

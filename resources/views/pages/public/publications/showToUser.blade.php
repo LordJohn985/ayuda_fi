@@ -38,20 +38,26 @@ use App\City;
         </div>
 
         {{--publication controls--}}
-        @if($userIsCandidate->count() == 0)
-            <form action="/dashboard/publications/aply/{{$publication->id}}" method="POST" id="form-update">
-                <input type="submit" value="Postularse">
-                <label>Comentario de postulacion:</label>
-                <input type="textarea" name="comment" required>
-                <input type="hidden" name="_method" value="POST">
-                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-            </form>
+        @if(!$canSomeoneAply)
+            <div>
+                <label>El candidato ya fue calificado o la publicación ha expirado.</label>
+            </div>
         @else
-            <form action="#" method="POST" id="form-update">
-                <input type="submit" value="Cancelar postulacion">
-                <input type="hidden" name="_method" value="POST">
-                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-            </form>
+            @if($userIsCandidate->count() == 0)
+                <form action="/dashboard/publications/aply/{{$publication->id}}" method="POST" id="form-update">
+                    <input type="submit" class="btn btn-success" value="Postularse">
+                    <label>Comentario de postulacion:</label>
+                    <input type="textarea" name="comment" required>
+                    <input type="hidden" name="_method" value="POST">
+                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                </form>
+            @else
+                <form action="#" method="POST" id="form-update">
+                    <input type="submit" class="btn btn-danger" value="Cancelar postulacion">
+                    <input type="hidden" name="_method" value="POST">
+                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                </form>
+            @endif
         @endif
     </section>
 

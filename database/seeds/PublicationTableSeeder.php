@@ -49,12 +49,21 @@ class PublicationTableSeeder extends Seeder
 
         App\Publication::create([
             'title' => 'listar postulantes - gauchada vencida',
+            'finish_date' => Carbon::yesterday(),
+            'content' => 'esta gauchada se usará para testear la HU listar postulantes',
+            'city_id' => 42,
+            'user_id' => 1,
+            'category_id'=> 1,
+        ]);
+
+        App\Publication::create([
+            'title' => 'listar postulantes - gauchada borrada',
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU listar postulantes',
             'city_id' => 42,
             'user_id' => 1,
             'category_id'=> 1,
-            'deleted_at' => Carbon::now()
+            'deleted_at' => Carbon::now(),
         ]);
 
         #CALIFICAR POSTULANTE - publicaciones 6 a 8

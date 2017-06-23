@@ -1,5 +1,5 @@
 <!-- Navigation-->
-<aside class="navigation">
+<aside class="navigation" style="position: fixed">
     <nav>
         <ul class="nav luna-nav">
             <li class="nav-category">

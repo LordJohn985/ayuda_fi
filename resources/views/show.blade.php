@@ -36,6 +36,11 @@ use App\City;
             <div class="panel-body" >{{$publication->content}}</div>
         </div>
 
+        @if(!$canSomeoneAply)
+            <div>
+                <label>El candidato ya fue calificado o la publicación ha expirado.</label>
+            </div>
+        @endif
     </section>
 
 @stop

@@ -39,37 +39,43 @@ use App\City;
 
         {{--publication controls--}}
         @if($candidateSelected->count()==0)
-            {{--table of candidates--}}
-            <div class="table-responsive">
-                <table id="tableExample2" class="table table-striped table-hover">
-                    <thead>
-                    <tr>
-                        <th>Usuario</th>
-                        <th>Comentario</th>
-                        <th class="no-sort" >Reputacion</th>
-                        <th class="no-sort" >Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    @foreach( $candidates as $candidate)
+            @if($publicationIsExpired)
+                <div>
+                    <label>La publicación ha expirado.</label>
+                </div>
+            @else
+                {{--table of candidates--}}
+                <div class="table-responsive">
+                    <table id="tableExample2" class="table table-striped table-hover">
+                        <thead>
                         <tr>
-                            <td><a href="/user/{{$candidate->id}}">{{$candidate->name}}</a></td>
-                            <td>{{$candidate->comment}}</td>
-                            <td>{{\App\Reputation::where('necesary_score', '<=', $candidate->score)->orderBy('necesary_score', 'DESC')->first()->name}}</td>
-                            <td>
-                                <a href="/dashboard/publications/selectCandidate/{{$candidate->id}}/{{$publication->id}}">Elegir</a>
-                            </td>
+                            <th>Usuario</th>
+                            <th>Comentario</th>
+                            <th class="no-sort" >Reputacion</th>
+                            <th class="no-sort" >Action</th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+
+                        @foreach( $candidates as $candidate)
+                            <tr>
+                                <td><a href="/user/{{$candidate->id}}">{{$candidate->name}}</a></td>
+                                <td>{{$candidate->comment}}</td>
+                                <td>{{\App\Reputation::where('necesary_score', '<=', $candidate->score)->orderBy('necesary_score', 'DESC')->first()->name}}</td>
+                                <td>
+                                    <a href="/dashboard/publications/selectCandidate/{{$candidate->id}}/{{$publication->id}}">Elegir</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         @elseif($candidateIsRated->label->id == 1)
             {{--form to rate candidate--}}
             <form action="/dashboard/publications/rate/{{$publication->id}}" method="POST" id="form-update">
-                <label>Usuario elegido: {{$candidateSelected->name}}</label>
-                <input type="submit" value="Calificar">
+                <label>Usuario elegido: {{$candidateSelected->first()->name}}</label>
+                <input type="submit" class="btn btn-info" value="Calificar">
                 <label>Comentario de calificacion:</label>
                 <input type="textarea" name="comment" required>
                 <select class="form-control" name="label">
@@ -89,7 +95,7 @@ use App\City;
         @else
             {{--message when candidate is rated or publication has expired--}}
             <div>
-                <label>El candidato ya fue calificado o la publicación ha expirado.</label>
+                <label>El candidato ya fue calificado.</label>
             </div>
         @endif
     </section>

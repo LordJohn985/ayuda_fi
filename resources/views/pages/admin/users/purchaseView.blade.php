@@ -12,7 +12,7 @@
 
             <div class=form-group>
                 <label>Cantidad de créditos a comprar</label>
-                <input  type="number" id="cant" class="form-control"  name="credits" placeholder="0" required>
+                <input  type="number" id="cant" min="0" class="form-control"  name="credits" placeholder="0" required>
             </div>
 
             <div class=form-group>
