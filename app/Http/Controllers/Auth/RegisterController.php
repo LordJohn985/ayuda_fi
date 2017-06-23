@@ -79,7 +79,7 @@ class RegisterController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        $file = $request->file('picture');
+        $file = $request->picture;
         // Now you have your file in a variable that you can do things with
         $name = 'user'.'1'.'.png';
         $path = '/storage/users/'.$name;
@@ -104,6 +104,7 @@ class RegisterController extends Controller
      */
     protected function createWithoutPicture(array $data)
     {
+        dd('no tiene archivo');
         return User::create([
             'name' => $data['name'],
             'last_name' => $data['last_name'],

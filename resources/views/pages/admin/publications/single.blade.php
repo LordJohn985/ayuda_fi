@@ -22,7 +22,7 @@
 
             <div class=form-group>
                 <label>Imagen</label>
-                <input  type="file" class="form-control" rows="3" name="image" placeholder="Imagen" value="{{isset($publication->image)?$publication->image:''}}">
+                <input  type="file" class="form-control" name="image" placeholder="Imagen" value="{{isset($publication->image)?$publication->image:''}}">
             </div>
 
             <div class=form-group>
