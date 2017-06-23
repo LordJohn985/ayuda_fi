@@ -34,6 +34,7 @@
                         <li><a href="/reputations">Reputaciones</a></li>
                         <li><a href="#">Crear categorias</a></li>
                         <li><a href="#">Setear configuraciones</a></li>
+                        <li><a href="/logs">Logs</a></li>
                     </ul>
                 </li>
             @endif
