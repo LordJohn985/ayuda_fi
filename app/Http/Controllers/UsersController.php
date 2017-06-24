@@ -155,7 +155,26 @@ class UsersController extends Controller
             'phone' => $request->phone,
             'born_date' => $request->birth,
             'picture' => '/images/users/defualt_photo_profile.jpeg',
-            'password' => bcrypt($request->password),*/   
+            'password' => bcrypt($request->password),*/
+
+         if( $request->hasFile('image') ) {
+            $file = $request->file('image');
+            // Now you have your file in a variable that you can do things with
+            $name = 'user'.$user_id.'.png';
+            $path = '/storage/users/'.$name;
+            try{
+                $user->photo=$path;
+                $user->save();
+                $success = 'The operation has succeed';
+                \Session::flash('success', $success);
+                Storage::disk('public')->put('/users/'.$name, file_get_contents($file));
+            }catch (\PDOException $e){
+                $error = 'The operation has failed';
+                \Session::flash('error', $error);
+                Log::info($e);
+            }
+        }
+           
         $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
         if($validator->fails()){
             $errors = $validator->messages();

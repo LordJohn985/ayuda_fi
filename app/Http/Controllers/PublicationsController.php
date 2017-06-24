@@ -118,12 +118,12 @@ class PublicationsController extends Controller
             // Now you have your file in a variable that you can do things with
             $name = 'publication'.$publication->id.'.png';
             $path = '/storage/publications/'.$name;
-            Storage::disk('public')->put('/publications/'.$name, file_get_contents($file));
             try{
                 $publication->image=$path;
                 $publication->save();
                 $success = 'The operation has succeed';
                 \Session::flash('success', $success);
+                Storage::disk('public')->put('/publications/'.$name, file_get_contents($file));
             }catch (\PDOException $e){
                 $error = 'The operation has failed';
                 \Session::flash('error', $error);
