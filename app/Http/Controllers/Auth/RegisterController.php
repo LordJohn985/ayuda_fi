@@ -75,7 +75,6 @@ class RegisterController extends Controller
             'phone' => $request->phone,
             'born_date' => $request->birth,
             'picture' => '/images/users/defualt_photo_profile.jpeg',
-
             'password' => bcrypt($request->password),
         ]);
 

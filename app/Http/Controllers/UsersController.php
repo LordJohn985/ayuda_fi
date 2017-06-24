@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 
 class UsersController extends Controller
@@ -96,6 +97,12 @@ class UsersController extends Controller
     #UPDATE
     public function getUpdateUser ($user_id){
 
+        if($user_id!=Auth::id()){
+            $error='No puedes editar este perfil';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
+
         #RETRIEVE USER
         try{
             $user = User::findOrFail($user_id);
@@ -115,21 +122,46 @@ class UsersController extends Controller
     public function postUpdateUser (Request $request, $user_id){
 
         #VALIDATE DATA
+
         $rules = [
-            'user_name'=>'required|unique:users,name,'. $user_id,
-            'role' => 'required|exists:roles,id',
-            'user_email'=>'required|email|unique:users,email,'. $user_id,
-            'user_password' => 'required|max:12',
+            'name'=>'required',
+            'last_name' => 'required',
+            'phone' => 'required|numeric',
+            'born_date' => 'required|date',
+            'email'=>['required','email',Rule::unique('users')->ignore($user_id)],
+
         ];
 
         $fields = [
-            'user_name' => $request->name,
-            'role' => $request->role,
-            'user_email' => $request->email,
-            'user_password' => $request->password,
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'born_date' => $request->birth,
+            'email' => $request->email,
         ];
-        $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
 
+        $pass=isset($request->password);
+        $pic=isset($request->picture);
+
+        if($pass){
+            $rules['password']='required|min:6|confirmed';
+            $rules['password_confirmation']='required|min:6';
+            $fields['password']=($request->password);
+            $fields['password_confirmation']=($request->password_confirmation);
+        }
+/*          'name' => $request->name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'born_date' => $request->birth,
+            'picture' => '/images/users/defualt_photo_profile.jpeg',
+            'password' => bcrypt($request->password),*/   
+        $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
+        if($validator->fails()){
+            $errors = $validator->messages();
+            \Session::flash('error',$errors);
+            return Redirect::to('/user/edit/'.$user_id);
+        }
         #RETRIEVE USER
         try{
             $user = User::findOrFail($user_id);
@@ -139,21 +171,21 @@ class UsersController extends Controller
             return view('pages.admin.users.single', compact('userIsNew', 'error'));
         }
 
-        if($validator->fails()){
+        if($pass){
+            $fields['password']=bcrypt($fields['password']);
+        }
+
+/*        if($validator->fails()){
             $errors = $validator->messages();
             \Session::flash('error', $errors);
             $userIsNew = false;
             return view('pages.admin.users.single' ,compact('userIsNew','errors', 'user'));
-        }
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        $user->role_id = $request->role;
+        }*/
 
         #SAVE USER
+
         try{
-            $user->save();
+            $user->update($fields);
             $success = 'The operation has succeed';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
@@ -163,7 +195,7 @@ class UsersController extends Controller
             return view('pages.admin.users.single' ,compact('userIsNew','errors'));
         }
 
-        return Redirect::to('/dashboard/users/list');
+        return Redirect::to('/user/'.$user_id);
 
     }
 
@@ -261,5 +293,9 @@ class UsersController extends Controller
             \Session::flash('error',$error);
             return Redirect::to('/home');
         }
+    }
+
+    public function emptyUser(){
+        return Redirect::to('/login');
     }
 }
