@@ -81,7 +81,7 @@ class RegisterController extends Controller
 
         $file = $request->picture;
         // Now you have your file in a variable that you can do things with
-        $name = 'user'.'1'.'.png';
+        $name = 'user'.$user->id.'.png';
         $path = '/storage/users/'.$name;
         Storage::disk('public')->put('/users/'.$name, file_get_contents($file));
         try{
