@@ -75,7 +75,6 @@ class RegisterController extends Controller
             'phone' => $request->phone,
             'born_date' => $request->birth,
             'picture' => '/images/users/defualt_photo_profile.jpeg',
-
             'password' => bcrypt($request->password),
         ]);
 
@@ -104,7 +103,6 @@ class RegisterController extends Controller
      */
     protected function createWithoutPicture(array $data)
     {
-        dd('no tiene archivo');
         return User::create([
             'name' => $data['name'],
             'last_name' => $data['last_name'],

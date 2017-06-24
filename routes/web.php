@@ -78,7 +78,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('dashboard/publications/create/','PublicationsController@postCreatePublication');
     Route::get('dashboard/users/buyCredits', 'UsersController@getBuyCredits');
     Route::post('dashboard/users/buyCredits', 'UsersController@postBuyCredits');
-
+    Route::get('/user/edit/{id}','UsersController@getUpdateUser');
+    Route::post('/user/edit/{id}','UsersController@postUpdateUser');
 });
 
 
@@ -90,7 +91,7 @@ Route::get('/about-us', 'HomeController@getAboutUs');
 Route::get('/contact-us', 'HomeController@getContactUs');
 Route::get('/news', 'HomeController@getNews');
 Route::get('/user/{id}','UsersController@getShowUser');
-
+Route::get('/user','UsersController@emptyUser');
 
 
 ##PUBLICATIONS

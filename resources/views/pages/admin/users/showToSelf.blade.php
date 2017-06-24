@@ -5,6 +5,7 @@ use \App\Label
 
 @section('content')
     <section class='content'>
+        <a href="/user/edit/{{$user->id}}">Editar</a>
         <div class='form-group'>
             <label>Nombre</label>
             <div class="panel-body" >{{$user->name}}, {{$user->last_name}}</div>
