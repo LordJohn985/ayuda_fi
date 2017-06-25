@@ -1,4 +1,5 @@
 use App\City;
+
 @extends('layouts.admin.base')
 
 @section('content')
@@ -86,13 +87,14 @@ use App\City;
                             <tbody>
                                 @foreach( $questionsAll as $question)
                                     <tr>
-                                        <td><a href="/user/{{$question->user_id}}">{{ \App\User::where('id', '=', $question->user_id)->name }}</a></td>
-                                        <td>{{ \App\Reputation::where('necesary_score', '<=', \App\User::where('id', '=', $question->user_id)->score )->orderBy('necesary_score', 'DESC')->first()->name }}</td>
+                                        <td><a href="/user/{{$question->user_id}}">{{ $question->user->name}}</a></td>
+                                        <td>{{ \App\Reputation::where('necesary_score', '<=', \App\User::where('id', '=', $question->user_id)->first()->score )->orderBy('necesary_score', 'DESC')->first()->name }}</td>
+                                        {{--<td>{{var_dump($question->user->reputation)}}</td>--}}
                                         <td>{{$question->content}}</td>
                                         <td>{{$question->answer}}</td>
                                         <td>
                                         <!--ESTO NO CREO FUNCIONE-->
-                                        {{--@if({{$question->answer->count() == 0 }}--}}
+                                        @if($question->answer=='Sin respuesta aun')
 
                                             <form action="/questions/answer/{{$question->id}}" method="POST" id="form-update">
                                                 <input type="submit" class="btn btn-success" value="Responder">
@@ -101,7 +103,7 @@ use App\City;
                                                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                                             </form>
 
-                                        {{--@endif--}}
+                                        @endif
                                         </td>
                                     </tr>
                                 @endforeach

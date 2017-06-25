@@ -31,8 +31,7 @@ class QuestionsController extends Controller
         if($validator->fails()){
             $errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
-            return view('home' ,compact('errors', 'publications'));
-        }
+        return Redirect::to('/home');        }
 
         #CREATE QUESTION
         $question = new Question();
@@ -51,17 +50,13 @@ class QuestionsController extends Controller
         }catch (\PDOException $e){
             $errors = 'No pudimos enviar tu pregunta debido a un error del sistema. Intentalo nuevamente' .$e->getMessage();
             \Session::flash('error', $errors);
-            return view('home' ,compact('errors', 'publications'));
-
+            return Redirect::to('/home');
         }
 
-        return view('home' ,compact('publications'));
-    	
+        return Redirect::to('/home');    	
     }
 
     public function postAnswerQuestion($questionId,Request $request){
-
-    	$publications = Publication::all();
 
         #VALIDATE DATA
         $rules = [
@@ -77,11 +72,11 @@ class QuestionsController extends Controller
         if($validator->fails()){
             $errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
-            return view('home' ,compact('errors', 'publications'));
+            return Redirect::to('/home');
         }
 
         #ANSWER QUESTION
-        $answer = Question::where('id', '=', $questionId);
+        $answer = Question::find($questionId);
         $answer->answer=$request->answer;
 
         #DB::table('questions')
@@ -98,11 +93,10 @@ class QuestionsController extends Controller
         }catch (\PDOException $e){
             $errors = 'No pudimos enviar tu respuesta debido a un error del sistema. Intentalo nuevamente' .$e->getMessage();
             \Session::flash('error', $errors);
-            return view('home' ,compact('errors', 'publications'));
+            return Redirect::to('/home');
 
         }
 
-        return view('home' ,compact('publications'));
-
+        return Redirect::to('/home');
     }
 }
