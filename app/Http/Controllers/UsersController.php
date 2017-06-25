@@ -313,4 +313,31 @@ class UsersController extends Controller
     public function emptyUser(){
         return Redirect::to('/login');
     }
+
+    public function setOriginalPhoto($userId){
+        try {
+            $user=User::findOrFail($userId);
+            if(Auth::id()!=$user->id){
+                $error='No tienes permiso para editar este perfil';
+                \Session::flash('error',$error);
+            }
+            else{
+                $user->picture='/images/users/default_photo_profile.jpg';
+                try {
+                    $user->save();
+                    $success='Foto original puesta';
+                    \Session::flash('success',$success);
+                } catch (\PDOException $e) {
+                    $error='No se ha podido borrar la foto';
+                    \Session::flash('error',$error);
+                    Log::info($e);
+                }
+            }
+        } catch (ModelNotFoundException $e) {
+            $error='No se ha podido borrar la foto';
+            \Session::flash('error',$error);
+            Log::info($e);
+        }
+        return Redirect::to('/user/'.$userId);
+    }
 }

@@ -109,7 +109,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
             'born_date' => $data['birth'],
-            'picture' => '/images/users/defualt_photo_profile.jpg',
+            'picture' => '/images/users/default_photo_profile.jpg',
 
             'password' => bcrypt($data['password']),
         ]);

@@ -415,4 +415,31 @@ class PublicationsController extends Controller
         }
     }
 
+    public function setOriginalPhoto($publicationId){
+        try {
+            $publication=Publication::findOrFail($publicationId);
+            if(Auth::id()!=$publication->user_id){
+                $error='No tienes permiso para editar esta gauchada';
+                \Session::flash('error',$error);
+            }
+            else{
+                $publication->image='/images/publications/default_publication_pic.jpg';
+                try {
+                    $publication->save();
+                    $success='Foto original puesta';
+                    \Session::flash('success',$success);
+                } catch (\PDOException $e) {
+                    $error='No se ha podido borrar la foto';
+                    \Session::flash('error',$error);
+                    Log::info($e);
+                }
+            }
+        } catch (ModelNotFoundException $e) {
+            $error='No se ha podido borrar la foto';
+            \Session::flash('error',$error);
+            Log::info($e);
+        }
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
+    }
+
 }

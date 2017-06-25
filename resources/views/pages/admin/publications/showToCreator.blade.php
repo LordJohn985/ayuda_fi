@@ -6,6 +6,7 @@ use App\City;
 
     <section class="content">
         <a href="../edit/{{$publication->id}}">Editar</a>
+        <a href="/publication/setOriginalPhoto/{{$publication->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')">Eliminar foto</a>
         {{--publication details--}}
         <div class=form-group>
             <label>Título</label>

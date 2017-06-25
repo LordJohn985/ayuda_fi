@@ -6,6 +6,7 @@ use \App\Label
 @section('content')
     <section class='content'>
         <a href="/user/edit/{{$user->id}}">Editar</a>
+        <a href="/user/setOriginalPhoto/{{$user->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')">Eliminar foto</a>
         <div class='form-group'>
             <label>Nombre</label>
             <div class="panel-body" >{{$user->name}}, {{$user->last_name}}</div>

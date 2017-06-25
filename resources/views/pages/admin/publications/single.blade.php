@@ -36,7 +36,7 @@
                         @if($publicationIsNew)
                             <option value="{{$city->id}}">{{$city->name}}</option>
                         @else
-                            <option value="{{$city->id}}" selected="selected">{{$city->name}}</option>
+                            <option value="{{$city->id}}" {{($city->id==$publication->city_id)?'selected="selected"':''}}>{{$city->name}}</option>
                         @endif
                             @endforeach
                     {{--<option value="{{isset($publication->city)?$publication->city->id:''}}" selected="selected">{{isset($publication->city)?$publication->city->name:''}} </option>--}}
