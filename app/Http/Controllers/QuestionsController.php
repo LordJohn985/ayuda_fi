@@ -81,12 +81,12 @@ class QuestionsController extends Controller
         }
 
         #ANSWER QUESTION
-        #$answer = Question::where('id', '=', $questionId);
-        #$answer->answer=$request->answer;
+        $answer = Question::where('id', '=', $questionId);
+        $answer->answer=$request->answer;
 
-        DB::table('users')
-            ->where('id', $questionId)
-            ->update(['answer' => $request->answer]);
+        #DB::table('questions')
+         #   ->where('id', $questionId)
+          #  ->update(['answer' => $request->answer]);
 
         \Log::info($answer);
 
