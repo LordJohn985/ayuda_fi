@@ -46,8 +46,6 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('dashboard/users/list','UsersController@getListUser');
     Route::get('dashboard/users/create','UsersController@getCreateUser');
     Route::post('dashboard/users/create','UsersController@postCreateUser');
-    Route::get('dashboard/users/edit/{id}','UsersController@getUpdateUser');
-    Route::post('dashboard/users/edit/{id}','UsersController@postUpdateUser');
     Route::get('dashboard/users/delete/{id}','UsersController@getDeleteUser');
     #                               END   USERS                               #
 
@@ -80,6 +78,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('dashboard/users/buyCredits', 'UsersController@postBuyCredits');
     Route::get('/user/edit/{id}','UsersController@getUpdateUser');
     Route::post('/user/edit/{id}','UsersController@postUpdateUser');
+    Route::get('dashboard/users/edit/{id}','UsersController@getUpdateUser');
+    Route::post('dashboard/users/edit/{id}','UsersController@postUpdateUser');
+
 });
 
 

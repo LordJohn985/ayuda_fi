@@ -7,6 +7,8 @@
 
     {{--@include('includes.components.admin.styles')--}}
 <!-- Vendor styles -->
+    
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/vendor/fontawesome/css/font-awesome.css"/>
     <link rel="stylesheet" href="css/vendor/animate.css/animate.css"/>
     <link rel="stylesheet" href="css/vendor/bootstrap/css/bootstrap.css"/>

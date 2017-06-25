@@ -1,5 +1,5 @@
 use App\City;
-@extends('layouts.admin.base')
+@extends('layouts.public.base')
 
 
 @section('content')
