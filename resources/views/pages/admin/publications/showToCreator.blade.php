@@ -5,7 +5,7 @@ use App\City;
 @section('content')
 
     <section class="content">
-
+        <a href="../edit/{{$publication->id}}">Editar</a>
         {{--publication details--}}
         <div class=form-group>
             <label>Título</label>

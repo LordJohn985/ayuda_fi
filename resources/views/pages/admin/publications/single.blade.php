@@ -1,6 +1,5 @@
 @extends('layouts.admin.base')
 
-
 @section('content')
 
     <section class="content">
@@ -51,7 +50,7 @@
                         @if($publicationIsNew)
                             <option value="{{$category->id}}">{{$category->name}}</option>
                         @else
-                            <option value="{{$category->id}}" selected="selected">{{$category->name}}</option>
+                            <option value="{{$category->id}}" selected="{{($category->id==$publication->category_id?'selected':'')}}">{{$category->name}}</option>
                         @endif
                     @endforeach
                     {{--<option value="{{isset($publication->category)?$publication->category->id:''}}" selected="selected">{{isset($publication->category)?$publication->category->name:''}} </option>--}}
@@ -60,7 +59,7 @@
 
             <div class=form-group>
                 <label>Contenido</label>
-                <textarea class="form-control" rows="10" cols="100" name="body_content" placeholder="Describa su publicación" value="{{isset($publication->content)?$publication->content:''}}" required></textarea>
+                <textarea class="form-control" rows="10" cols="100" name="body_content" placeholder="Describa su publicación" required>{{isset($publication->content)?$publication->content:''}}</textarea>
             </div>
 
             <input class="btn btn-accent pull-right" type="submit" value="Save">

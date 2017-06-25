@@ -23,8 +23,6 @@ Route::group(['middleware' => 'checkRole'], function () {
 
     #                               BEGIN PUBLICATIONS                               #
     Route::get('dashboard/publications/list','PublicationsController@getListPublication');
-    Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
-    Route::post('dashboard/publications/edit/','PublicationsController@postUpdatePublication');
     Route::get('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
     Route::get('dashboard/publications/selectCandidate/{user_id}/{publication_id}','PublicationsController@getSelectCandidate');
     #                               END   PUBLICATIONS                               #
@@ -78,7 +76,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/user/edit/{id}','UsersController@postUpdateUser');
     Route::get('dashboard/users/edit/{id}','UsersController@getUpdateUser');
     Route::post('dashboard/users/edit/{id}','UsersController@postUpdateUser');
-
+    Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
+    Route::post('dashboard/publications/edit/{id}','PublicationsController@postUpdatePublication');
     Route::post('questions/ask/{id}','QuestionsController@postCreateQuestion');
     Route::post('questions/answer/{id}','QuestionsController@postAnswerQuestion');
 
