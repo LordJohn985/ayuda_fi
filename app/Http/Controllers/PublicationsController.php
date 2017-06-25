@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Postulation;
 use App\Publication;
 use App\User;
+use App\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -16,10 +17,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Carbon\Carbon;
-
-
-
-
 
 class PublicationsController extends Controller
 {
@@ -73,8 +70,6 @@ class PublicationsController extends Controller
             return view('pages.admin.publications.single' ,compact('publicationIsNew','errors'));
         }
 
-
-
         #CREATE PUBLICATION
         $publication = new Publication();
         $publication->title = $request->title;
@@ -98,8 +93,6 @@ class PublicationsController extends Controller
             \Session::flash('error', $error);
             Log::info($e);
         }
-
-
 
         #SAVE PUBLICATION
         try{
@@ -152,14 +145,21 @@ class PublicationsController extends Controller
             $userIsCreator = $publication->user->id == auth::id();
             if($userIsCreator){
                 #view returned to a logged user who is the creator of the publication
-                $candidates = (Postulation::where('publication_id', $publicationId))->join('users','users.id','=','postulations.user_id')->get();
+                $candidates = Postulation::where('publication_id', $publicationId)->join('users','users.id','=','postulations.user_id')->get();
                 $candidateSelected = Calification::where('publication_id','=', $publicationId)->join('users', 'users.id', '=', 'califications.user_id')->get();
                 $candidateIsRated =  Calification::where('publication_id','=', $publicationId)->first();
-                return view("pages.admin.publications.showToCreator", compact("candidates", "candidateSelected", "candidateIsRated", "publication", "publicationIsExpired"));
+
+                $questionsAll = Question::where('publication_id','=', $publicationId)->get();
+
+                return view("pages.admin.publications.showToCreator", compact("candidates", "candidateSelected", "candidateIsRated", "publication", "publicationIsExpired", "questionsAll"));
+
             }else {
                 #view returned to a logged user who is no the creator of the publication
-                $userIsCandidate = (Postulation::where('publication_id','=', $publicationId)->where('user_id','=', auth::id()))->get();
-                return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication"));
+                $userIsCandidate = Postulation::where('publication_id','=', $publicationId)->where('user_id','=', auth::id())->get();
+
+                $userMadeQuestion = Question::where('publication_id','=', $publicationId)->where('user_id','=', auth::id())->get();
+
+                return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication", "userMadeQuestion"));
             }
         }
         #view returned to a visitor, who is not logged into the system
@@ -322,11 +322,5 @@ class PublicationsController extends Controller
             return view('welcome', compact('publications'));
         }
     }
-
-
-
-
-
-
 
 }

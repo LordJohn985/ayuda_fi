@@ -64,8 +64,6 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
     #                               END   LOGS                               #
 
-
-
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -80,6 +78,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/user/edit/{id}','UsersController@postUpdateUser');
     Route::get('dashboard/users/edit/{id}','UsersController@getUpdateUser');
     Route::post('dashboard/users/edit/{id}','UsersController@postUpdateUser');
+
+    Route::post('questions/ask/{id}','QuestionsController@postCreateQuestion');
+    Route::post('questions/answer/{id}','QuestionsController@postAnswerQuestion');
 
 });
 
@@ -105,9 +106,6 @@ Route::get('dashboard/publications/unfilter', 'PublicationsController@getUnfilte
 Route::post('dashboard/publications/unfilter', 'PublicationsController@postUnfilterPublication');
 
 #                               END   PUBLIC ROUTES                               #
-
-
-
 
 Auth::routes();
 

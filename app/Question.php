@@ -33,4 +33,14 @@ class Question extends Model
     protected $hidden = [
 
     ];
+
+    #RELATIONSHIPS
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+    public function publications()
+    {
+        return $this->belongsTo('App\Publication');
+    }
 }
