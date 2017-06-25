@@ -49,7 +49,7 @@ class QuestionsController extends Controller
             $success = 'Tu pregunta fue enviada, ahora espera la respuesta sobre: '.Publication::find($publicationId)->title;
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $errors = 'No pudimos enviar tu pregunta debido a un error del sistema. Intentalo nuevamente';
+            $errors = 'No pudimos enviar tu pregunta debido a un error del sistema. Intentalo nuevamente' .$e->getMessage();
             \Session::flash('error', $errors);
             return view('home' ,compact('errors', 'publications'));
 
@@ -96,7 +96,7 @@ class QuestionsController extends Controller
             $success = 'Tu respuesta fue enviada.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $errors = 'No pudimos enviar tu respuesta debido a un error del sistema. Intentalo nuevamente';
+            $errors = 'No pudimos enviar tu respuesta debido a un error del sistema. Intentalo nuevamente' .$e->getMessage();
             \Session::flash('error', $errors);
             return view('home' ,compact('errors', 'publications'));
 
