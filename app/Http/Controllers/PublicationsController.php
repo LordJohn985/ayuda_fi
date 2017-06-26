@@ -144,8 +144,8 @@ class PublicationsController extends Controller
 
     public function getShowPublication($publicationId){
         $publication = Publication::withTrashed()->find($publicationId);
-        $publicationIsExpired = $publication->finish_date < Carbon::now();
-        $canSomeoneAply = !(($publication->finish_date < Carbon::now()) || (Calification::where('publication_id','=', $publicationId)->count()!==0));
+        $publicationIsExpired = (($publication->finish_date < Carbon::now())||($publication->deleted_at!==null));
+        $canSomeoneAply = !(($publication->finish_date < Carbon::now()) || (Calification::where('publication_id','=', $publicationId)->count()!==0)||($publication->deleted_at!==null));
         $questionsAll = Question::where('publication_id','=', $publicationId)->get();
         $userIsLoggedIn = auth::check();
         if($userIsLoggedIn){
@@ -379,16 +379,16 @@ class PublicationsController extends Controller
         }catch (\PDOException $e){
             $errors = 'No se pudo hacer la selección del postulante, vuelve a intentarlo.';
             \Session::flash('error', $errors);
-<<<<<<< HEAD
-        }
-=======
             return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
         }
-
->>>>>>> a39a696886a92b700c64e98b19e44d2c83f78f7e
+    }
+/*<<<<<<< HEAD
         return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
+=======
 
+>>>>>>> a39a696886a92b700c64e98b19e44d2c83f78f7e
+*/
     #RATE CANDIDATE
     public function postRateCandidate($publicationId, Request $request)
     {
@@ -434,7 +434,7 @@ class PublicationsController extends Controller
             }catch (\PDOException $e){
                 $errors = 'No se pudo calificar positivo';
                 \Session::flash('error', $errors);
-                return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
+                return Redirect::to('/dashboard/publications/show/'.$publicationId);
             }
         }elseif($calification->label->name == 'negativo'){
             #BUSINESS RULES WHEN CALIFICATION IS NEGATIVE
@@ -447,7 +447,7 @@ class PublicationsController extends Controller
             }catch (\PDOException $e){
                 $errors = 'No se pudo calificar negativo';
                 \Session::flash('error', $errors);
-                return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
+                return Redirect::to('/dashboard/publications/show/'.$publicationId);
             }
         }
     }

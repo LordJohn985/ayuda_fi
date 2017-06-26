@@ -6,12 +6,7 @@ use App\City;
 
     <section class="content">
         @if(!$publicationIsExpired)
-<<<<<<< HEAD
-        <a href="../edit/{{$publication->id}}">Editar</a>
-        <a href="/publication/setOriginalPhoto/{{$publication->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')">Eliminar foto</a>
-        @endif
-=======
-            @if($candidateIsRated->label->id == 1)
+            @if(($candidateIsRated===null)||($candidateIsRated->label->id == 1))
                 <a href="../delete/{{$publication->id}}" class=col-md-4>Eliminar Gauchada</a>
             @endif
             @if($candidates->count() == 0)
@@ -21,7 +16,6 @@ use App\City;
             <br><br>
         @endif
 
->>>>>>> a39a696886a92b700c64e98b19e44d2c83f78f7e
         {{--publication details--}}
         <div class=form-group>
             <label>Título</label>
