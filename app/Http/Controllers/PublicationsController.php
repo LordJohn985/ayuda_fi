@@ -24,9 +24,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
-
-
-
 class PublicationsController extends Controller
 {
 
@@ -162,9 +159,7 @@ class PublicationsController extends Controller
             }else {
                 #view returned to a logged user who is no the creator of the publication
                 $userIsCandidate = Postulation::where('publication_id','=', $publicationId)->where('user_id','=', auth::id())->get();
-
                 /*$userMadeQuestion = Question::where('publication_id','=', $publicationId)->where('user_id','=', auth::id())->get();*/
-
                 return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication"));
             }
         }
@@ -275,7 +270,47 @@ class PublicationsController extends Controller
     #DELETE
     public function getDeletePublication($publicationId){
 
-}
+        #GET ALL CANDIDATES
+        $candidates = Postulation::where('publication_id', $publicationId)->join('users','users.id','=','postulations.user_id')->get();
+
+        if($candidates->count() == 0){
+            $usuario = User::find(auth::id());
+            $usuario->credits++;
+            \Log::info($usuario);
+
+            try{
+                $usuario->save();
+            }catch (\PDOException $e){
+                $errors = 'No se pudo eliminar gauchada';
+                \Session::flash('error', $errors);
+                return view('home' ,compact('errors', 'publications'));
+            }
+
+        }else{
+                #REPORTING FROM THE DELETE TO THE CHOSEN
+                $candidateSelected = Calification::where('publication_id','=', $publicationId)->join('users', 'users.id', '=', 'califications.user_id')->get();
+                
+                if($candidateSelected->count() > 0){
+                    #ENVIAR MAIL DEL BORRADO A ELEGIDO
+                    #Mail::to($candidateSelected->first())->send(new mailToCandidateOnDelete(Publication::find($publicationId)->title));
+                }
+
+        }
+
+        #DELETE PUBLICATION
+        $publications = Publication::all();
+        try{
+            #GET PUBLICATION
+            $publication = Publication::find($publicationId)->delete();
+            \Log::info($publication);
+            $success = 'Eliminaste exitosamente la gauchada';
+            \Session::flash('success', $success);
+        }catch (\PDOException $e){
+            $errors = 'No pudimos eliminar la gauchada debido a un error del sistema. Intentalo nuevamente';
+            \Session::flash('error', $errors);
+        }
+        return Redirect::to('/home');
+    }
 
     #APLY
     public function postAplyPublication($publicationId, Request $request){
@@ -321,7 +356,6 @@ class PublicationsController extends Controller
 
         return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
-
 
     #SELECT CANDIDATE
     public function getSelectCandidate($userId, $publicationId){

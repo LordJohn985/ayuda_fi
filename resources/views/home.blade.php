@@ -42,11 +42,9 @@
             @endif
 
             <input class="btn btn-accent pull-right" type="submit" name="filter_button" value="Filtrar">
-
         </div>
         {{ csrf_field() }}
     </form>
-
 
     <div class="content table-responsive">
         <table id="tableExample2" class="table table-striped table-hover">
