@@ -9,6 +9,7 @@ use App\City;
         <a href="../edit/{{$publication->id}}" class=col-md-4>Editar Gauchada</a>
         <a href="../delete/{{$publication->id}}" class=col-md-4>Eliminar Gauchada</a>
         <a href="/publication/setOriginalPhoto/{{$publication->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')" class=col-md-4>Eliminar foto</a>
+        <br><br>
         
     @endif
 

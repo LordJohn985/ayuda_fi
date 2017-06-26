@@ -14,20 +14,20 @@ use App\City;
 
         <div class=form-group>
             <label>Imagen</label>
-            <img src="{{asset($publication->image)}}">
+            <img src="{{asset($publication->image)}}" style="height: 250px; width: 300px">
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Fecha de finalización</label>
             <div class="panel-body" >{{$publication->finish_date}}</div>
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Ciudad</label>
             <div class="panel-body" >{{$publication->city->name}}</div>
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Categoría</label>
             <div class="panel-body" >{{$publication->category->name}}</div>
         </div>
