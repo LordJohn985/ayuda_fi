@@ -19,7 +19,7 @@ class PublicationTableSeeder extends Seeder
             'category_id'=> 3
         ]);
 
-        #LISTAR POSTULANTES - publicaciones 2 a 5
+        #LISTAR POSTULANTES - publicaciones 2 a 6
         App\Publication::create([
             'title' => 'listar postulantes - sin postulantes',
             'finish_date' => Carbon::now()->addMonths(2),
@@ -66,7 +66,7 @@ class PublicationTableSeeder extends Seeder
             'deleted_at' => Carbon::now(),
         ]);
 
-        #CALIFICAR POSTULANTE - publicaciones 6 a 8
+        #CALIFICAR POSTULANTE - publicaciones 7 a 9
         App\Publication::create([
             'title' => 'calificar postulante - calificación positiva',
             'finish_date' => Carbon::now()->addMonths(2),
@@ -94,7 +94,7 @@ class PublicationTableSeeder extends Seeder
             'category_id'=> 1,
         ]);
 
-        #PUBLICAR GAUCHADA - publicacion 9
+        #PUBLICAR GAUCHADA - publicacion 10
         App\Publication::create([
             'title' => 'publicar gauchada - calificaciones pendientes',
             'finish_date' => Carbon::now()->addMonths(2),

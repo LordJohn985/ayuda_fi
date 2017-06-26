@@ -8,7 +8,7 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
 
     <!-- Page title -->
-    <title>Recommend | Dashboard</title>
+    <title>UnaGauchada</title>
 
     <!-- Vendor styles -->
     <link rel="stylesheet" href="/css/vendor/fontawesome/css/font-awesome.css"/>
@@ -31,20 +31,12 @@
 
 <!-- Wrapper-->
 <div class="wrapper">
-
-
-
     @include('includes.header')
-
-
     @include('includes.nav')
-
     @include('includes.alert-error')
     @include('includes.alert-success')
     @yield('content')
-
     @include('includes.scripts')
-
 </div>
 @yield('script')
 </body>

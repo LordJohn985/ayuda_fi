@@ -12,7 +12,7 @@ class UserTableSeeder extends Seeder
         App\User::create([
             'name' => 'admin',
             'last_name' => 'admin',
-            'email' => 'admin@admin.com',
+            'email' => 'prueba.ingenieria.dos@gmail.com',
             'password' => bcrypt('123'),
             'role_id' => 1,
             'picture'=> '/images/users/default_photo_profile.jpg',
@@ -20,9 +20,9 @@ class UserTableSeeder extends Seeder
             'born_date' => '1987-07-03'
         ]);
         App\User::create([
-            'name' => 'usuario1',
-            'last_name' => 'tester1',
-            'email' => 'test1@test1.com',
+            'name' => 'alvaro',
+            'last_name' => 'cor',
+            'email' => 'cor.alvaro.87@gmail.com',
             'password' => bcrypt('123'),
             'role_id' => 2,
             'picture'=> '/images/users/default_photo_profile.jpg',

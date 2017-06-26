@@ -14,20 +14,20 @@ use App\City;
 
         <div class=form-group>
             <label>Imagen</label>
-            <img src="{{asset($publication->image)}}">
+            <img src="{{asset($publication->image)}}" style="height: 250px; width: 300px">
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Fecha de finalización</label>
             <div class="panel-body" >{{$publication->finish_date}}</div>
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Ciudad</label>
             <div class="panel-body" >{{$publication->city->name}}</div>
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Categoría</label>
             <div class="panel-body" >{{$publication->category->name}}</div>
         </div>
@@ -53,44 +53,52 @@ use App\City;
                 </form>
             @else
                 <form action="#" method="POST" id="form-update">
-                    <input type="submit" class="btn btn-danger" value="Cancelar postulacion">
+                    <input type="submit" class="btn btn-danger" value="Cancelar postulacion" disabled>
                     <input type="hidden" name="_method" value="POST">
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 </form>
             @endif
 
+            {{--@if($userMadeQuestion->count() > 0)--}}
+
+            {{--table of questions--}}
+
+            {{--@if($questionsAll->count() > 0)--}}
+            {{--table of questions--}}
+
+            <div class="table-responsive">
+                <label>Preguntas:</label>
+                <table id="tableExample2" class="table table-striped table-hover">
+                    <caption>PREGUNTAS</caption>
+                    <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Reputacion</th>
+                        <th class="no-sort" >Pregunta</th>
+                        <th class="no-sort" >Respuesta</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach( $publication->questions as $question)
+                        <tr>
+                            <td><a href="/user/{{$question->user_id}}">{{ $question->user->name}}</a></td>
+                            <td>{{ \App\Reputation::where('necesary_score', '<=', \App\User::where('id', '=', $question->user_id)->first()->score )->orderBy('necesary_score', 'DESC')->first()->name }}</td>
+                            <td>{{$question->content}}</td>
+                            <td>{{$question->answer}}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+
             <form action="/questions/ask/{{$publication->id}}" method="POST" id="form-update">
                 <input type="submit" class="btn btn-success" value="Preguntar">
                 <label>Ingresa tu pregunta:</label>
-                <input type="textarea" name="content" required>
+                <input type="textarea" name="body_content" required>
                 <input type="hidden" name="_method" value="POST">
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             </form>
-
-            @if($userMadeQuestion->count() > 0)
-
-            {{--table of questions--}}
-                    <div class="table-responsive">
-                        <table id="tableExample2" class="table table-striped table-hover">
-                            <thead>
-                            <tr>
-                                <th class="no-sort" >Pregunta</th>
-                                <th class="no-sort" >Respuesta</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                @foreach( $userMadeQuestion as $question)
-                                    <tr>
-                                        <td>{{$question->content}}</td>
-                                        <td>{{$question->answer}}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-            @endif
-
+            {{--@endif--}}
         @endif
 
     </section>

@@ -50,6 +50,11 @@ class Publication extends Model
     }
     public function calification()
     {
-        return $this->hasOne('App\Calification'); /*probar con hasone*/
+        return $this->hasOne('App\Calification');
+    }
+
+    public function questions()
+    {
+        return $this->hasMany('App\Question');
     }
 }
