@@ -5,13 +5,16 @@ use App\City;
 @section('content')
 
     <section class="content">
-    @if(!$publicationIsExpired and !$candidateIsRated)
-        <a href="../edit/{{$publication->id}}" class=col-md-4>Editar Gauchada</a>
-        <a href="../delete/{{$publication->id}}" class=col-md-4>Eliminar Gauchada</a>
-        <a href="/publication/setOriginalPhoto/{{$publication->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')" class=col-md-4>Eliminar foto</a>
-        <br><br>
-        
-    @endif
+        @if(!$publicationIsExpired)
+            @if($candidateIsRated->label->id == 1)
+                <a href="../delete/{{$publication->id}}" class=col-md-4>Eliminar Gauchada</a>
+            @endif
+            @if($candidates->count() == 0)
+                <a href="../edit/{{$publication->id}}" class=col-md-4>Editar Gauchada</a>
+            @endif
+            <a href="/publication/setOriginalPhoto/{{$publication->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')" class=col-md-4>Eliminar foto</a>
+            <br><br>
+        @endif
 
         {{--publication details--}}
         <div class=form-group>

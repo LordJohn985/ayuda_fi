@@ -9,6 +9,7 @@ use App\City;
 use App\Http\Controllers\Controller;
 use App\Mail\mailToCandidate;
 use App\Mail\mailToCreator;
+use App\Mail\mailToCandidateOnDelete;
 /*use App\Mail\myMailable;*/
 use App\Postulation;
 use App\Publication;
@@ -283,7 +284,8 @@ class PublicationsController extends Controller
             }catch (\PDOException $e){
                 $errors = 'No se pudo eliminar gauchada';
                 \Session::flash('error', $errors);
-                return view('home' ,compact('errors', 'publications'));
+                /*return view('home' ,compact('errors', 'publications'));*/
+                return Redirect::to('/');
             }
 
         }else{
@@ -292,7 +294,7 @@ class PublicationsController extends Controller
                 
                 if($candidateSelected->count() > 0){
                     #ENVIAR MAIL DEL BORRADO A ELEGIDO
-                    #Mail::to($candidateSelected->first())->send(new mailToCandidateOnDelete(Publication::find($publicationId)->title));
+                    Mail::to($candidateSelected->first())->send(new mailToCandidateOnDelete(Publication::find($publicationId)));
                 }
 
         }
