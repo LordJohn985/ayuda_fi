@@ -74,10 +74,9 @@ class RegisterController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'born_date' => $request->birth,
-            'picture' => '/images/users/defualt_photo_profile.jpeg',
+            'picture' => '/images/users/default_photo_profile.jpeg',
             'password' => bcrypt($request->password),
         ]);
-
         $file = $request->picture;
         // Now you have your file in a variable that you can do things with
         $name = 'user'.$user->id.'.png';
@@ -109,7 +108,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
             'born_date' => $data['birth'],
-            'picture' => '/images/users/defualt_photo_profile.jpg',
+            'picture' => '/images/users/default_photo_profile.jpg',
 
             'password' => bcrypt($data['password']),
         ]);

@@ -48,8 +48,8 @@ class Publication extends Model
     {
         return $this->hasMany('App\Postulation');
     }
-    public function califications()
+    public function calification()
     {
-        return $this->hasMany('App\Calification');
+        return $this->hasOne('App\Calification'); /*probar con hasone*/
     }
 }

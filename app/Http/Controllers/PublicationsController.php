@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Application;
 use App\Calification;
+use App\Category;
+use App\City;
 use App\Http\Controllers\Controller;
+use App\Mail\mailToCandidate;
+use App\Mail\mailToCreator;
+use App\Mail\myMailable;
 use App\Postulation;
 use App\Publication;
 use App\User;
@@ -16,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -178,7 +183,7 @@ class PublicationsController extends Controller
     #DELETE
     public function getDeletePublication($publicationId){
 
-    }
+}
 
     #APLY
     public function postAplyPublication($publicationId, Request $request){
@@ -239,6 +244,8 @@ class PublicationsController extends Controller
         #SAVE CANDIDACY
         try{
             $calification->save();
+            Mail::to($calification->user)->send(new mailToCandidate(Auth::user()));
+            Mail::to(Auth::user())->send(new mailToCreator($calification->user, $calification->publication));
             $success = 'The operation has succeed';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
@@ -313,13 +320,42 @@ class PublicationsController extends Controller
 
     public function getHome()
     {
-
+        $hasFilter = false;
         if(Auth::check()){
             $publications = Publication::all()->where('finish_date', '>=', Carbon::now());
-            return VIEW('home', compact('publications'));
+            return view('home', compact('publications', 'hasFilter'));
         }else{
             $publications = Publication::all()->where('finish_date', '>=', Carbon::now());
-            return view('welcome', compact('publications'));
+            return view('welcome', compact('publications', 'hasFilter'));
+        }
+    }
+
+    public function postFilterPublications(Request $request)
+    {
+        if ($request->title!=null){
+            $title = $request->title;
+            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$title%"]])->get();
+        }
+        else{
+            $publications = Publication::where('finish_date', '>=', Carbon::now());
+        }
+        if ($request->category!="all"){
+            $filterCategory = $request->category;
+            /*$thisCategory = Category::where('id', '=', $request->category);
+            dd($thisCategory);*/
+            $publications = $publications->where('category_id', '=', $request->category);
+        }
+        if ($request->city!="all"){
+            $filterCity = $request->city;
+            /*$thisCity = City::where('id', '=', $request->city);*/
+            $publications = $publications->where('city_id', '=', $request->city);
+        }
+
+        $hasFilter = true;
+        if(Auth::check()){
+            return view('home', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'title'));
+        }else{
+            return view('welcome', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'title'));
         }
     }
 
