@@ -175,7 +175,7 @@ class PublicationsController extends Controller
             }
             if(count($publication->postulations)!=0){
                 $error='No puedes editar esta gauchada porque tiene postulantes';
-                \Sesssion::flash('error',$error);
+                \Session::flash('error',$error);
                 return Redirect::to('/dashboard/publications/show/'.$publicationId);
             }
             $publicationIsNew=false;
@@ -336,10 +336,8 @@ class PublicationsController extends Controller
         }catch (\PDOException $e){
             $errors = $e->getMessage();
             \Session::flash('error', $errors);
-            return view('home' ,compact('errors', 'publications'));
         }
-
-        return view('home' ,compact('publications'));
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 
     #RATE CANDIDATE
@@ -421,6 +419,10 @@ class PublicationsController extends Controller
             if(Auth::id()!=$publication->user_id){
                 $error='No tienes permiso para editar esta gauchada';
                 \Session::flash('error',$error);
+            }
+            elseif (count($publication->postulations)!=0) {
+                $error='No puedes editar esta gauchada porque tiene postulantes';
+                \Session::flash('error',$error);            
             }
             else{
                 $publication->image='/images/publications/default_publication_pic.jpg';

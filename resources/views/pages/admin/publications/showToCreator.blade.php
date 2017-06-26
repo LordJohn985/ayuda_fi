@@ -5,8 +5,10 @@ use App\City;
 @section('content')
 
     <section class="content">
+        @if(!$publicationIsExpired)
         <a href="../edit/{{$publication->id}}">Editar</a>
         <a href="/publication/setOriginalPhoto/{{$publication->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')">Eliminar foto</a>
+        @endif
         {{--publication details--}}
         <div class=form-group>
             <label>Título</label>
