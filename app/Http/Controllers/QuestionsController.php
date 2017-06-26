@@ -84,7 +84,6 @@ class QuestionsController extends Controller
          #   ->where('id', $questionId)
           #  ->update(['answer' => $request->answer]);
 
-        \Log::info($answer);
 
         #SAVE ANSWER
         try{
@@ -98,6 +97,6 @@ class QuestionsController extends Controller
 
         }
 
-        return Redirect::to('/');
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 }

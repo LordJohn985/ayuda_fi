@@ -59,28 +59,25 @@ use App\City;
                 </form>
             @endif
 
-            <form action="/questions/ask/{{$publication->id}}" method="POST" id="form-update">
-                <input type="submit" class="btn btn-success" value="Preguntar">
-                <label>Ingresa tu pregunta:</label>
-                <input type="textarea" name="body_content" required>
-                <input type="hidden" name="_method" value="POST">
-                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
-            </form>
 
-            @if($userMadeQuestion->count() > 0)
+
+            {{--@if($userMadeQuestion->count() > 0)--}}
 
             {{--table of questions--}}
                     <div class="table-responsive">
+                        <label>Preguntas:</label>
                         <table id="tableExample2" class="table table-striped table-hover">
                             <thead>
                             <tr>
+                                <th>Usuario</th>
                                 <th class="no-sort" >Pregunta</th>
                                 <th class="no-sort" >Respuesta</th>
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach( $userMadeQuestion as $question)
+                                @foreach( $publication->questions as $question)
                                     <tr>
+                                        <td><a href="/user/{{$question->user_id}}">{{$question->user->name}}</a></td>
                                         <td>{{$question->content}}</td>
                                         <td>{{$question->answer}}</td>
                                     </tr>
@@ -89,7 +86,14 @@ use App\City;
                         </table>
                     </div>
 
-            @endif
+                <form action="/questions/ask/{{$publication->id}}" method="POST" id="form-update">
+                    <input type="submit" class="btn btn-success" value="Preguntar">
+                    <label>Ingresa tu pregunta:</label>
+                    <input type="textarea" name="body_content" required>
+                    <input type="hidden" name="_method" value="POST">
+                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                </form>
+            {{--@endif--}}
 
         @endif
 
