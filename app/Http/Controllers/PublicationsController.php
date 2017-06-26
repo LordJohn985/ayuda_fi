@@ -295,8 +295,11 @@ class PublicationsController extends Controller
         }else{
                 #REPORTING FROM THE DELETE TO THE CHOSEN
                 $candidateSelected = Calification::where('publication_id','=', $publicationId)->join('users', 'users.id', '=', 'califications.user_id')->get();
-
-                #ENVIAR MAIL DEL BORRADO A ELEGIDO
+                
+                if($candidateSelected->count() > 0){
+                    #ENVIAR MAIL DEL BORRADO A ELEGIDO
+                    #Mail::to($candidateSelected->first())->send(new mailToCandidateOnDelete(Publication::find($publicationId)->title));
+                }
 
         }
 
@@ -314,7 +317,7 @@ class PublicationsController extends Controller
         }
         return Redirect::to('/home');
     }
-    
+
     #APLY
     public function postAplyPublication($publicationId, Request $request){
 
@@ -359,7 +362,6 @@ class PublicationsController extends Controller
 
         return view('home' ,compact('publications'));
     }
-
 
     #SELECT CANDIDATE
     public function getSelectCandidate($userId, $publicationId){

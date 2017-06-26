@@ -40,11 +40,11 @@
         @else--}}
             <input type="text" name="title" placeholder="título">
         {{--@endif--}}
-        @if($hasFilter)
+        {{--@if($hasFilter)--}}
             <input class="btn btn-accent pull-right" type="submit" value="Quitar filtros">
-        @else
+        {{--@else--}}
             <input class="btn btn-accent pull-right" type="submit" value="Filtrar">
-        @endif
+        {{--@endif--}}
         </div>
         {{ csrf_field() }}
 
