@@ -9,10 +9,11 @@ use App\City;
 use App\Http\Controllers\Controller;
 use App\Mail\mailToCandidate;
 use App\Mail\mailToCreator;
-use App\Mail\myMailable;
+/*use App\Mail\myMailable;*/
 use App\Postulation;
 use App\Publication;
 use App\User;
+use App\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -78,8 +79,6 @@ class PublicationsController extends Controller
             return view('pages.admin.publications.single' ,compact('publicationIsNew','errors'));
         }
 
-
-
         #CREATE PUBLICATION
         $publication = new Publication();
         $publication->title = $request->title;
@@ -103,8 +102,6 @@ class PublicationsController extends Controller
             \Session::flash('error', $error);
             Log::info($e);
         }
-
-
 
         #SAVE PUBLICATION
         try{
@@ -152,32 +149,131 @@ class PublicationsController extends Controller
         $publication = Publication::withTrashed()->find($publicationId);
         $publicationIsExpired = $publication->finish_date < Carbon::now();
         $canSomeoneAply = !(($publication->finish_date < Carbon::now()) || (Calification::where('publication_id','=', $publicationId)->count()!==0));
+        $questionsAll = Question::where('publication_id','=', $publicationId)->get();
         $userIsLoggedIn = auth::check();
         if($userIsLoggedIn){
             $userIsCreator = $publication->user->id == auth::id();
             if($userIsCreator){
                 #view returned to a logged user who is the creator of the publication
-                $candidates = (Postulation::where('publication_id', $publicationId))->join('users','users.id','=','postulations.user_id')->get();
+                $candidates = Postulation::where('publication_id', $publicationId)->join('users','users.id','=','postulations.user_id')->get();
                 $candidateSelected = Calification::where('publication_id','=', $publicationId)->join('users', 'users.id', '=', 'califications.user_id')->get();
                 $candidateIsRated =  Calification::where('publication_id','=', $publicationId)->first();
-                return view("pages.admin.publications.showToCreator", compact("candidates", "candidateSelected", "candidateIsRated", "publication", "publicationIsExpired"));
+                return view("pages.admin.publications.showToCreator", compact("candidates", "candidateSelected", "candidateIsRated", "publication", "publicationIsExpired", "questionsAll"));
+
             }else {
                 #view returned to a logged user who is no the creator of the publication
-                $userIsCandidate = (Postulation::where('publication_id','=', $publicationId)->where('user_id','=', auth::id()))->get();
-                return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication"));
+                $userIsCandidate = Postulation::where('publication_id','=', $publicationId)->where('user_id','=', auth::id())->get();
+
+                $userMadeQuestion = Question::where('publication_id','=', $publicationId)->where('user_id','=', auth::id())->get();
+
+                return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication", "userMadeQuestion"));
             }
         }
         #view returned to a visitor, who is not logged into the system
-        return view("show", compact("publication", "canSomeoneAply"));
+        return view("show", compact("publication", "canSomeoneAply",'questionsAll'));
     }
 
     #UPDATE
     public function getUpdatePublication($publicationId){
-
+        try{
+            $publication=Publication::findOrFail($publicationId);
+            if(Auth::id()!=$publication->user_id){
+                $error='No puedes editar esta gauchada';
+                \Session::flash('error',$error);
+                return Redirect::to('/home');
+            }
+            if(count($publication->postulations)!=0){
+                $error='No puedes editar esta gauchada porque tiene postulantes';
+                \Sesssion::flash('error',$error);
+                return Redirect::to('/dashboard/publications/show/'.$publicationId);
+            }
+            $publicationIsNew=false;
+            return view('pages.admin.publications.single',compact('publication','publicationIsNew'));
+        }
+        catch(ModelNotFoundException $e){
+            $error='La gauchada no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/home');
+        }
     }
 
-    public function postUpdatePublication(Request $request){
+    public function postUpdatePublication($publicationId,Request $request){
+        if(!Auth::check()){
+            Redirect::to('/login');
+        }
+        #VALIDATE DATA
+        $rules = [
+            'title' => 'required|max:255',
+            'category' => 'required|exists:categories,id',
+            'publication_city' => 'required|exists:cities,id',
+            'finish_date' => 'required|date|after:tomorrow',
+            'description'=>'required|string',
+        ];
 
+        $fields = [
+            'title' => $request->title,
+            'category' => $request->category,
+            'publication_city' => $request->city,
+            'finish_date' => $request->finish_date,
+            'description'=>$request->body_content,
+        ];
+        $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
+
+        if($validator->fails()){
+            $errors = $validator->errors()->all();
+            \Session::flash('error', implode(',',$errors));
+            $publicationIsNew = false;
+            return view('pages.admin.publications.single' ,compact('publicationIsNew','errors'));
+        }
+        try{
+            $publication=Publication::findOrFail($publicationId);
+            $publication->title = $request->title;
+            $publication->finish_date = $request->finish_date;
+            $publication->content = $request->body_content;
+            $publication->city_id = $request->city;
+            $publication->title = $request->title;
+            $publication->category_id = $request->category;
+            if($request->hasFile('image')){
+                $file = $request->file('image');
+                $name = 'publication'.$publication->id.'.png';
+                $path = '/storage/publications/'.$name;
+                $publication->image=$path;
+                Storage::disk('public')->put('/publications/'.$name, file_get_contents($file));
+            }
+            try{
+                $publication->save();
+                $success = 'Gauchada editada';
+                \Session::flash('success', $success);
+            }catch (\PDOException $e){
+                $error = 'La gauchada no ha podido ser editada';
+                \Session::flash('error', $error);
+                Log::info($e);
+                return Redirect::to("./");
+            }
+            if( $request->hasFile('image') ) {
+               $file = $request->file('image');
+                // Now you have your file in a variable that you can do things with
+                $name = 'publication'.$publication->id.'.png';
+                $path = '/storage/publications/'.$name;
+                try{
+                    $publication->image=$path;
+                    $publication->save();
+                    $success = 'Gauchada editada';
+                    \Session::flash('success', $success);
+                    Storage::disk('public')->put('/publications/'.$name, file_get_contents($file));
+                }catch (\PDOException $e){
+                    $error = 'La gauchada no ha podido ser editada';
+                    \Session::flash('error', $error);
+                    Log::info($e);
+                }
+            }
+        }
+        catch(ModelNotFoundException $e){
+            $error='No se ha encontrado la gauchada';
+            \Session::flash('error',$error);
+            Log::info($e);
+        }
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 
     #DELETE
@@ -359,10 +455,31 @@ class PublicationsController extends Controller
         }
     }
 
-
-
-
-
-
+    public function setOriginalPhoto($publicationId){
+        try {
+            $publication=Publication::findOrFail($publicationId);
+            if(Auth::id()!=$publication->user_id){
+                $error='No tienes permiso para editar esta gauchada';
+                \Session::flash('error',$error);
+            }
+            else{
+                $publication->image='/images/publications/default_publication_pic.jpg';
+                try {
+                    $publication->save();
+                    $success='Foto original puesta';
+                    \Session::flash('success',$success);
+                } catch (\PDOException $e) {
+                    $error='No se ha podido borrar la foto';
+                    \Session::flash('error',$error);
+                    Log::info($e);
+                }
+            }
+        } catch (ModelNotFoundException $e) {
+            $error='No se ha podido borrar la foto';
+            \Session::flash('error',$error);
+            Log::info($e);
+        }
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
+    }
 
 }

@@ -45,10 +45,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Role');
     }
-    public function califications()
+    public function calification()
     {
-        return $this->hasMany('App\Calification');
+        return $this->hasOne('App\Calification');
     }
-
 
 }

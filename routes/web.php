@@ -23,8 +23,6 @@ Route::group(['middleware' => 'checkRole'], function () {
 
     #                               BEGIN PUBLICATIONS                               #
     Route::get('dashboard/publications/list','PublicationsController@getListPublication');
-    Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
-    Route::post('dashboard/publications/edit/','PublicationsController@postUpdatePublication');
     Route::get('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
     Route::get('dashboard/publications/selectCandidate/{user_id}/{publication_id}','PublicationsController@getSelectCandidate');
     #                               END   PUBLICATIONS                               #
@@ -46,8 +44,6 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('dashboard/users/list','UsersController@getListUser');
     Route::get('dashboard/users/create','UsersController@getCreateUser');
     Route::post('dashboard/users/create','UsersController@postCreateUser');
-    Route::get('dashboard/users/edit/{id}','UsersController@getUpdateUser');
-    Route::post('dashboard/users/edit/{id}','UsersController@postUpdateUser');
     Route::get('dashboard/users/delete/{id}','UsersController@getDeleteUser');
     #                               END   USERS                               #
 
@@ -66,8 +62,6 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
     #                               END   LOGS                               #
 
-
-
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -80,6 +74,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('dashboard/users/buyCredits', 'UsersController@postBuyCredits');
     Route::get('/user/edit/{id}','UsersController@getUpdateUser');
     Route::post('/user/edit/{id}','UsersController@postUpdateUser');
+    Route::get('dashboard/users/edit/{id}','UsersController@getUpdateUser');
+    Route::post('dashboard/users/edit/{id}','UsersController@postUpdateUser');
+    Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
+    Route::post('dashboard/publications/edit/{id}','PublicationsController@postUpdatePublication');
+    Route::post('questions/ask/{id}','QuestionsController@postCreateQuestion');
+    Route::post('questions/answer/{id}','QuestionsController@postAnswerQuestion');
+    Route::get('/user/setOriginalPhoto/{id}','UsersController@setOriginalPhoto');
+    Route::get('/publication/setOriginalPhoto/{id}','PublicationsController@setOriginalPhoto');
+
 });
 
 
@@ -105,9 +108,6 @@ Route::get('dashboard/publications/unfilter', 'PublicationsController@getUnfilte
 Route::post('dashboard/publications/unfilter', 'PublicationsController@postUnfilterPublication');
 
 #                               END   PUBLIC ROUTES                               #
-
-
-
 
 Auth::routes();
 

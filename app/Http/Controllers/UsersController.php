@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 
 class UsersController extends Controller
@@ -141,7 +142,6 @@ class UsersController extends Controller
         ];
 
         $pass=isset($request->password);
-        $pic=isset($request->picture);
 
         if($pass){
             $rules['password']='required|min:6|confirmed';
@@ -149,31 +149,8 @@ class UsersController extends Controller
             $fields['password']=($request->password);
             $fields['password_confirmation']=($request->password_confirmation);
         }
-/*          'name' => $request->name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'born_date' => $request->birth,
-            'picture' => '/images/users/defualt_photo_profile.jpeg',
-            'password' => bcrypt($request->password),*/
 
-         if( $request->hasFile('image') ) {
-            $file = $request->file('image');
-            // Now you have your file in a variable that you can do things with
-            $name = 'user'.$user_id.'.png';
-            $path = '/storage/users/'.$name;
-            try{
-                $user->photo=$path;
-                $user->save();
-                $success = 'The operation has succeed';
-                \Session::flash('success', $success);
-                Storage::disk('public')->put('/users/'.$name, file_get_contents($file));
-            }catch (\PDOException $e){
-                $error = 'The operation has failed';
-                \Session::flash('error', $error);
-                Log::info($e);
-            }
-        }
+
            
         $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
         if($validator->fails()){
@@ -202,6 +179,25 @@ class UsersController extends Controller
         }*/
 
         #SAVE USER
+
+        if($request->hasFile('picture')) {
+            $file = $request->file('picture');
+            // Now you have your file in a variable that you can do things with
+            $name = 'user'.$user_id.'.png';
+            $path = '/storage/users/'.$name;
+            try{
+                $user->picture=$path;
+                $user->save();
+                $success = 'The operation has succeed';
+                \Session::flash('success', $success);
+                Storage::disk('public')->put('/users/'.$name, file_get_contents($file));
+            }catch (\PDOException $e){
+                $error = 'The operation has failed';
+                \Session::flash('error', $error);
+                Log::info($e);
+            }
+        }
+        
 
         try{
             $user->update($fields);
@@ -316,5 +312,32 @@ class UsersController extends Controller
 
     public function emptyUser(){
         return Redirect::to('/login');
+    }
+
+    public function setOriginalPhoto($userId){
+        try {
+            $user=User::findOrFail($userId);
+            if(Auth::id()!=$user->id){
+                $error='No tienes permiso para editar este perfil';
+                \Session::flash('error',$error);
+            }
+            else{
+                $user->picture='/images/users/default_photo_profile.jpg';
+                try {
+                    $user->save();
+                    $success='Foto original puesta';
+                    \Session::flash('success',$success);
+                } catch (\PDOException $e) {
+                    $error='No se ha podido borrar la foto';
+                    \Session::flash('error',$error);
+                    Log::info($e);
+                }
+            }
+        } catch (ModelNotFoundException $e) {
+            $error='No se ha podido borrar la foto';
+            \Session::flash('error',$error);
+            Log::info($e);
+        }
+        return Redirect::to('/user/'.$userId);
     }
 }

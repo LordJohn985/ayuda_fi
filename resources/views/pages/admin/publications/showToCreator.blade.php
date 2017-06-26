@@ -1,11 +1,12 @@
 use App\City;
-@extends('layouts.admin.base')
 
+@extends('layouts.admin.base')
 
 @section('content')
 
     <section class="content">
-
+        <a href="../edit/{{$publication->id}}">Editar</a>
+        <a href="/publication/setOriginalPhoto/{{$publication->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')">Eliminar foto</a>
         {{--publication details--}}
         <div class=form-group>
             <label>Título</label>
@@ -70,6 +71,48 @@ use App\City;
                         </tbody>
                     </table>
                 </div>
+
+                @if($questionsAll->count() > 0)
+                    {{--table of questions--}}
+                    <div class="table-responsive">
+                        <table id="tableExample2" class="table table-striped table-hover">
+                            <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Reputacion</th>
+                                <th class="no-sort" >Pregunta</th>
+                                <th class="no-sort" >Respuesta</th>
+                                <th class="no-sort" >Responder</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                @foreach( $questionsAll as $question)
+                                    <tr>
+                                        <td><a href="/user/{{$question->user_id}}">{{ $question->user->name}}</a></td>
+                                        <td>{{ \App\Reputation::where('necesary_score', '<=', \App\User::where('id', '=', $question->user_id)->first()->score )->orderBy('necesary_score', 'DESC')->first()->name }}</td>
+                                        {{--<td>{{var_dump($question->user->reputation)}}</td>--}}
+                                        <td>{{$question->content}}</td>
+                                        <td>{{$question->answer}}</td>
+                                        <td>
+                                        <!--ESTO NO CREO FUNCIONE-->
+                                        @if($question->answer=='Sin respuesta aun')
+
+                                            <form action="/questions/answer/{{$question->id}}" method="POST" id="form-update">
+                                                <input type="submit" class="btn btn-success" value="Responder">
+                                                <input type="textarea" name="answer" required>
+                                                <input type="hidden" name="_method" value="POST">
+                                                <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+                                            </form>
+
+                                        @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+
             @endif
         @elseif($candidateIsRated->label->id == 1)
             {{--form to rate candidate--}}
