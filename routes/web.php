@@ -98,6 +98,7 @@ Route::get('/user','UsersController@emptyUser');
 
 
 ##PUBLICATIONS
+Route::post('publications/filter','PublicationsController@postFilterPublications');
 Route::get('publications/list/','PublicationsController@getListPublication');
 Route::get('publications/show/{id}','PublicationsController@getShowPublication');
 Route::get('dashboard/publications/show/{id}','PublicationsController@getShowPublication');
