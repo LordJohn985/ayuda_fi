@@ -79,8 +79,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('dashboard/publications/edit/{id}','PublicationsController@getUpdatePublication');
     Route::post('dashboard/publications/edit/{id}','PublicationsController@postUpdatePublication');
     Route::post('questions/ask/{id}','QuestionsController@postCreateQuestion');
-    Route::post('questions/answer/{id}','QuestionsController@postAnswerQuestion');
-
+    Route::post('questions/answer/{id}/{publication_id}','QuestionsController@postAnswerQuestion');
+    Route::post('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
 });
 
 

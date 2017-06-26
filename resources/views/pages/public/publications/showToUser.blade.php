@@ -67,20 +67,25 @@ use App\City;
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             </form>
 
-            @if($userMadeQuestion->count() > 0)
-
-            {{--table of questions--}}
+            @if($questionsAll->count() > 0)
+                    {{--table of questions--}}
                     <div class="table-responsive">
                         <table id="tableExample2" class="table table-striped table-hover">
+                        <caption>PREGUNTAS</caption>
                             <thead>
                             <tr>
+                                <th>Usuario</th>
+                                <th>Reputacion</th>
                                 <th class="no-sort" >Pregunta</th>
                                 <th class="no-sort" >Respuesta</th>
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach( $userMadeQuestion as $question)
+                                @foreach( $questionsAll as $question)
                                     <tr>
+                                        <td><a href="/user/{{$question->user_id}}">{{ $question->user->name}}</a></td>
+                                        <td>{{ \App\Reputation::where('necesary_score', '<=', \App\User::where('id', '=', $question->user_id)->first()->score )->orderBy('necesary_score', 'DESC')->first()->name }}</td>
+                                        {{--<td>{{var_dump($question->user->reputation)}}</td>--}}
                                         <td>{{$question->content}}</td>
                                         <td>{{$question->answer}}</td>
                                     </tr>
@@ -88,8 +93,8 @@ use App\City;
                             </tbody>
                         </table>
                     </div>
+                @endif
 
-            @endif
 
         @endif
 

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 
 class QuestionsController extends Controller
 {
-    public function postCreateQuestion($publicationId,Request $request){
+    public function postCreateQuestion($publicationId, Request $request){
 
     	$publications = Publication::all();
 
@@ -31,7 +31,8 @@ class QuestionsController extends Controller
         if($validator->fails()){
             $errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
-        return Redirect::to('/home');        }
+        	return Redirect::to('/dashboard/publications/show/'.$publicationId);
+        }
 
         #CREATE QUESTION
         $question = new Question();
@@ -50,13 +51,12 @@ class QuestionsController extends Controller
         }catch (\PDOException $e){
             $errors = 'No pudimos enviar tu pregunta debido a un error del sistema. Intentalo nuevamente' .$e->getMessage();
             \Session::flash('error', $errors);
-            return Redirect::to('/home');
         }
 
-        return Redirect::to('/home');    	
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);  	
     }
 
-    public function postAnswerQuestion($questionId,Request $request){
+    public function postAnswerQuestion($questionId, $publicationId, Request $request){
 
         #VALIDATE DATA
         $rules = [
@@ -72,7 +72,7 @@ class QuestionsController extends Controller
         if($validator->fails()){
             $errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
-            return Redirect::to('/home');
+            return Redirect::to('/dashboard/publications/show/'.$publicationId);
         }
 
         #ANSWER QUESTION
@@ -93,10 +93,8 @@ class QuestionsController extends Controller
         }catch (\PDOException $e){
             $errors = 'No pudimos enviar tu respuesta debido a un error del sistema. Intentalo nuevamente' .$e->getMessage();
             \Session::flash('error', $errors);
-            return Redirect::to('/home');
-
         }
 
-        return Redirect::to('/home');
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 }

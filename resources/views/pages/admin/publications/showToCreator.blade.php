@@ -5,7 +5,10 @@ use App\City;
 @section('content')
 
     <section class="content">
+    @if(!$publicationIsExpired and !$candidateIsRated)
         <a href="../edit/{{$publication->id}}">Editar</a>
+        <a href="../delete/{{$publication->id}}">Eliminar</a>
+    @endif
         {{--publication details--}}
         <div class=form-group>
             <label>Título</label>
@@ -14,20 +17,20 @@ use App\City;
 
         <div class=form-group>
             <label>Imagen</label>
-            <img src="{{asset($publication->image)}}">
+            <img src="{{asset($publication->image)}}" style="height: 250px; width: 300px">
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Fecha de finalización</label>
             <div class="panel-body" >{{$publication->finish_date}}</div>
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Ciudad</label>
             <div class="panel-body" >{{$publication->city->name}}</div>
         </div>
 
-        <div class=form-group>
+        <div class="form-group col-md-4">
             <label>Categoría</label>
             <div class="panel-body" >{{$publication->category->name}}</div>
         </div>
@@ -45,6 +48,7 @@ use App\City;
                 </div>
             @else
                 {{--table of candidates--}}
+                <br><br>
                 <div class="table-responsive">
                     <table id="tableExample2" class="table table-striped table-hover">
                         <thead>
@@ -73,8 +77,10 @@ use App\City;
 
                 @if($questionsAll->count() > 0)
                     {{--table of questions--}}
+                    <br><br>
                     <div class="table-responsive">
                         <table id="tableExample2" class="table table-striped table-hover">
+                        <caption>PREGUNTAS</caption>
                             <thead>
                             <tr>
                                 <th>Usuario</th>
@@ -96,7 +102,7 @@ use App\City;
                                         <!--ESTO NO CREO FUNCIONE-->
                                         @if($question->answer=='Sin respuesta aun')
 
-                                            <form action="/questions/answer/{{$question->id}}" method="POST" id="form-update">
+                                            <form action="/questions/answer/{{$question->id}}/{{$publication->id}}" method="POST" id="form-update">
                                                 <input type="submit" class="btn btn-success" value="Responder">
                                                 <input type="textarea" name="answer" required>
                                                 <input type="hidden" name="_method" value="POST">
