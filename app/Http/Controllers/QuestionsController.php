@@ -15,7 +15,6 @@ class QuestionsController extends Controller
 {
     public function postCreateQuestion($publicationId,Request $request){
 
-    	$publications = Publication::all();
 
         #VALIDATE DATA
         $rules = [
@@ -23,7 +22,7 @@ class QuestionsController extends Controller
         ];
 
         $fields = [
-            'content' => $request->content,
+            'content' => $request->body_content,
         ];
 
         $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
@@ -31,15 +30,15 @@ class QuestionsController extends Controller
         if($validator->fails()){
             $errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
-        return Redirect::to('/home');        }
+            return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
+        }
 
         #CREATE QUESTION
         $question = new Question();
         $question->publication_id=$publicationId;
         $question->user_id=auth::id();
-        $question->content=$request->content;
+        $question->content=$request->body_content;
         $question->answer='Sin respuesta aun';
-        \Log::info($question);
 
 
         #SAVE QUESTION
@@ -48,15 +47,17 @@ class QuestionsController extends Controller
             $success = 'Tu pregunta fue enviada, ahora espera la respuesta sobre: '.Publication::find($publicationId)->title;
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $errors = 'No pudimos enviar tu pregunta debido a un error del sistema. Intentalo nuevamente' .$e->getMessage();
+            $errors = 'No pudimos enviar tu pregunta debido a un error del sistema. Intentalo nuevamente';
             \Session::flash('error', $errors);
-            return Redirect::to('/home');
+            return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
         }
 
-        return Redirect::to('/home');    	
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 
     public function postAnswerQuestion($questionId,Request $request){
+
+        $publicationId = Question::find($questionId)->publication->id;
 
         #VALIDATE DATA
         $rules = [
@@ -72,12 +73,12 @@ class QuestionsController extends Controller
         if($validator->fails()){
             $errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
-            return Redirect::to('/home');
+            return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
         }
 
         #ANSWER QUESTION
-        $answer = Question::find($questionId);
-        $answer->answer=$request->answer;
+        $question = Question::find($questionId);
+        $question->answer=$request->answer;
 
         #DB::table('questions')
          #   ->where('id', $questionId)
@@ -87,16 +88,16 @@ class QuestionsController extends Controller
 
         #SAVE ANSWER
         try{
-            $answer->save();
+            $question->save();
             $success = 'Tu respuesta fue enviada.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $errors = 'No pudimos enviar tu respuesta debido a un error del sistema. Intentalo nuevamente' .$e->getMessage();
+            $errors = 'No pudimos enviar tu respuesta debido a un error del sistema. Intentalo nuevamente';
             \Session::flash('error', $errors);
-            return Redirect::to('/home');
+            return Redirect::to('/');
 
         }
 
-        return Redirect::to('/home');
+        return Redirect::to('/');
     }
 }

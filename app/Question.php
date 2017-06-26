@@ -46,7 +46,7 @@ class Question extends Model
     {
         return $this->belongsTo('App\User');
     }
-    public function publications()
+    public function publication()
     {
         return $this->belongsTo('App\Publication');
     }

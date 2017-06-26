@@ -44,9 +44,8 @@ class ReputationsController extends Controller
 
     	$reputations=Reputation::where('name','=',$request->name)->orWhere('necesary_score','=',$request->necesary_score)->count();
     	if($reputations>0){
-    		$error= 'Reputation already exists';
+    		$error= 'La reputación ya existe.';
     		\Session::flash('error', $error);
-            Log::info($error);
             $reputationIsNew = true;
             return view('pages.admin.reputations.single',compact('reputationIsNew','error'));
         }
@@ -55,15 +54,13 @@ class ReputationsController extends Controller
 	    $reputation->necesary_score=$request->necesary_score;
 	    try{
 	    	$reputation->save();
-	    	$success = 'The operation has succeed';
+	    	$success = 'La reputación ha sido creada.';
 	        \Session::flash('success', $success);
 	    }
 	    catch(\PDOExeption $e){
-	    	$error = 'The operation has failed';
+	    	$error = 'No se pudo crear la reputación.';
 	       \Session::flash('error', $error);
-	       Log::info($e);
 	    }
-    	$reputationIsNew=true;
     	return Redirect::to('/reputations');
     }
 
@@ -118,7 +115,7 @@ class ReputationsController extends Controller
     	}
     	else{
 	    	$reputation=Reputation::find($reputationId);
-	    	if($reputation!==null){
+	    	if($reputation!=null){
 		    	try{
 		    		$reputation->delete();
 		    		$success='Reputacion eliminada';

@@ -109,9 +109,9 @@ class UsersController extends Controller
             $user = User::findOrFail($user_id);
             $userIsNew = false;
         }catch (ModelNotFoundException $e){
-            $error = 'User not found';
+            $error = 'Usuario no encontrado';
             \Session::flash('error', $error);
-            return Redirect::to('users/list');
+            return Redirect::to('/');
         }
 
 
@@ -156,7 +156,7 @@ class UsersController extends Controller
         if($validator->fails()){
             $errors = $validator->messages();
             \Session::flash('error',$errors);
-            return Redirect::to('/user/edit/'.$user_id);
+            return Redirect::to('/user/edit/'.$user_id, compact('errors'));
         }
         #RETRIEVE USER
         try{
@@ -188,23 +188,22 @@ class UsersController extends Controller
             try{
                 $user->picture=$path;
                 $user->save();
-                $success = 'The operation has succeed';
+                $success = 'La imagen se actualizó correctamente.';
                 \Session::flash('success', $success);
                 Storage::disk('public')->put('/users/'.$name, file_get_contents($file));
             }catch (\PDOException $e){
-                $error = 'The operation has failed';
+                $error = 'No se pudo actualizar la imagen.';
                 \Session::flash('error', $error);
-                Log::info($e);
             }
         }
         
 
         try{
             $user->update($fields);
-            $success = 'The operation has succeed';
+            $success = 'El perfil se actualizó correctamente.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $errors = $e->getMessage();
+            $errors = 'No se pudo actualizar el perfil.';
             \Session::flash('error', $errors);
             $userIsNew = false;
             return view('pages.admin.users.single' ,compact('userIsNew','errors'));
@@ -237,11 +236,11 @@ class UsersController extends Controller
                         $success = 'La compra se realizó con éxito';
                         \Session::flash('success', $success);
                     }catch(\PDOException $e){
-                        $error = 'The operation has failed';
+                        $error = 'No se pudo realizar la compra.';
                         \Session::flash('error', $error);
+                        return view('pages.admin.users.purchaseView', compact('errors'));
                     }
-                    $publications = Publication::all();
-                    return view('home', compact('success', 'publications'));
+                    return Redirect::to('/', compact('success'));
                 }
                 /*código de tarjeta inválido*/
                 $errors = 'El codigo de seguridad no corresponde a la tarjeta ingresada.';
@@ -269,24 +268,24 @@ class UsersController extends Controller
         try{
             $user = User::findOrFail($user_id);
         }catch (ModelNotFoundException $e){
-            $error = 'User not found';
+            $error = 'Usuario no encontrado.';
             \Session::flash('error', $error);
             $result='fail';
         }
 
         try{
             $user->delete();
-            $error = 'success';
+            $error = 'Usuario borrado';
         }catch (\PDOException $e){
-            $error = 'The operation has failed';
+            $error = 'No se pudo borrar el usuario.';
             \Session::flash('error', $error);
             $result='fail';
         }
 
         if($result=='success'){
-            return response('The user has been deleted.',200);
+            return response('El usuario ha sido borrado.',200);
         }else{
-            return response("The action can't be performed.",500);
+            return response("No se puede realizar la acción.",500);
         }
 
     }
@@ -306,7 +305,7 @@ class UsersController extends Controller
         catch(ModelNotFoundException $e){
             $error='El usuario no existe';
             \Session::flash('error',$error);
-            return Redirect::to('/home');
+            return Redirect::to('/');
         }
     }
 
@@ -330,13 +329,11 @@ class UsersController extends Controller
                 } catch (\PDOException $e) {
                     $error='No se ha podido borrar la foto';
                     \Session::flash('error',$error);
-                    Log::info($e);
                 }
             }
         } catch (ModelNotFoundException $e) {
             $error='No se ha podido borrar la foto';
             \Session::flash('error',$error);
-            Log::info($e);
         }
         return Redirect::to('/user/'.$userId);
     }

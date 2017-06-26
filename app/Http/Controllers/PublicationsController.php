@@ -33,17 +33,19 @@ class PublicationsController extends Controller
     #CREATE
     public function getCreatePublication(){
         $user = User::withTrashed()->find(auth::id());
-        $publications = Publication::all();
+        /*$publications = Publication::all();*/
         if($user->credits<1){
             $errors='No se puede crear una gauchada debido a que no te quedan créditos';
             \Session::flash('error', $errors);
-            return view('home', compact('publications'));
+            /*return view('home', compact('publications'));*/
+            return Redirect::to('/');
         }
         $calificationsRemaining = Publication::where('publications.user_id', '=', $user->id)->join('califications', 'califications.publication_id', '=', 'publications.id')->where('label_id', '=', 1)->count();
         if($calificationsRemaining!=0){
             $errors='No se puede crear una gauchada debido a que tienes calificaciones pendientes.';
             \Session::flash('error', $errors);
-            return view('home', compact('publications'));
+            /*return view('home', compact('publications'));*/
+            return Redirect::to('/');
         }
         $publicationIsNew = true;
         return view('pages.admin.publications.single' ,compact('publicationIsNew'));
@@ -95,23 +97,21 @@ class PublicationsController extends Controller
         $user->credits --;
         try{
             $user->save();
-            $success = 'The operation has succeed';
+            $success = 'Se cargó el costo de crear la publicación.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $error = 'The operation has failed';
+            $error = 'No se cargó el costo de crear la publicación.';
             \Session::flash('error', $error);
-            Log::info($e);
         }
 
         #SAVE PUBLICATION
         try{
             $publication->save();
-            $success = 'La gauchada se creó con éxito';
+            $success = 'La gauchada se creó con éxito.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $error = 'The operation has failed';
+            $error = 'No se pudo crear la gauchada.';
             \Session::flash('error', $error);
-            Log::info($e);
         }
 
         #STORE UPLOADED IMAGE
@@ -123,18 +123,17 @@ class PublicationsController extends Controller
             try{
                 $publication->image=$path;
                 $publication->save();
-                $success = 'The operation has succeed';
+                $success = 'La gauchada se creó con éxito.';
                 \Session::flash('success', $success);
                 Storage::disk('public')->put('/publications/'.$name, file_get_contents($file));
             }catch (\PDOException $e){
-                $error = 'The operation has failed';
+                $error = 'No se pudo guardar la imagen de la gauchada.';
                 \Session::flash('error', $error);
-                Log::info($e);
             }
         }
 
         $publications = Publication::all();
-        return view('home',compact('publications'));
+        return Redirect::to('/');
 
     }
 
@@ -180,7 +179,7 @@ class PublicationsController extends Controller
             if(Auth::id()!=$publication->user_id){
                 $error='No puedes editar esta gauchada';
                 \Session::flash('error',$error);
-                return Redirect::to('/home');
+                return Redirect::to('/');
             }
             if(count($publication->postulations)!=0){
                 $error='No puedes editar esta gauchada porque tiene postulantes';
@@ -193,7 +192,7 @@ class PublicationsController extends Controller
         catch(ModelNotFoundException $e){
             $error='La gauchada no existe';
             \Session::flash('error',$error);
-            return Redirect::to('/home');
+            return Redirect::to('/');
         }
     }
 
@@ -247,8 +246,7 @@ class PublicationsController extends Controller
             }catch (\PDOException $e){
                 $error = 'La gauchada no ha podido ser editada';
                 \Session::flash('error', $error);
-                Log::info($e);
-                return Redirect::to("./");
+                return Redirect::to("/");
             }
             if( $request->hasFile('image') ) {
                $file = $request->file('image');
@@ -264,14 +262,12 @@ class PublicationsController extends Controller
                 }catch (\PDOException $e){
                     $error = 'La gauchada no ha podido ser editada';
                     \Session::flash('error', $error);
-                    Log::info($e);
                 }
             }
         }
         catch(ModelNotFoundException $e){
             $error='No se ha encontrado la gauchada';
             \Session::flash('error',$error);
-            Log::info($e);
         }
         return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
@@ -300,7 +296,7 @@ class PublicationsController extends Controller
         if($validator->fails()){
             $errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
-            return view('home' ,compact('errors', 'publications'));
+            return Redirect::to('/dashboard/publications/show/'.$publicationId ,compact('errors'));
         }
 
         #CREATE POSTULATION
@@ -319,11 +315,11 @@ class PublicationsController extends Controller
         }catch (\PDOException $e){
             $errors = 'No pudiste postularte debido a un error del sistema. Intentalo nuevamente';
             \Session::flash('error', $errors);
-            return view('home' ,compact('errors', 'publications'));
+            return Redirect::to('/dashboard/publications/show/'.$publicationId ,compact('errors'));
 
         }
 
-        return view('home' ,compact('publications'));
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 
 
@@ -342,15 +338,15 @@ class PublicationsController extends Controller
             $calification->save();
             Mail::to($calification->user)->send(new mailToCandidate(Auth::user()));
             Mail::to(Auth::user())->send(new mailToCreator($calification->user, $calification->publication));
-            $success = 'The operation has succeed';
+            $success = 'Has elegido un postulante. Se les enviará un mail con los datos de cada uno para que se pongan en contacto.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $errors = $e->getMessage();
+            $errors = 'No se pudo hacer la selección del postulante, vuelve a intentarlo.';
             \Session::flash('error', $errors);
-            return view('home' ,compact('errors', 'publications'));
+            return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
         }
 
-        return view('home' ,compact('publications'));
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 
     #RATE CANDIDATE
@@ -373,17 +369,14 @@ class PublicationsController extends Controller
         }catch (\PDOException $e){
             $errors = 'El usuario no se pudo calificar';
             \Session::flash('error', $errors);
-            $publications = Publication::all();
-            return view('home' ,compact('errors', 'publications'));
+            return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
         }
-        $publications = Publication::all();
-        return view('home' ,compact('publications'));
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 
     public function updateUserOnCalification($calification)
     {
-        $publications = Publication::all();
-
+        $publicationId = $calification->publication;
         if($calification->label->name == 'positivo'){
             #BUSINESS RULES WHEN CALIFICATION IS POSITIVE
             $usuario = User::find($calification->user_id);
@@ -396,7 +389,7 @@ class PublicationsController extends Controller
             }catch (\PDOException $e){
                 $errors = 'No se pudo calificar positivo';
                 \Session::flash('error', $errors);
-                return view('home' ,compact('errors', 'publications'));
+                return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
             }
         }elseif($calification->label->name == 'negativo'){
             #BUSINESS RULES WHEN CALIFICATION IS NEGATIVE
@@ -409,7 +402,7 @@ class PublicationsController extends Controller
             }catch (\PDOException $e){
                 $errors = 'No se pudo calificar negativo';
                 \Session::flash('error', $errors);
-                return view('home' ,compact('errors', 'publications'));
+                return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
             }
         }
     }
@@ -471,13 +464,11 @@ class PublicationsController extends Controller
                 } catch (\PDOException $e) {
                     $error='No se ha podido borrar la foto';
                     \Session::flash('error',$error);
-                    Log::info($e);
                 }
             }
         } catch (ModelNotFoundException $e) {
             $error='No se ha podido borrar la foto';
             \Session::flash('error',$error);
-            Log::info($e);
         }
         return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Publication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
@@ -24,7 +25,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $publications = Publication::all();
-        return view('home',compact('publications'));
+        return Redirect::to('/');
     }
 }

@@ -53,7 +53,7 @@ use App\City;
                 </form>
             @else
                 <form action="#" method="POST" id="form-update">
-                    <input type="submit" class="btn btn-danger" value="Cancelar postulacion">
+                    <input type="submit" class="btn btn-danger" value="Cancelar postulacion" disabled>
                     <input type="hidden" name="_method" value="POST">
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 </form>
@@ -62,7 +62,7 @@ use App\City;
             <form action="/questions/ask/{{$publication->id}}" method="POST" id="form-update">
                 <input type="submit" class="btn btn-success" value="Preguntar">
                 <label>Ingresa tu pregunta:</label>
-                <input type="textarea" name="content" required>
+                <input type="textarea" name="body_content" required>
                 <input type="hidden" name="_method" value="POST">
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
             </form>
