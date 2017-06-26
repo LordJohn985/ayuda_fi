@@ -353,6 +353,11 @@ class PublicationsController extends Controller
     public function postRateCandidate($publicationId, Request $request)
     {
 
+        if ($request->label == 1){
+            $error = 'Debes elegir una etiquéta válida para calificar.';
+            \Session::flash('error', $error);
+            return Redirect::to('/dashboard/publications/show/'.$publicationId);
+        }
         #UPDATE CANDIDACY
         $calification = Calification::where('publication_id', '=', $publicationId)->first();
         $calification->content = $request->comment;
@@ -421,30 +426,29 @@ class PublicationsController extends Controller
 
     public function postFilterPublications(Request $request)
     {
+
         if ($request->title!=null){
-            $title = $request->title;
-            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$title%"]])->get();
+            $filterTitle = $request->title;
+            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$filterTitle%"]])->get();
         }
         else{
-            $publications = Publication::where('finish_date', '>=', Carbon::now());
+            $publications = Publication::all()->where('finish_date', '>=', Carbon::now());
         }
         if ($request->category!="all"){
             $filterCategory = $request->category;
-            /*$thisCategory = Category::where('id', '=', $request->category);
-            dd($thisCategory);*/
             $publications = $publications->where('category_id', '=', $request->category);
         }
         if ($request->city!="all"){
             $filterCity = $request->city;
-            /*$thisCity = City::where('id', '=', $request->city);*/
             $publications = $publications->where('city_id', '=', $request->city);
         }
 
         $hasFilter = true;
+
         if(Auth::check()){
-            return view('home', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'title'));
+            return view('home', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'filterTitle'));
         }else{
-            return view('welcome', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'title'));
+            return view('welcome', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'filterTitle'));
         }
     }
 

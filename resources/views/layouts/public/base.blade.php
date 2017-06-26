@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
-<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
-<!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
+<html>
 <head>
-    <title>UnaGauchada</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {{--@include('includes.components.admin.styles')--}}
-<!-- Vendor styles -->
-    
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/vendor/fontawesome/css/font-awesome.css"/>
-    <link rel="stylesheet" href="css/vendor/animate.css/animate.css"/>
-    <link rel="stylesheet" href="css/vendor/bootstrap/css/bootstrap.css"/>
+
+    <title>UnaGauchada</title>
+    {{--@include('includes.components.admin.styles')--}}
+    <!-- Vendor styles -->
+    <link rel="stylesheet" href="/css/vendor/fontawesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="/css/vendor/animate.css/animate.css"/>
+    <link rel="stylesheet" href="/css/vendor/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="/css/vendor/datatables/datatables.min.css"/>
     <link rel="stylesheet" href="/css/vendor/toastr/toastr.min.css"/>
 
@@ -20,35 +21,22 @@
     <link rel="stylesheet" href="/css/pe-icons/helper.css"/>
     <link rel="stylesheet" href="/css/stroke-icons/style.css"/>
     <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="css/style-custom.css">
+    <link rel="stylesheet" href="/css/style-custom.css">
 
 </head>
-
 <body>
+
+<input id="environment" type="hidden" value="{{env('APP_ENV')}}"/>
+
+<!-- Wrapper-->
 <div class="wrapper">
     @include('includes.publicHeader')
-
-    {{--@include('includes.components.admin.header')
-    @include('includes.components.admin.sidebar')
-    @include('includes.components.admin.notification')--}}
+    {{--@include('includes.nav')--}}
     @include('includes.alert-error')
     @include('includes.alert-success')
     @yield('content')
-
-    {{--@include('includes.components.admin.footer')--}}
-
     @include('includes.scripts')
-
-
-</div><!--/wrapper-->
-
-<!-- Vendor scripts -->
-{{--<script src="css/vendor/pacejs/pace.min.js"></script>--}}
-<!--<script src="css/vendor/jquery/dist/jquery.min.js"></script> -->
-<!--<script src="css/vendor/bootstrap/js/bootstrap.min.js"></script> -->
-
-<!-- App scripts -->
-{{--<script src="js/luna.js"></script>
-@yield('scripts')--}}
+</div>
+@yield('script')
 </body>
 </html>
