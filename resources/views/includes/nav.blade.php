@@ -21,7 +21,6 @@
                 </a>
                 <ul id="publications" class="nav nav-second collapse">
                     <li><a href="/dashboard/publications/create">Crear</a></li>
-                    <li><a href="#">Ver mis Gauchadas</a></li>
                 </ul>
             </li>
             @if(auth::id()==1)

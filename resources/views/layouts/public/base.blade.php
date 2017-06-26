@@ -30,7 +30,7 @@
 
 <!-- Wrapper-->
 <div class="wrapper">
-    @include('includes.publicHeader')
+    @include('includes.header')
     {{--@include('includes.nav')--}}
     @include('includes.alert-error')
     @include('includes.alert-success')

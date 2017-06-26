@@ -336,7 +336,7 @@ class PublicationsController extends Controller
         #SAVE CANDIDACY
         try{
             $calification->save();
-            Mail::to($calification->user)->send(new mailToCandidate(Auth::user()));
+            Mail::to($calification->user)->send(new mailToCandidate(Auth::user(), $calification->publication));
             Mail::to(Auth::user())->send(new mailToCreator($calification->user, $calification->publication));
             $success = 'Has elegido un postulante. Se les enviará un mail con los datos de cada uno para que se pongan en contacto.';
             \Session::flash('success', $success);
