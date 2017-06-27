@@ -5,41 +5,51 @@ use \App\Label
 
 @section('content')
     <section class='content'>
-        <a href="/user/edit/{{$user->id}}">Editar</a>
-        <a href="/user/setOriginalPhoto/{{$user->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')">Eliminar foto</a>
+        <div class="col-md-12">
+            <a href="/user/edit/{{$user->id}}" class="btn btn-warning">Editar perfil</a>
+        </div>
+
+        <br><br>
+
         <div class='form-group'>
-            <label>Nombre</label>
+            <label>Nombre: </label>
             <div class="panel-body" >{{$user->name}}, {{$user->last_name}}</div>
         </div>
 
         <div class='form-group'>
-            <label>Imagen</label>
+            <label>Imagen: </label>
             <img src="{{asset($user->picture)}}">
         </div>
 
+        <div class="col-md-12">
+            <a href="/user/setOriginalPhoto/{{$user->id}}" class="btn btn-warning" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')">Eliminar foto</a>
+        </div>
+
+        <br><br>
+
         <div class='form-group'>
-            <label>Reputacion</label>
+            <label>Reputacion: </label>
             <div class="panel-body" >{{\App\Reputation::where('necesary_score', '<=', $user->score)->orderBy('necesary_score', 'DESC')->first()->name}}</div>
         </div>
 		
 		<div class='form-group'>
-            <label>Correo electronico</label>
+            <label>Correo electronico: </label>
             <div class="panel-body" >{{$user->email}}</div>
         </div>
 
         <div class='form-group'>
-            <label>Telefono</label>
+            <label>Telefono: </label>
             <div class="panel-body" >{{$user->phone}}</div>
         </div>
 
         <div class='form-group'>
-            <label>Creditos disponibles</label>
+            <label>Creditos disponibles: </label>
             <div class="panel-body" >{{$user->credits}}</div>
         </div>
 
         
         <div class='form-group'>
-            <label>Gauchadas a las que te postulaste</label>
+            <label>Gauchadas a las que te postulaste:</label>
             <div class="panel-body" >
                 <table id="tableExample2" class="table table-striped table-hover">
                     <thead>
@@ -59,7 +69,7 @@ use \App\Label
         </div>
         
 		<div class='form-group'>
-            <label>Gauchadas que creaste</label>
+            <label>Gauchadas que creaste:</label>
             <div class="panel-body" >
                 <table id="tableExample2" class="table table-striped table-hover">
                     <thead>
@@ -80,7 +90,7 @@ use \App\Label
 
 
         <div class='form-group'>
-            <label>Calificaciones que recibiste</label>
+            <label>Calificaciones que recibiste:</label>
             <div class="panel-body" >
                 <table id="tableExample2" class="table table-striped table-hover">
                     <thead>

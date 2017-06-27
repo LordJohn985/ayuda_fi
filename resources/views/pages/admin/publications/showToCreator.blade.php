@@ -7,13 +7,16 @@ use App\City;
     <section class="content">
         @if(!$publicationIsExpired)
             @if(($candidateIsRated===null)||($candidateIsRated->label->id == 1))
-                <a href="../delete/{{$publication->id}}" class=col-md-4>Eliminar Gauchada</a>
+                <div class="col-md-2">
+                    <a href="../delete/{{$publication->id}}" class="btn btn-warning">Eliminar Gauchada</a>
+                </div>
             @endif
             @if($candidates->count() == 0)
-                <a href="../edit/{{$publication->id}}" class=col-md-4>Editar Gauchada</a>
+                <div class="col-md-10">
+                    <a href="../edit/{{$publication->id}}" class="btn btn-warning">Editar Gauchada</a>
+                </div>
             @endif
-            <a href="/publication/setOriginalPhoto/{{$publication->id}}" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')" class=col-md-4>Eliminar foto</a>
-            <br><br>
+            <br><br><br><br>
         @endif
 
         {{--publication details--}}
@@ -26,6 +29,12 @@ use App\City;
             <label>Imagen</label>
             <img src="{{asset($publication->image)}}" style="height: 250px; width: 300px">
         </div>
+        @if(!$publicationIsExpired)
+            <div class="col-md-12">
+                <a href="/publication/setOriginalPhoto/{{$publication->id}}" class="btn btn-warning" onclick="return confirm('¿Esta seguro que desea poner la foto por defecto?')">Eliminar foto</a>
+            </div>
+        @endif
+            <br><br><br><br>
 
         <div class="form-group col-md-4">
             <label>Fecha de finalización</label>
@@ -55,9 +64,9 @@ use App\City;
                 </div>
             @else
                 {{--table of candidates--}}
-                    <div>
-                        <label>POSTULANTES:</label>
-                    </div>
+                <div>
+                    <label>POSTULANTES:</label>
+                </div>
                 <br><br>
                 <div class="table-responsive">
                     <table id="tableExample2" class="table table-striped table-hover">
@@ -90,7 +99,7 @@ use App\City;
                     <br><br>
                     <div class="table-responsive">
                         <table id="tableExample2" class="table table-striped table-hover">
-                        <caption>PREGUNTAS</caption>
+                            <caption>PREGUNTAS</caption>
                             <thead>
                             <tr>
                                 <th>Usuario</th>
@@ -101,14 +110,14 @@ use App\City;
                             </tr>
                             </thead>
                             <tbody>
-                                @foreach( $questionsAll as $question)
-                                    <tr>
-                                        <td><a href="/user/{{$question->user_id}}">{{ $question->user->name}}</a></td>
-                                        <td>{{ \App\Reputation::where('necesary_score', '<=', \App\User::where('id', '=', $question->user_id)->first()->score )->orderBy('necesary_score', 'DESC')->first()->name }}</td>
-                                        {{--<td>{{var_dump($question->user->reputation)}}</td>--}}
-                                        <td>{{$question->content}}</td>
-                                        <td>{{$question->answer}}</td>
-                                        <td>
+                            @foreach( $questionsAll as $question)
+                                <tr>
+                                    <td><a href="/user/{{$question->user_id}}">{{ $question->user->name}}</a></td>
+                                    <td>{{ \App\Reputation::where('necesary_score', '<=', \App\User::where('id', '=', $question->user_id)->first()->score )->orderBy('necesary_score', 'DESC')->first()->name }}</td>
+                                    {{--<td>{{var_dump($question->user->reputation)}}</td>--}}
+                                    <td>{{$question->content}}</td>
+                                    <td>{{$question->answer}}</td>
+                                    <td>
                                         <!--ESTO NO CREO FUNCIONE-->
                                         @if($question->answer=='Sin respuesta aun')
 
@@ -120,9 +129,9 @@ use App\City;
                                             </form>
 
                                         @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
+                                    </td>
+                                </tr>
+                            @endforeach
                             </tbody>
                         </table>
                     </div>
