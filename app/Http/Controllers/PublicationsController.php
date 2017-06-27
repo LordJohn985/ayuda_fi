@@ -379,16 +379,10 @@ class PublicationsController extends Controller
         }catch (\PDOException $e){
             $errors = 'No se pudo hacer la selección del postulante, vuelve a intentarlo.';
             \Session::flash('error', $errors);
-            return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
         }
-    }
-/*<<<<<<< HEAD
         return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
-=======
 
->>>>>>> a39a696886a92b700c64e98b19e44d2c83f78f7e
-*/
     #RATE CANDIDATE
     public function postRateCandidate($publicationId, Request $request)
     {
