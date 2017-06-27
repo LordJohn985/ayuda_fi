@@ -26,11 +26,16 @@
                        <strong>{{ $errors->first('name') }}</strong>
                     </span>
                 @endif
-            </div>            
+            </div>
 
             <div class=form-group>
                 <label>Email</label>
                 <input  type="email" class="form-control"  name="email" placeholder="Email" value="{{isset($user->email)?$user->email:''}}" required>
+                @if ($errors->has('email'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('email') }}</strong>
+                    </span>
+                @endif
             </div>
 
 

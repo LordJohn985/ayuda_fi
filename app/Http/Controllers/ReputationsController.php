@@ -39,7 +39,8 @@ class ReputationsController extends Controller
     		$errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
             $reputationIsNew = true;
-            return view('pages.admin.reputations.single' ,compact('reputationIsNew','errors'));
+            /*return view('pages.admin.reputations.single' ,compact('reputationIsNew','errors'));*/
+            return back()->withInput();
     	}
 
     	$reputations=Reputation::where('name','=',$request->name)->orWhere('necesary_score','=',$request->necesary_score)->count();
