@@ -68,7 +68,7 @@
                                 <label for="birth" class="col-md-4 control-label">Fecha de nacimiento</label>
 
                                 <div class="col-md-6">
-                                    <input id="birth" type="date" class="form-control" name="birth" value="{{ old('birth') }}" required>
+                                    <input id="birth" type="date" max="{{date('2012-06-26')}}" class="form-control" name="birth" value="{{ old('birth') }}" required>
                                     @if ($errors->has('birth'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('birth') }}</strong>

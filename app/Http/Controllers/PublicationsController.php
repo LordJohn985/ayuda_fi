@@ -291,10 +291,10 @@ class PublicationsController extends Controller
         }else{
                 #REPORTING FROM THE DELETE TO THE CHOSEN
                 $candidateSelected = Calification::where('publication_id','=', $publicationId)->join('users', 'users.id', '=', 'califications.user_id')->get();
-                
-                if($candidateSelected->count() > 0){
+                $publication = Publication::find($publicationId);
+                if($candidateSelected->count() > 0 && $publication->finish_date >= Carbon::now()){
                     #ENVIAR MAIL DEL BORRADO A ELEGIDO
-                    Mail::to($candidateSelected->first())->send(new mailToCandidateOnDelete(Publication::find($publicationId)));
+                    Mail::to($candidateSelected->first())->send(new mailToCandidateOnDelete($publication));
                 }
 
         }
@@ -311,7 +311,7 @@ class PublicationsController extends Controller
             $errors = 'No pudimos eliminar la gauchada debido a un error del sistema. Intentalo nuevamente';
             \Session::flash('error', $errors);
         }
-        return Redirect::to('/home');
+        return Redirect::to('/');
     }
 
     #APLY
@@ -381,22 +381,18 @@ class PublicationsController extends Controller
             \Session::flash('error', $errors);
             return Redirect::to('/dashboard/publications/show/'.$publicationId, compact('errors'));
         }
-    }
-/*<<<<<<< HEAD
         return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
-=======
 
->>>>>>> a39a696886a92b700c64e98b19e44d2c83f78f7e
-*/
     #RATE CANDIDATE
     public function postRateCandidate($publicationId, Request $request)
     {
-
+        $comment = $request->comment;
         if ($request->label == 1){
             $error = 'Debes elegir una etiquéta válida para calificar.';
             \Session::flash('error', $error);
-            return Redirect::to('/dashboard/publications/show/'.$publicationId);
+            /*return Redirect::to('/dashboard/publications/show/'.$publicationId);*/
+            return back()->withInput()->with($comment);
         }
         #UPDATE CANDIDACY
         $calification = Calification::where('publication_id', '=', $publicationId)->first();

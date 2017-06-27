@@ -51,10 +51,13 @@ use App\City;
         @if($candidateSelected->count()==0)
             @if($publicationIsExpired)
                 <div>
-                    <label>La publicación ha expirado.</label>
+                    <label>La publicación ha expirado o fué borrada.</label>
                 </div>
             @else
                 {{--table of candidates--}}
+                    <div>
+                        <label>POSTULANTES:</label>
+                    </div>
                 <br><br>
                 <div class="table-responsive">
                     <table id="tableExample2" class="table table-striped table-hover">
@@ -132,7 +135,7 @@ use App\City;
                 <label>Usuario elegido: {{$candidateSelected->first()->name}}</label>
                 <input type="submit" class="btn btn-info" value="Calificar">
                 <label>Comentario de calificacion:</label>
-                <input type="textarea" name="comment" required>
+                <input type="textarea" name="comment" value="{{old('comment')}}" required>
                 <select class="form-control" name="label">
                     @foreach(\App\Label::all() as $label)
                         {{--@if($label->id==1)
@@ -150,7 +153,7 @@ use App\City;
         @else
             {{--message when candidate is rated or publication has expired--}}
             <div>
-                <label>El candidato ya fue calificado.</label>
+                <label>El candidato {{$candidateIsRated->user->name}} ya fue calificado.</label>
             </div>
         @endif
     </section>
