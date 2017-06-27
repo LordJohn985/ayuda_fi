@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 class PublicationsController extends Controller
 {
@@ -450,11 +451,14 @@ class PublicationsController extends Controller
     public function getHome()
     {
         $hasFilter = false;
+        $califications=Calification::all();
+        foreach ($califications as $calification) {
+            $calif[]=$calification->publication_id;
+        }
+        $publications = Publication::all()->where('finish_date', '>=', Carbon::now())->whereNotIn('id',$calif);
         if(Auth::check()){
-            $publications = Publication::all()->where('finish_date', '>=', Carbon::now());
             return view('home', compact('publications', 'hasFilter'));
         }else{
-            $publications = Publication::all()->where('finish_date', '>=', Carbon::now());
             return view('welcome', compact('publications', 'hasFilter'));
         }
     }
@@ -515,5 +519,6 @@ class PublicationsController extends Controller
         }
         return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
+
 
 }

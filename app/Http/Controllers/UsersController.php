@@ -340,4 +340,39 @@ class UsersController extends Controller
         }
         return Redirect::to('/user/'.$userId);
     }
+
+    public function getPendingPublications(){
+        try{
+            $publications=Publication::where('user_id','=',Auth::id())->where('finish_date', '>=', Carbon::now())->get();
+            $hasFilter=false;
+            return view('pages.admin.users.pending',compact('publications','hasFilter'));
+        }
+        catch(\ModelNotFoundException $e){
+            $error='El usuario no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
+    }
+
+    public function postFilterPendingPublications(Request $request){
+        if ($request->title!=null){
+            $filterTitle = $request->title;
+            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$filterTitle%"]],['user_id','=',Auth::id()])->get();
+        }
+        else{
+            $publications = Publication::all()->where('finish_date', '>=', Carbon::now())->where('user_id','=',Auth::id());
+        }
+        if ($request->category!="all"){
+            $filterCategory = $request->category;
+            $publications = $publications->where('category_id', '=', $request->category);
+        }
+        if ($request->city!="all"){
+            $filterCity = $request->city;
+            $publications = $publications->where('city_id', '=', $request->city);
+        }
+
+        $hasFilter = true;
+        return view('pages.admin.users.pending', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'filterTitle'));
+    }
+
 }

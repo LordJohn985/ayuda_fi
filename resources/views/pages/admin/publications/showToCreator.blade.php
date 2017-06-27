@@ -8,7 +8,7 @@ use App\City;
         @if(!$publicationIsExpired)
             @if(($candidateIsRated===null)||($candidateIsRated->label->id == 1))
                 <div class="col-md-2">
-                    <a href="../delete/{{$publication->id}}" class="btn btn-warning">Eliminar Gauchada</a>
+                    <a href="../delete/{{$publication->id}}" class="btn btn-warning" onclick="return confirm('¿Esta seguro que desea eliminar esta gauchada?')">Eliminar Gauchada</a>
                 </div>
             @endif
             @if($candidates->count() == 0)

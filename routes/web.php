@@ -83,7 +83,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
     Route::get('/user/setOriginalPhoto/{id}','UsersController@setOriginalPhoto');
     Route::get('/publication/setOriginalPhoto/{id}','PublicationsController@setOriginalPhoto');
-
+    Route::get('/pendingPublications','UsersController@getPendingPublications');
+    Route::post('/pendingPublications/filter','UsersController@postFilterPendingPublications');
 });
 
 
