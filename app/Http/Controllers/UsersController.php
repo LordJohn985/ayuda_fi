@@ -343,7 +343,11 @@ class UsersController extends Controller
 
     public function getPendingPublications(){
         try{
-            $publications=Publication::where('user_id','=',Auth::id())->where('finish_date', '>=', Carbon::now())->get();
+            $califications=Calification::all()->where('label_id','=',1);
+        foreach ($califications as $calification) {
+            $calif[]=$calification->publication_id;
+        }
+        $publications=Publication::where('user_id','=',Auth::id())->where('finish_date', '>=', Carbon::now())->whereIn('id',$calif)->get();
             $hasFilter=false;
             return view('pages.admin.users.pending',compact('publications','hasFilter'));
         }
@@ -355,12 +359,16 @@ class UsersController extends Controller
     }
 
     public function postFilterPendingPublications(Request $request){
+        $califications=Calification::all()->where('label_id','=',1);
+        foreach ($califications as $calification) {
+            $calif[]=$calification->publication_id;
+        }
         if ($request->title!=null){
             $filterTitle = $request->title;
-            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$filterTitle%"]],['user_id','=',Auth::id()])->get();
+            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$filterTitle%"]],['user_id','=',Auth::id()])->whereIn('id',$calif)->get();
         }
         else{
-            $publications = Publication::all()->where('finish_date', '>=', Carbon::now())->where('user_id','=',Auth::id());
+            $publications = Publication::all()->where('finish_date', '>=', Carbon::now())->where('user_id','=',Auth::id())->whereIn('id',$calif);
         }
         if ($request->category!="all"){
             $filterCategory = $request->category;
