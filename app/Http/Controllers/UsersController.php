@@ -215,13 +215,15 @@ class UsersController extends Controller
 
     public function getBuyCredits (){
         $price = Configuration::find('1')->price;
-        return view('pages.admin.users.purchaseView', compact('price'));
+        $priceToPay =0;
+        return view('pages.admin.users.purchaseView', compact('price', 'priceToPay'));
     }
 
     public function postBuyCredits (Request $request){
         $credit_card = $request->credit_card;
         $credits = $request->credits;
         $security_code = $request->security_code;
+        $priceToPay = $request->credits * Configuration::find('1')->price;
         switch ($request->credit_card){
             case '4242424242424242': /*tarjeta válida*/
                 if ($request->security_code == 123){ /*código de tarjeta válido*/
@@ -230,7 +232,7 @@ class UsersController extends Controller
                     $purchase = new Purchase();
                     $purchase->purchase_date = Carbon::now();
                     $purchase->count = $request->credits;
-                    $purchase->total = $request->credits * Configuration::find('1')->price;
+                    $purchase->total = $priceToPay;
                     $purchase->user_id = $user->id;
 
                     try{
@@ -241,24 +243,24 @@ class UsersController extends Controller
                     }catch(\PDOException $e){
                         $error = 'No se pudo realizar la compra.';
                         \Session::flash('error', $error);
-                        return view('pages.admin.users.purchaseView', compact('error', 'credit_card', 'credits', 'security_code'));
+                        return view('pages.admin.users.purchaseView', compact('error', 'credit_card', 'credits', 'security_code', 'priceToPay'));
                     }
                     return Redirect::to('/');
                 }
                 /*código de tarjeta inválido*/
                 $errors = 'El codigo de seguridad no corresponde a la tarjeta ingresada.';
                 \Session::flash('error', $errors);
-                return view('pages.admin.users.purchaseView', compact('errors', 'credit_card', 'credits', 'security_code'));
+                return view('pages.admin.users.purchaseView', compact('errors', 'credit_card', 'credits', 'security_code', 'priceToPay'));
                 break;
             case '5105105105100510': /*tarjeta sin saldo*/
                 $errors = 'La tarjeta no tiene saldo.';
                 \Session::flash('error', $errors);
-                return view('pages.admin.users.purchaseView', compact('errors', 'credit_card', 'credits', 'security_code'));
+                return view('pages.admin.users.purchaseView', compact('errors', 'credit_card', 'credits', 'security_code', 'priceToPay'));
                 break;
             default: /*tarjeta inválida*/
                 $errors = 'La tarjeta es inválida.';
                 \Session::flash('error', $errors);
-                return view('pages.admin.users.purchaseView', compact('errors', 'credit_card', 'credits', 'security_code'));
+                return view('pages.admin.users.purchaseView', compact('errors', 'credit_card', 'credits', 'security_code', 'priceToPay'));
                 break;
         }
     }

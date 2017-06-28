@@ -28,7 +28,7 @@
             <div class=form-group>
             {{--<div id="price" style="display:none">{{$price}}</div>--}}
                 <label>Precio a pagar</label>
-                <div id="show-cant" name="price" >0</div>
+                <div id="show-cant" name="price" >{{$priceToPay}}</div>
             </div>
 
             <input class="btn btn-accent pull-right" type="submit" value="Comprar">

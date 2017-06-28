@@ -1,6 +1,7 @@
 @extends('layouts.admin.base')
 
-    <section class="content">
+@section('content')
+    {{--<section class="content">--}}
 
 	<form  action='/pendingPublications/filter' method="POST" enctype="multipart/form-data">
         <div class="content">
@@ -77,3 +78,5 @@
             </tbody>
         </table>
     </div>
+    {{--</section>--}}
+@stop
