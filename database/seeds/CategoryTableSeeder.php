@@ -7,6 +7,7 @@ class CategoryTableSeeder extends Seeder
 
     public function run()
     {
+        App\Category::create(['name' => 'default']);
         App\Category::create(['name' => 'dinero']);
         App\Category::create(['name' => 'amor']);
         App\Category::create(['name' => 'suerte']);

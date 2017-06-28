@@ -33,4 +33,11 @@ class Purchase extends Model
     protected $hidden = [
 
     ];
+
+
+    #RELATIONSHIPS
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

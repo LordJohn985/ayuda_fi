@@ -25,18 +25,18 @@ class CategoriesController extends Controller
 
         #VALIDATE DATA
         $rules = [
-            'category_name' => 'required|max:255|unique:categories,name',
+            'nombre_elegido' => 'required|max:255|unique:categories,name',
         ];
 
         $fields = [
-            'category_name' => $request->name,
+            'nombre_elegido' => $request->name,
 
         ];
         $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
 
         if($validator->fails()){
             $errors = $validator->errors()->all();
-            \Session::flash('error', $errors);
+            \Session::flash('error', implode(',',$errors));
             $categoryIsNew = true;
             return view('pages.admin.categories.single' ,compact('categoryIsNew','errors'));
         }
@@ -49,10 +49,10 @@ class CategoriesController extends Controller
         #SAVE CATEGORY
         try{
             $category->save();
-            $success = 'The operation has succeed';
+            $success = 'La categoría ha sido creada con éxito.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $error = $e->getMessage();
+            $error = 'La categoría no pudo ser creada.';
             \Session::flash('error', $error);
             $categoryIsNew = true;
             return view('pages.admin.categories.single' ,compact('categoryIsNew','errors'));
@@ -63,7 +63,7 @@ class CategoriesController extends Controller
 
     #READ
     public function getListCategory(){
-        $categories = Category::paginate(5);
+        $categories= Category::paginate(100);
         return view("pages.admin.categories.list", compact("categories"));
     }
 
@@ -72,7 +72,7 @@ class CategoriesController extends Controller
         try{
             $category = Category::findOrFail($category_id);
         }catch(ModelNotFoundException $e){
-            $error = 'Category not found.';
+            $error = 'Categoria no encontrada.';
             \Session::flash('error', $error);
             return Redirect::to('dashboard/categories/list');
         }
@@ -87,7 +87,7 @@ class CategoriesController extends Controller
             $category = Category::findOrFail($category_id);
             $categoryIsNew = false;
         }catch (ModelNotFoundException $e){
-            $error = 'Category not found';
+            $error = 'Categoria no encontrada.';
             \Session::flash('error', $error);
             return Redirect::to('dashboards/categories/list');
         }
@@ -100,19 +100,20 @@ class CategoriesController extends Controller
     public function postUpdateCategory(Request $request, $category_id){
         #VALIDATE DATA
         $rules = [
-            'category_name' => 'required|max:255|unique:categories,name',
+            'nombre_elegido' => 'required|max:255|unique:categories,name',
         ];
 
         $fields = [
-            'category_name' => $request->name,
+            'nombre_elegido' => $request->name,
         ];
         $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
 
         if($validator->fails()){
             $errors = $validator->errors()->all();
-            \Session::flash('error', $errors);
+            \Session::flash('error', implode(',',$errors));
             $categoryIsNew = true;
-            return view('pages.admin.categories.single' ,compact('categoryIsNew','errors'));
+            return back()->withInput()->with($errors);
+            /*return view('pages.admin.categories.single' ,compact('categoryIsNew','error'));*/
         }
 
 
@@ -121,10 +122,11 @@ class CategoriesController extends Controller
         try{
             $category = Category::findOrFail($category_id);
         }catch (ModelNotFoundException $e){
-            $error = $e->getMessage();
+            $error = 'Categoria no encontrada.';
             \Session::flash('error', $error);
             $categoryIsNew = true;
-            return view('pages.admin.categories.single' ,compact('categoryIsNew','error'));
+            return back()->withInput()->with($error);
+            /*return view('pages.admin.categories.single' ,compact('categoryIsNew','error'));*/
 
         }
 
@@ -133,13 +135,14 @@ class CategoriesController extends Controller
         #SAVE CATEGORY
         try{
             $category->save();
-            $success = 'The operation has succeed';
+            $success = 'La categoría ha sido editada.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
-            $error = $e->getMessage();
+            $error = 'La categoría no pudo editarse';
             \Session::flash('error', $error);
             $categoryIsNew = true;
-            return view('pages.admin.categories.single' ,compact('categoryIsNew','error'));
+            return back()->withInput()->with($error);
+            /*return view('pages.admin.categories.single' ,compact('categoryIsNew','error'));*/
         }
 
         return Redirect::to('dashboard/categories/list');
@@ -153,25 +156,34 @@ class CategoriesController extends Controller
         try{
             $category = Category::findOrFail($category_id);
         }catch (ModelNotFoundException $e){
-            $error = 'Category not found';
+            $error = 'Categoria no encontrada';
             \Session::flash('error', $error);
             $result='fail';
+            return Redirect::to('/dashboard/categories/list');
         }
 
-        try{
-            $category->delete();
-            $error = 'success';
-        }catch (\PDOException $e){
-            $error = 'The operation has failed';
+        if ($category->publications->count()==0){
+            try{
+                $category->delete();
+                $success = 'La categoría se borró exitosamente.';
+                \Session::flash('success', $success);
+            }catch (\PDOException $e){
+                $error = 'No se pudo borrar la categoría';
+                \Session::flash('error', $error);
+                $result='fail';
+                return Redirect::to('/dashboard/categories/list');
+            }
+        }else{
+            $error = 'Existen gauchadas que pertenecen a la categoría que intentas borrar.';
             \Session::flash('error', $error);
-            $result='fail';
         }
+        return Redirect::to('/dashboard/categories/list');
 
-        if($result=='success'){
+        /*if($result=='success'){
             return response('The category has been deleted.',200);
         }else{
             return response("The action can't be performed.",500);
-        }
+        }*/
     }
 
 
