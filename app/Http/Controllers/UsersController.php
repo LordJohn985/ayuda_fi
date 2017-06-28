@@ -295,6 +295,18 @@ class UsersController extends Controller
 
     }
 
+    public function getDeleteAccount(){
+        try{
+            Auth::user()->delete();
+            $success = 'El usuario ha sido borrado.';
+            \Session::flash('success', $success);
+        }catch(\PDOException $e){
+            $error = 'No se pudo borrar el usuario.';
+            \Session::flash('error', $error);
+        }
+        return Redirect::to('/');
+    }
+
     public function getShowUser($userId){
         try{
             $user=User::findOrFail($userId);

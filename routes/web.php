@@ -64,6 +64,7 @@ Route::group(['middleware' => 'checkRole'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
 
+    Route::get('dashboard/users/deleteAccount/','UsersController@getDeleteAccount');
     Route::get('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
     Route::get('dashboard/publications/selectCandidate/{user_id}/{publication_id}','PublicationsController@getSelectCandidate');
     Route::post('dashboard/publications/aply/{id}', 'PublicationsController@postAplyPublication');

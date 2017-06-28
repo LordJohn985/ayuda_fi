@@ -13,6 +13,7 @@
                 <ul id="account" class="nav nav-second collapse">
                     <li><a href="/user/{{auth::id()}}">Mi perfil</a></li>
                     <li><a href="/dashboard/users/buyCredits">Comprar créditos</a></li>
+                    <li><a href="/dashboard/users/deleteAccount" onclick="return confirm('¿Esta seguro que desea borrar su cuenta?')">Borrar cuenta</a></li>
                 </ul>
             </li>
             <li>
