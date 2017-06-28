@@ -318,8 +318,6 @@ class PublicationsController extends Controller
     #APLY
     public function postAplyPublication($publicationId, Request $request){
 
-        $publications = Publication::all();
-
         #VALIDATE DATA
         $rules = [
             'comment' => 'required|max:255',
@@ -342,7 +340,6 @@ class PublicationsController extends Controller
         $postulation->publication_id=$publicationId;
         $postulation->user_id=auth::id();
         $postulation->comment=$request->comment;
-        \Log::info($postulation);
 
 
         #SAVE POSTULATION
@@ -354,9 +351,22 @@ class PublicationsController extends Controller
             $errors = 'No pudiste postularte debido a un error del sistema. Intentalo nuevamente';
             \Session::flash('error', $errors);
             return Redirect::to('/dashboard/publications/show/'.$publicationId ,compact('errors'));
-
         }
 
+        return Redirect::to('/dashboard/publications/show/'.$publicationId);
+    }
+
+    public function postQuitAplyPublication($publicationId){
+        $postulation = Publication::find($publicationId)->postulations->where('user_id', '=', Auth::id())->first();
+        try{
+            $postulation->delete();
+            $success = 'La postulación ha sido borrada';
+            \Session::flash('success', $success);
+        }catch(\PDOException $e){
+            $errors = 'La postulación no pudo cancelarse, vuelve a intentarlo.';
+            \Session::flash('error', $errors);
+            return back()->withInput()->with($errors);
+        }
         return Redirect::to('/dashboard/publications/show/'.$publicationId);
     }
 

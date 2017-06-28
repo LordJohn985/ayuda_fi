@@ -67,6 +67,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
     Route::get('dashboard/publications/selectCandidate/{user_id}/{publication_id}','PublicationsController@getSelectCandidate');
     Route::post('dashboard/publications/aply/{id}', 'PublicationsController@postAplyPublication');
+    Route::post('dashboard/publications/quit_aply/{id}', 'PublicationsController@postQuitAplyPublication');
     Route::post('dashboard/publications/rate/{id}', 'PublicationsController@postRateCandidate');
     Route::get('dashboard/publications/create','PublicationsController@getCreatePublication');
     Route::post('dashboard/publications/create/','PublicationsController@postCreatePublication');

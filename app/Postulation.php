@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
+/*use Illuminate\Database\Eloquent\SoftDeletes;*/
 
 
 
 class Postulation extends Model
 {
 
-    use SoftDeletes;
+    /*use SoftDeletes;*/
 
     /**
      * The attributes that are mass assignable.

@@ -52,8 +52,8 @@ use App\City;
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 </form>
             @else
-                <form action="#" method="POST" id="form-update">
-                    <input type="submit" class="btn btn-danger" value="Cancelar postulacion" disabled>
+                <form action="/dashboard/publications/quit_aply/{{$publication->id}}" method="POST" id="form-update">
+                    <input type="submit" class="btn btn-danger" value="Cancelar postulacion">
                     <input type="hidden" name="_method" value="POST">
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                 </form>
