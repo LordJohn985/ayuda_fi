@@ -33,7 +33,7 @@
                     <ul id="admin" class="nav nav-second collapse">
                         <li><a href="#">Ver ganancias</a></li>
                         <li><a href="/reputations">Reputaciones</a></li>
-                        <li><a href="#">Crear categorias</a></li>
+                        <li><a href="/dashboard/categories/list">Categorias</a></li>
                         <li><a href="/ranking">Ver ranking</a></li>
                         <li><a href="#">Setear configuraciones</a></li>
                         <li><a href="/logs">Logs</a></li>

@@ -7,6 +7,7 @@
     <script src="/css/vendor/datatables/datatables.min.js"></script>
     <script src="/css/vendor/toastr/toastr.min.js"></script>
     <script src="{{ asset('/vendors/ckeditor/ckeditor.js') }}"></script>
+    {{--<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>--}}
 
 
     <!-- App scripts -->

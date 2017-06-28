@@ -35,8 +35,8 @@ class Category extends Model
     ];
     #RELATIONSHIPS
 
-    public function publication()
+    public function publications()
     {
-        return $this->belongsTo('App\Publication');
+        return $this->hasMany('App\Publication');
     }
 }
