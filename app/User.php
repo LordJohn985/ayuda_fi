@@ -5,11 +5,13 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+/*use App\Events\UserDeleted;*/
 
 class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+
 
 
     #DEFAULT PROTECTED
@@ -32,6 +34,24 @@ class User extends Authenticatable
         return $this->role_id == 1;
     }
 
+    #EVENTS
+    protected static function boot() {
+        parent::boot();
+
+        static::deleting(function($user) { // before delete() method call this
+            $user->postulations()->delete();
+            $user->questions()->delete();
+            $user->purchases()->delete();
+            $user->califications()->delete();
+            $user->publications()->delete();
+            // do the rest of the cleanup...
+        });
+    }
+
+    /*protected $events = [
+        'deleted' => UserDeleted::class,
+    ];*/
+
     #RELATIONSHIPS
     public function publications()
     {
@@ -45,13 +65,18 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Role');
     }
-    public function calification()
+    public function califications()
     {
-        return $this->hasOne('App\Calification');
+        return $this->hasMany('App\Calification');
     }
 
     public function questions()
     {
         return $this->hasMany('App\Question');
+    }
+
+    public function purchases()
+    {
+        return $this->hasMany('App\Purchase');
     }
 }
