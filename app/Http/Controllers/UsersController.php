@@ -397,4 +397,8 @@ class UsersController extends Controller
         return view('pages.admin.users.pending', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'filterTitle'));
     }
 
+    public function getRanking(){
+        $users=User::orderBy('score','desc')->get();
+        return view('pages.admin.users.ranking',compact('users'));
+    }
 }

@@ -43,6 +43,7 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('dashboard/users/create','UsersController@getCreateUser');
     Route::post('dashboard/users/create','UsersController@postCreateUser');
     Route::get('dashboard/users/delete/{id}','UsersController@getDeleteUser');
+    Route::get('/ranking',"UsersController@getRanking");
     #                               END   USERS                               #
 
 
