@@ -401,4 +401,64 @@ class UsersController extends Controller
         $users=User::orderBy('score','desc')->get();
         return view('pages.admin.users.ranking',compact('users'));
     }
+
+    public function getEarnings(Request $request){
+
+        #VALIDAR RANGO DE FECHA VALIDAS
+        #if (($request->date_to - $request->date_from) < 0) {
+            #$error='Rango de fecha invalido.';
+            #\Session::flash('error',$error);
+            #return Redirect::to('/');
+        #}else{
+
+        try{
+
+        #OBTENER LISTA DE COMPRAS
+        $purchases = DB::table('purchases')
+            ->join('users', 'users.id', '=', 'purchases.user_id')
+            ->select('users.id as user_id', 'name', 'last_name', 'count', 'total', 'purchases.created_at as purchase_date')
+            ->whereBetween('purchases.created_at', [$request->date_from, $request->date_to])
+            ->get();
+
+        #OBTENER PRECIO DE CREDITOS
+        $price = Configuration::find('1')->price;
+
+        #EARNING TOTAL
+        $total_gral = DB::table('purchases')->sum('total')->whereBetween('purchases.created_at', [$request->date_from, $request->date_to]);
+
+        return view('pages.admin.users.earnings',compact('purchases','price'));
+
+        } catch (ModelNotFoundException $e) {
+            $error='No se pudo cargar las ganacias. Intentelo mas tarde.';
+            \Session::flash('error',$error);
+        }
+
+        return Redirect::to('');
+        #}
+
+    }
+
+    public function getAllPurchases(){
+
+        try{
+
+        #FULL LIST OF PURCHASES
+        $purchases =DB::select("select users.id as user_id, name, last_name, count, total, purchases.created_at as purchase_date from `purchases` inner join `users` on `purchases`.`user_id` = `users`.`id` order by purchases.created_at desc");
+
+        #EARNING TOTAL
+        $total_gral = DB::table('purchases')->sum('total');
+
+        #GET PRICE OF CREDITS
+        $price = Configuration::find('1')->price;
+
+        return view('pages.admin.users.earnings',compact('purchases','price', 'total_gral'));
+
+        } catch (ModelNotFoundException $e) {
+            $error='No se pudo cargar las ganacias. Intentelo mas tarde.';
+            \Session::flash('error',$error);
+        }
+
+        return Redirect::to('/');
+    }   
+
 }

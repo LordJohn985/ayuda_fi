@@ -44,6 +44,8 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::post('dashboard/users/create','UsersController@postCreateUser');
     Route::get('dashboard/users/delete/{id}','UsersController@getDeleteUser');
     Route::get('/ranking',"UsersController@getRanking");
+    Route::get('/earnings/getAllPurchases',"UsersController@getAllPurchases");
+    Route::get('/earnings/getEarnings',"UsersController@getEarnings");
     #                               END   USERS                               #
 
 

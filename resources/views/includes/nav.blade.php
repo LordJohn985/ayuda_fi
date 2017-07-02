@@ -31,7 +31,7 @@
                         Admin<span class="sub-nav-icon"> <i class="stroke-arrow"></i> </span>
                     </a>
                     <ul id="admin" class="nav nav-second collapse">
-                        <li><a href="#">Ver ganancias</a></li>
+                        <li><a href="/earnings/getAllPurchases">Ver ganancias</a></li>
                         <li><a href="/reputations">Reputaciones</a></li>
                         <li><a href="/dashboard/categories/list">Categorias</a></li>
                         <li><a href="/ranking">Ver ranking</a></li>
