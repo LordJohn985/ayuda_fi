@@ -405,11 +405,12 @@ class UsersController extends Controller
     public function getEarnings(Request $request){
 
         #VALIDAR RANGO DE FECHA VALIDAS
-        #if (($request->date_to - $request->date_from) < 0) {
-            #$error='Rango de fecha invalido.';
-            #\Session::flash('error',$error);
-            #return Redirect::to('/');
-        #}else{
+        #falta comprobar esto
+        if (($request->date_to - $request->date_from) < 0) {
+            $error='Rango de fecha invalido.';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }else{
 
         try{
 
@@ -424,9 +425,9 @@ class UsersController extends Controller
         $price = Configuration::find('1')->price;
 
         #EARNING TOTAL
-        $total_gral = DB::table('purchases')->sum('total')->whereBetween('purchases.created_at', [$request->date_from, $request->date_to]);
+        $total_gral = DB::table('purchases')->whereBetween('purchases.created_at', [$request->date_from, $request->date_to])->sum('total');
 
-        return view('pages.admin.users.earnings',compact('purchases','price'));
+        return view('pages.admin.users.earnings',compact('purchases','price', 'total_gral'));
 
         } catch (ModelNotFoundException $e) {
             $error='No se pudo cargar las ganacias. Intentelo mas tarde.';
@@ -434,7 +435,7 @@ class UsersController extends Controller
         }
 
         return Redirect::to('');
-        #}
+        }
 
     }
 

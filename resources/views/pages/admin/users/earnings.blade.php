@@ -2,7 +2,7 @@
 
 @section('content')
 
-	<form  action='/earnings/getEarnings' method="POST" enctype="multipart/form-data">
+	<form  action='/earnings/getEarnings' method="get" enctype="multipart/form-data">
         <div class="content">
             <div class="form-group col-md-3">
                 <label>Desde</label>
