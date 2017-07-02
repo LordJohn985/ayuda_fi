@@ -414,18 +414,22 @@ class UsersController extends Controller
 
         try{
 
-        #OBTENER LISTA DE COMPRAS
+        #OBTENER LISTA DE COMPRAS ->whereBetwee('purchases.created_at', [$request->date_from, $request->date_to])
         $purchases = DB::table('purchases')
             ->join('users', 'users.id', '=', 'purchases.user_id')
             ->select('users.id as user_id', 'name', 'last_name', 'count', 'total', 'purchases.created_at as purchase_date')
-            ->whereBetween('purchases.created_at', [$request->date_from, $request->date_to])
+            ->whereDate('purchases.created_at','>=',$request->date_from)
+            ->whereDate('purchases.created_at','<=',$request->date_to)
             ->get();
 
         #OBTENER PRECIO DE CREDITOS
         $price = Configuration::find('1')->price;
 
         #EARNING TOTAL
-        $total_gral = DB::table('purchases')->whereBetween('purchases.created_at', [$request->date_from, $request->date_to])->sum('total');
+        $total_gral = DB::table('purchases')
+            ->whereDate('purchases.created_at','>=',$request->date_from)
+            ->whereDate('purchases.created_at','<=',$request->date_to)
+            ->sum('total');
 
         return view('pages.admin.users.earnings',compact('purchases','price', 'total_gral'));
 
