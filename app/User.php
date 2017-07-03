@@ -41,7 +41,6 @@ class User extends Authenticatable
         static::deleting(function($user) { // before delete() method call this
             $user->postulations()->delete();
             $user->questions()->delete();
-            $user->purchases()->delete();
             $user->califications()->delete();
             $user->publications()->delete();
             // do the rest of the cleanup...

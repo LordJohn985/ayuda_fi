@@ -434,7 +434,7 @@ class UsersController extends Controller
             \Session::flash('error',$error);
         }
 
-        return Redirect::to('');
+        return Redirect::to('/');
         }
 
     }

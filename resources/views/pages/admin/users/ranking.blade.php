@@ -6,9 +6,9 @@
 		<table id="tableExample2" class="table table-striped table-hover">
 			<thead>
 				<tr>
-					<th>Puntaje</th>
+					<th class='no-sort'>Puntaje</th>
 					<th class='no-sort'>Nombre</th>
-					<th class='no-sort'>Reputacion</th>
+					<th >Reputacion</th>
 				</tr>	
 			</thead>
 			<tbody>
