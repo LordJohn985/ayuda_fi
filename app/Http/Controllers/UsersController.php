@@ -36,7 +36,7 @@ class UsersController extends Controller
         return view('pages.admin.users.single' ,compact('userIsNew'));
 
     }
-    
+
     public function postCreateUser (Request $request){
 
         #VALIDATE DATA
@@ -119,7 +119,7 @@ class UsersController extends Controller
         return view('pages.admin.users.single' ,compact('userIsNew','user'));
 
     }
-    
+
     public function postUpdateUser (Request $request, $user_id){
 
         #VALIDATE DATA
@@ -151,7 +151,7 @@ class UsersController extends Controller
         }
 
 
-           
+
         $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
         if($validator->fails()){
             $errors = $validator->errors()->all();
@@ -171,12 +171,12 @@ class UsersController extends Controller
             $fields['password']=bcrypt($fields['password']);
         }
 
-/*        if($validator->fails()){
-            $errors = $validator->messages();
-            \Session::flash('error', $errors);
-            $userIsNew = false;
-            return view('pages.admin.users.single' ,compact('userIsNew','errors', 'user'));
-        }*/
+        /*        if($validator->fails()){
+                    $errors = $validator->messages();
+                    \Session::flash('error', $errors);
+                    $userIsNew = false;
+                    return view('pages.admin.users.single' ,compact('userIsNew','errors', 'user'));
+                }*/
 
         #SAVE USER
 
@@ -196,7 +196,7 @@ class UsersController extends Controller
                 \Session::flash('error', $error);
             }
         }
-        
+
 
         try{
             $user->update($fields);
@@ -358,10 +358,10 @@ class UsersController extends Controller
     public function getPendingPublications(){
         try{
             $califications=Calification::all()->where('label_id','=',1);
-        foreach ($califications as $calification) {
-            $calif[]=$calification->publication_id;
-        }
-        $publications=Publication::where('user_id','=',Auth::id())->where('finish_date', '>=', Carbon::now())->whereIn('id',$calif)->get();
+            foreach ($califications as $calification) {
+                $calif[]=$calification->publication_id;
+            }
+            $publications=Publication::where('user_id','=',Auth::id())->where('finish_date', '>=', Carbon::now())->whereIn('id',$calif)->get();
             $hasFilter=false;
             return view('pages.admin.users.pending',compact('publications','hasFilter'));
         }
@@ -404,55 +404,56 @@ class UsersController extends Controller
 
     public function getEarnings(Request $request){
 
-        #VALIDAR RANGO DE FECHA VALIDAS
-        #falta comprobar esto
-        if (($request->date_to - $request->date_from) < 0) {
+        if($request->date_from > $request->date_to ){
             $error='Rango de fecha invalido.';
             \Session::flash('error',$error);
-            return Redirect::to('/');
+            return Redirect::to('/earnings/getAllPurchases');
         }else{
 
-        try{
+            #OBTENER LISTA DE COMPRAS
+            $purchases = DB::table('purchases')
+                ->join('users', 'users.id', '=', 'purchases.user_id')
+                ->select('users.id as user_id', 'name', 'last_name', 'count', 'total', 'purchases.created_at as purchase_date')
+                ->whereDate('purchases.created_at','>=',$request->date_from)
+                ->whereDate('purchases.created_at','<=',$request->date_to)
+                ->get();
 
-        #OBTENER LISTA DE COMPRAS
-        $purchases = DB::table('purchases')
-            ->join('users', 'users.id', '=', 'purchases.user_id')
-            ->select('users.id as user_id', 'name', 'last_name', 'count', 'total', 'purchases.created_at as purchase_date')
-            ->whereBetween('purchases.created_at', [$request->date_from, $request->date_to])
-            ->get();
+            #COMPRUEBA SI HAY DATOS PARA ESE RANGO DE FECHAS
+            if (!$purchases->count()) {
+                $error='No existen datos para ese rango de fechas.';
+                \Session::flash('error',$error);
+                return Redirect::to('/earnings/getAllPurchases');
+            }else{
 
-        #OBTENER PRECIO DE CREDITOS
-        $price = Configuration::find('1')->price;
+                try{
 
-        #EARNING TOTAL
-        $total_gral = DB::table('purchases')->whereBetween('purchases.created_at', [$request->date_from, $request->date_to])->sum('total');
+                    #EARNING TOTAL
+                    $total_gral = DB::table('purchases')
+                        ->whereDate('purchases.created_at','>=',$request->date_from)
+                        ->whereDate('purchases.created_at','<=',$request->date_to)
+                        ->sum('total');
 
-        return view('pages.admin.users.earnings',compact('purchases','price', 'total_gral'));
-
-        } catch (ModelNotFoundException $e) {
-            $error='No se pudo cargar las ganacias. Intentelo mas tarde.';
-            \Session::flash('error',$error);
+                    return view('pages.admin.users.earnings',compact('purchases', 'total_gral'));
+                } catch (ModelNotFoundException $e) {
+                    $error='No se pudo cargar las ganacias. Intentelo mas tarde.';
+                    \Session::flash('error',$error);
+                    return Redirect::to('/');
+                }
+            }
         }
-
-        return Redirect::to('/');
-        }
-
     }
 
     public function getAllPurchases(){
 
         try{
 
-        #FULL LIST OF PURCHASES
-        $purchases =DB::select("select users.id as user_id, name, last_name, count, total, purchases.created_at as purchase_date from `purchases` inner join `users` on `purchases`.`user_id` = `users`.`id` order by purchases.created_at desc");
+            #FULL LIST OF PURCHASES
+            $purchases =DB::select("select users.id as user_id, name, last_name, count, total, purchases.created_at as purchase_date from `purchases` inner join `users` on `purchases`.`user_id` = `users`.`id` order by purchases.created_at desc");
 
-        #EARNING TOTAL
-        $total_gral = DB::table('purchases')->sum('total');
+            #EARNING TOTAL
+            $total_gral = DB::table('purchases')->sum('total');
 
-        #GET PRICE OF CREDITS
-        $price = Configuration::find('1')->price;
-
-        return view('pages.admin.users.earnings',compact('purchases','price', 'total_gral'));
+            return view('pages.admin.users.earnings',compact('purchases', 'total_gral'));
 
         } catch (ModelNotFoundException $e) {
             $error='No se pudo cargar las ganacias. Intentelo mas tarde.';
@@ -460,6 +461,6 @@ class UsersController extends Controller
         }
 
         return Redirect::to('/');
-    }   
+    }
 
 }

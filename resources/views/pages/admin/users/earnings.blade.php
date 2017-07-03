@@ -50,7 +50,7 @@
 						<td>{{$purchase->purchase_date}}</td>
 						<td><a href="/user/{{$purchase->user_id}}">{{$purchase->name,$purchase->last_name}}</a></td>
 						<td>{{$purchase->count}}</td>
-						<td>{{$price}}</td>
+						<td>{{$purchase->total / $purchase->count}}</td>
 						<td>{{$purchase->total}}</td>
 					</tr>
 				@endforeach
