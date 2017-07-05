@@ -3,7 +3,7 @@
 @section('content')
 
 	<div class='content table-responsive'>
-		<table id="tableExample2" class="table table-striped table-hover">
+		<table {{--id="tableExample4"--}} class="table table-striped table-hover">
 			<thead>
 				<tr>
 					<th class='no-sort'>Puntaje</th>
@@ -21,6 +21,6 @@
 				@endforeach
 			</tbody>
 		</table>
+		{{ $users->links()}}
 	</div>
-
 @endsection

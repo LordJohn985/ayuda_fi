@@ -398,7 +398,7 @@ class UsersController extends Controller
     }
 
     public function getRanking(){
-        $users=User::orderBy('score','desc')->get();
+        $users=User::orderBy('score','desc')->paginate(5);
         return view('pages.admin.users.ranking',compact('users'));
     }
 

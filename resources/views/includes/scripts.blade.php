@@ -89,6 +89,24 @@
 
         });
 
+    </script></script></script><script>
+        $(document).ready(function () {
+
+
+
+            $('#tableExample4').DataTable({
+                "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>t<'row'<'col-sm-6'i><'col-sm-6'p>>",
+                "lengthMenu": [ [6, 25, 50, -1], [6, 25, 50, "All"] ],
+                "iDisplayLength": 6,
+                "columnDefs": [ {
+                    "targets": 'no-sort',
+                    "orderable": false,
+                } ]
+            });
+
+
+        });
+
     </script>
 
 
