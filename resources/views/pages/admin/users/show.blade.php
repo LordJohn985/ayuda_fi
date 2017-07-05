@@ -21,9 +21,10 @@ use \App\Label
         </div>
 
         <div class='form-group'>
-            <label>Gauchadas a las que se postulo</label>
+            {{--<label>Gauchadas a las que se postulo</label>--}}
             <div class="panel-body" >
-                <table id="tableExample2" class="table table-striped table-hover">
+                <table id="tableExample1" class="table table-striped table-hover">
+                    <caption>Gauchadas a las que se postulo:</caption>
                     <thead>
                         <tr>
                             <th>Gauchada</th>                   
@@ -41,9 +42,10 @@ use \App\Label
         </div> 
 
         <div class='form-group'>
-            <label>Gauchadas creadas</label>
+            {{--<label>Gauchadas creadas</label>--}}
             <div class="panel-body" >
                 <table id="tableExample2" class="table table-striped table-hover">
+                    <caption>Gauchadas creadas:</caption>
                     <thead>
                         <tr>
                             <th>Gauchada</th>                   
@@ -61,9 +63,10 @@ use \App\Label
         </div>  
         
         <div class='form-group'>
-            <label>Calificaciones recibidas</label>
+            {{--<label>Calificaciones recibidas</label>--}}
             <div class="panel-body" >
-                <table id="tableExample2" class="table table-striped table-hover">
+                <table id="tableExample3" class="table table-striped table-hover">
+                    <caption>Calificaciones recibidas:</caption>
                     <thead>
                         <tr>
                             <th>Gauchada</th>
