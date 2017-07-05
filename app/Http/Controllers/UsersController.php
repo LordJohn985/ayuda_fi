@@ -407,7 +407,8 @@ class UsersController extends Controller
         if($request->date_from > $request->date_to ){
             $error='Rango de fecha invalido.';
             \Session::flash('error',$error);
-            return Redirect::to('/earnings/getAllPurchases');
+            /*return Redirect::to('/earnings/getAllPurchases');*/
+            return back()->withInput()->with($error);
         }else{
 
             #OBTENER LISTA DE COMPRAS
@@ -422,7 +423,8 @@ class UsersController extends Controller
             if (!$purchases->count()) {
                 $error='No existen datos para ese rango de fechas.';
                 \Session::flash('error',$error);
-                return Redirect::to('/earnings/getAllPurchases');
+                /*return Redirect::to('/earnings/getAllPurchases');*/
+                return back()->withInput()->with($error);
             }else{
 
                 try{
@@ -433,7 +435,9 @@ class UsersController extends Controller
                         ->whereDate('purchases.created_at','<=',$request->date_to)
                         ->sum('total');
 
-                    return view('pages.admin.users.earnings',compact('purchases', 'total_gral'));
+                    $date_from = $request->date_from;
+                    $date_to = $request->date_to;
+                    return view('pages.admin.users.earnings',compact('purchases', 'total_gral', 'date_from', 'date_to'));
                 } catch (ModelNotFoundException $e) {
                     $error='No se pudo cargar las ganacias. Intentelo mas tarde.';
                     \Session::flash('error',$error);

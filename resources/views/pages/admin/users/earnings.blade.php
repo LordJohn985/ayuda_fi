@@ -6,12 +6,12 @@
         <div class="content">
             <div class="form-group col-md-3">
                 <label>Desde</label>
-                <input  type="date" max="{{date('Y-m-d')}}" class="form-control"  name="date_from" required>
+                <input  type="date" max="{{date('Y-m-d')}}" class="form-control"  name="date_from"  value="{{isset($date_from) ? $date_from : old('date_from')}}" required>
             </div>
 
             <div class="form-group col-md-3">
                 <label>Hasta</label>
-                <input  type="date" max="{{date('Y-m-d')}}" class="form-control"  name="date_to" required>
+                <input  type="date" max="{{date('Y-m-d')}}" class="form-control"  name="date_to" value="{{isset($date_to) ? $date_to : old('date_to')}}" required>
             </div>
 
 			<div class="form-group col-md-3">
