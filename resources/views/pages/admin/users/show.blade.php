@@ -20,46 +20,14 @@ use \App\Label
             <div class="panel-body" >{{\App\Reputation::where('necesary_score', '<=', $user->score)->orderBy('necesary_score', 'DESC')->first()->name}}</div>
         </div>
 
-        <div class='form-group'>
-            {{--<label>Gauchadas a las que se postulo</label>--}}
-            <div class="panel-body" >
-                <table id="tableExample1" class="table table-striped table-hover">
-                    <caption>Gauchadas a las que se postulo:</caption>
-                    <thead>
-                        <tr>
-                            <th>Gauchada</th>                   
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($postulations as $postulation)
-                            <tr>
-                                <td><a href="/publications/show/{{$postulation->publication_id}}">{{$postulation->title}}</a></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div> 
 
         <div class='form-group'>
-            {{--<label>Gauchadas creadas</label>--}}
-            <div class="panel-body" >
-                <table id="tableExample2" class="table table-striped table-hover">
-                    <caption>Gauchadas creadas:</caption>
-                    <thead>
-                        <tr>
-                            <th>Gauchada</th>                   
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($publications as $publication)
-                            <tr>
-                                <td><a href="/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    <div class='form-group'>
+            <a href="/user/publications/{{$user->id}}">Ver gauchadas que creo este usuario</a>
+        </div>
+        
+        <div class='form-group'>
+            <a href="#">Ver postulaciones de este usuario</a>
         </div>  
         
         <div class='form-group'>

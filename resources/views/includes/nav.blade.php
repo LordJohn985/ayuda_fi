@@ -22,7 +22,8 @@
                 </a>
                 <ul id="publications" class="nav nav-second collapse">
                     <li><a href="/dashboard/publications/create">Crear</a></li>
-                    <li><a href="/pendingPublications">Gauchadas pendientes de calificar</a></li>
+                    <li><a href="/user/publications/{{Auth::id()}}">Mis gauchadas</a></li>
+                    <li><a href="#">Mis postulaciones</a></li>
                 </ul>
             </li>
             @if(auth::id()==1)

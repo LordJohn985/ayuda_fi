@@ -355,15 +355,11 @@ class UsersController extends Controller
         return Redirect::to('/user/'.$userId);
     }
 
-    public function getPendingPublications(){
+    public function getPublications($userId){
         try{
-            $califications=Calification::all()->where('label_id','=',1);
-            foreach ($califications as $calification) {
-                $calif[]=$calification->publication_id;
-            }
-            $publications=Publication::where('user_id','=',Auth::id())->where('finish_date', '>=', Carbon::now())->whereIn('id',$calif)->get();
+            $publications=Publication::withTrashed()->where('user_id','=',$userId)->get();
             $hasFilter=false;
-            return view('pages.admin.users.pending',compact('publications','hasFilter'));
+            return view('pages.admin.users.publications',compact('publications','hasFilter','userId'));
         }
         catch(\ModelNotFoundException $e){
             $error='El usuario no existe';
@@ -372,29 +368,31 @@ class UsersController extends Controller
         }
     }
 
-    public function postFilterPendingPublications(Request $request){
-        $califications=Calification::all()->where('label_id','=',1);
-        foreach ($califications as $calification) {
-            $calif[]=$calification->publication_id;
+    public function postFilterPublications(Request $request){
+        $publications=Publication::withTrashed()->select('id')->where('user_id','=',$request->user)->get();
+        exit(var_dump($publications));
+        switch ($request->state){
+            case 1:
+                $publications=$publications->whereNotIn('id',Publication::select('id')->whereHas('postulations')->get())->get();
+                break;
+            case 2:
+                $publications=$publications->whereIn('id',Publication::select('id')->has('postulations')->get())->get();
+                break;
+            case 3:
+                $publications=$publication->whereIn('id',Calification::select('publication_id')->where('label_id','=','1')->get())->get();
+                break;
+            case 4:
+                $publications=Publication::whereIn('id',Calification::select('publication_id')->where('label_id','>','1')->get())->get();
+                break;
+            case 5:
+                $publications=$publications->where('finish_date','>',Carbon::now())->get();
+                break;
         }
-        if ($request->title!=null){
-            $filterTitle = $request->title;
-            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$filterTitle%"]],['user_id','=',Auth::id()])->whereIn('id',$calif)->get();
+        foreach ($publications as $publication) {
+            echo $publication->title."<br>";
         }
-        else{
-            $publications = Publication::all()->where('finish_date', '>=', Carbon::now())->where('user_id','=',Auth::id())->whereIn('id',$calif);
-        }
-        if ($request->category!="all"){
-            $filterCategory = $request->category;
-            $publications = $publications->where('category_id', '=', $request->category);
-        }
-        if ($request->city!="all"){
-            $filterCity = $request->city;
-            $publications = $publications->where('city_id', '=', $request->city);
-        }
-
-        $hasFilter = true;
-        return view('pages.admin.users.pending', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'filterTitle'));
+        /*$hasFilter = true;
+        return view('pages.admin.users.pending', compact('publications', 'hasFilter'));*/
     }
 
     public function getRanking(){

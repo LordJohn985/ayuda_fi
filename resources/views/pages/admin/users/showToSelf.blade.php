@@ -49,45 +49,11 @@ use \App\Label
 
         
         <div class='form-group'>
-            {{--<label>Gauchadas a las que te postulaste:</label>--}}
-            <div class="panel-body" >
-                <table id="tableExample2" class="table table-striped table-hover">
-                    <caption>Gauchadas a las que te postulaste:</caption>
-                    <thead>
-                        <tr>
-                            <th>Gauchada</th>                   
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($postulations as $postulation)
-                            <tr>
-                                <td><a href="/publications/show/{{$postulation->publication_id}}">{{$postulation->title}}</a></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <a href="/user/publications/{{$user->id}}">Ver gauchadas que creo este usuario</a>
         </div>
         
 		<div class='form-group'>
-            {{--<label>Gauchadas que creaste:</label>--}}
-            <div class="panel-body" >
-                <table id="tableExample1" class="table table-striped table-hover">
-                    <caption>Gauchadas que creaste:</caption>
-                    <thead>
-                        <tr>
-                            <th>Gauchada</th>                   
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($publications as $publication)
-                            <tr>
-                                <td><a href="/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            <a href="#">Ver postulaciones de este usuario</a>
         </div>
 
 
