@@ -27,8 +27,8 @@
         {{ csrf_field() }}
     </form>
 
-    <div class="content table-responsive">
-        <h2>Gauchadas de {{$user->name}}  {{$user->last_name}}</h2>
+    <div class="content">
+        <h2>Postulaciones de {{$user->name}} {{$user->last_name}}</h2>
     </div>
 
 
@@ -36,32 +36,26 @@
         <table id="tableExample2" class="table table-striped table-hover">
             <thead>
             <tr>
-                <th>Titulo</th>
+                <th>Gauchada</th>
                 <th>Estado</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($publications as $publication)
-                @if(!(($publication->calification==null)&&($publication->deleted_at!=null)))
-                    <tr>
-                        <td><a href="/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
-                        <td>
-                            @if($publication->calification!=null)
-                                @if($publication->calification->label_id==1)
-                                    Calificacion pendiente
-                                @else
-                                    Calificacion puesta
-                                @endif
-                            @elseif(strtotime($publication->finish_date)<=strtotime(date('Y-m-d')))
-                                Vencida
-                            @elseif(count($publication->postulations)>0)
-                                Con postulantes
+            @foreach($postulations as $postulation)
+                <tr>
+                    <td><a href="/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
+                    <td>
+                        @if($postulation->publications->calification!=null)
+                            @if($postulation->publications->calification->user_id!=$user->id)
+                                Rechazado
                             @else
-                                Sin postulantes
+                                Aceptado
                             @endif
-                        </td>
-                    </tr>
-                @endif
+                        @else
+                            Pendiente
+                        @endif
+                    </td>
+                </tr>
             @endforeach
             </tbody>
         </table>

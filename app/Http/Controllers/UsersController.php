@@ -357,9 +357,10 @@ class UsersController extends Controller
 
     public function getPublications($userId){
         try{
+            $user=User::findOrFail($userId);
             $publications=Publication::withTrashed()->where('user_id','=',$userId)->get();
             $hasFilter=false;
-            return view('pages.admin.users.publications',compact('publications','hasFilter','userId'));
+            return view('pages.admin.users.publications',compact('publications','hasFilter','user'));
         }
         catch(\ModelNotFoundException $e){
             $error='El usuario no existe';
@@ -369,30 +370,72 @@ class UsersController extends Controller
     }
 
     public function postFilterPublications(Request $request){
-        $publications=Publication::withTrashed()->select('id')->where('user_id','=',$request->user)->get();
-        exit(var_dump($publications));
-        switch ($request->state){
+        try{
+            $state=$request->state;
+            switch ($state){
+                case 1:
+                    $publications=Publication::has('postulations','=',0)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
+                    break;
+                case 2:
+                    $publications=Publication::has('postulations')->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
+                    break;
+                case 3:
+                    $publications=Publication::join('califications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->get();
+                    break;
+                case 4:
+                    $publications=Publication::withTrashed()->join('califications','publications.id','=','califications.publication_id')->where('label_id','>',1)->where('publications.user_id','=',$request->user)->get();
+                    break;
+                case 5:
+                    $publications=Publication::where('finish_date','<=',Carbon::now())->where('user_id','=',$request->user)->get();
+            }
+            $user=User::findOrFail($request->user);
+            $hasFilter=true;
+            return view('pages.admin.users.publications', compact('publications', 'hasFilter','user','state'));
+        }
+        catch(\ModelNotFoundException $e){
+            $error='El usuario no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
+    }
+
+    public function getPostulations($userId){
+        try{
+            $user=User::findOrFail($userId);
+            $postulations=Postulation::where('user_id','=',$userId)->get();
+            $hasFilter=false;
+            return view('pages.admin.users.postulations', compact('postulations','hasFilter','user'));
+        }
+        catch(ModelNotFoundException $e){
+            $error='El usuario no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
+    }
+
+    public function postFilterPostulations(Request $request){
+        $state=$request->state;
+        switch ($state) {
             case 1:
-                $publications=$publications->whereNotIn('id',Publication::select('id')->whereHas('postulations')->get())->get();
+                $postulations;
                 break;
             case 2:
-                $publications=$publications->whereIn('id',Publication::select('id')->has('postulations')->get())->get();
+                $postulations;
                 break;
             case 3:
-                $publications=$publication->whereIn('id',Calification::select('publication_id')->where('label_id','=','1')->get())->get();
-                break;
-            case 4:
-                $publications=Publication::whereIn('id',Calification::select('publication_id')->where('label_id','>','1')->get())->get();
-                break;
-            case 5:
-                $publications=$publications->where('finish_date','>',Carbon::now())->get();
+                $postulations;
                 break;
         }
-        foreach ($publications as $publication) {
-            echo $publication->title."<br>";
+        try{
+            $user=User::findOrFail($request->user);
+            $hasFilter=true;
+            return view('pages.admin.users.postulations', compact('postulations','hasFilter','user','state'));
         }
-        /*$hasFilter = true;
-        return view('pages.admin.users.pending', compact('publications', 'hasFilter'));*/
+        catch(ModelNotFoundException $e){
+            $error='El usuario no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }  
     }
 
     public function getRanking(){
