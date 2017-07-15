@@ -103,7 +103,7 @@ Route::get('/user','UsersController@emptyUser');
 Route::get('/user/publications/{id}','UsersController@getPublications');
 Route::post('/user/publications/filter/','UsersController@postFilterPublications');
 Route::get('/user/postulations/{id}','UsersController@getPostulations');
-Route::pist('/user/postulations/filter/','UsersController@postFilterPostulations');
+Route::post('/user/postulations/filter/','UsersController@postFilterPostulations');
 
 ##PUBLICATIONS
 Route::post('publications/filter','PublicationsController@postFilterPublications');

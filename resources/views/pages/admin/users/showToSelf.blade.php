@@ -49,11 +49,11 @@ use \App\Label
 
         
         <div class='form-group'>
-            <a href="/user/publications/{{$user->id}}">Ver gauchadas que creo este usuario</a>
+            <a href="/user/publications/{{$user->id}}">Ver gauchadas que creaste</a>
         </div>
         
 		<div class='form-group'>
-            <a href="#">Ver postulaciones de este usuario</a>
+            <a href="/user/postulations/{{$user->id}}">Ver tus postulaciones</a>
         </div>
 
 

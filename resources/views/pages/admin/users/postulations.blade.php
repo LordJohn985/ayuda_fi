@@ -37,13 +37,14 @@
             <thead>
             <tr>
                 <th>Gauchada</th>
-                <th>Estado</th>
+                {{--<th>Estado</th>--}}
             </tr>
             </thead>
             <tbody>
             @foreach($postulations as $postulation)
                 <tr>
-                    <td><a href="/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
+                    <td>{{var_dump($postulation->publications)}}</td>
+                    {{--<td><a href="/dashboard/publications/show/{{$postulation->publications->id}}">{{$postulation->publications->title}}</a></td>
                     <td>
                         @if($postulation->publications->calification!=null)
                             @if($postulation->publications->calification->user_id!=$user->id)
@@ -54,7 +55,7 @@
                         @else
                             Pendiente
                         @endif
-                    </td>
+                    </td>--}}
                 </tr>
             @endforeach
             </tbody>
