@@ -370,6 +370,7 @@ class UsersController extends Controller
     }
 
     public function postFilterPublications(Request $request){
+        $user=User::findOrFail($request->user);
         try{
             $state=$request->state;
             switch ($state){
@@ -377,10 +378,12 @@ class UsersController extends Controller
                     $publications=Publication::has('postulations','=',0)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
                     break;
                 case 2:
-                    $publications=Publication::has('postulations')->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
+                    /*$partialQ=Publication::has('califications')->select('id')->get();*/
+                    $publications=Publication::has('postulations')/*->whereNotIn('id', $partialQ)*/->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
                     break;
                 case 3:
-                    $publications=Publication::join('califications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->get();
+                    $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
+                    $publications=Publication::withTrashed()->whereIn('id', $partialQ)->get();
                     break;
                 case 4:
                     $publications=Publication::withTrashed()->join('califications','publications.id','=','califications.publication_id')->where('label_id','>',1)->where('publications.user_id','=',$request->user)->get();
@@ -388,7 +391,6 @@ class UsersController extends Controller
                 case 5:
                     $publications=Publication::where('finish_date','<=',Carbon::now())->where('user_id','=',$request->user)->get();
             }
-            $user=User::findOrFail($request->user);
             $hasFilter=true;
             return view('pages.admin.users.publications', compact('publications', 'hasFilter','user','state'));
         }
