@@ -402,7 +402,15 @@ class UsersController extends Controller
     public function getPostulations($userId){
         try{
             $user=User::findOrFail($userId);
-            $postulations=Postulation::where('user_id','=',$userId)->get();
+            if(count($user->postulations)>0){
+                foreach($user->postulations as $postulation){
+                    $publications[]=$postulation->publication_id;
+                }
+                $postulations=Publication::withTrashed()->whereIn('id',$publications)->get();
+            }
+            else{
+                $postulations=Publication::withTrashed()->join('postulations','publications.id','=','postulations.publications_id')->where('postulations.user_id','=',$userId)->get();
+            }
             $hasFilter=false;
             return view('pages.admin.users.postulations', compact('postulations','hasFilter','user'));
         }
@@ -414,20 +422,23 @@ class UsersController extends Controller
     }
 
     public function postFilterPostulations(Request $request){
-        $state=$request->state;
-        switch ($state) {
-            case 1:
-                $postulations;
-                break;
-            case 2:
-                $postulations;
-                break;
-            case 3:
-                $postulations;
-                break;
-        }
         try{
-            $user=User::findOrFail($request->user);
+            $user=User::findOrFail($request->user); 
+            foreach($user->postulations as $postulation){
+                $publications[]=$postulation->publication_id;
+            }
+            $state=$request->state;
+            switch ($state) {
+                case 1:
+                    $postulations=Publication::withTrashed()->join('califications','publications.id','=','califications.publication_id')->where('califications.user_id','=',$request->user)->whereIn('publications.id',$publications)->get();
+                    break;
+                case 2:
+                    $postulations=Publication::withTrashed()->join('califications','publications.id','=','califications.publication_id')->where('califications.user_id','<>',$request->user)->whereIn('publications.id',$publications)->get();
+                    break;
+                case 3:
+                    $postulations=Publication::withTrashed()->whereIn('id',$publications)->has('calification','<=',0)->get();
+                    break;
+            }    
             $hasFilter=true;
             return view('pages.admin.users.postulations', compact('postulations','hasFilter','user','state'));
         }

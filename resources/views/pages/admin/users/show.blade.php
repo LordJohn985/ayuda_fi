@@ -23,7 +23,7 @@ use \App\Label
 
         <div class='form-group'>
                     <div class='form-group'>
-            <a href="/user/postulations/{{$user->id}}">Ver gauchadas que creo este usuario</a>
+            <a href="/user/publications/{{$user->id}}">Ver gauchadas que creo este usuario</a>
         </div>
         
         <div class='form-group'>

@@ -53,7 +53,7 @@ use \App\Label
         </div>
         
 		<div class='form-group'>
-            <a href="/user/postulations/{{$user->id}}">Ver tus postulaciones</a>
+            <a href="#">Ver tus postulaciones</a>
         </div>
 
 

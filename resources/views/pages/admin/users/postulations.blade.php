@@ -4,22 +4,20 @@
     {{--<section class="content">--}}
 
 
-	<form  action='/user/publications/filter' method="POST" enctype="multipart/form-data">
+	<form  action='/user/postulations/filter' method="POST" enctype="multipart/form-data">
         <div class="content">
             <div class=form-group>
                 <label>Estado</label>
                 <select class="form-control" name="state">
-                    <option value="1"{{(isset($state)&&($state==1))?'selected="selected"':''}}>Sin postulantes</option>
-                    <option value="2"{{(isset($state)&&($state==2))?'selected="selected"':''}}>Con postulantes</option>
-                    <option value="3"{{(isset($state)&&($state==3))?'selected="selected"':''}}>Calificacion pendiente</option>
-                    <option value="4"{{(isset($state)&&($state==4))?'selected="selected"':''}}>Calificacion puesta</option>
-                    <option value="5"{{(isset($state)&&($state==5))?'selected="selected"':''}}>Vencida</option>
+                    <option value="1"{{(isset($state)&&($state==1))?'selected="selected"':''}}>Aceptado</option>
+                    <option value="2"{{(isset($state)&&($state==2))?'selected="selected"':''}}>Rechazado</option>
+                    <option value="3"{{(isset($state)&&($state==3))?'selected="selected"':''}}>Pendiente</option>
                 </select>
                 <input type="hidden" name='user' value='{{$user->id}}' >
             </div>
 
             @if($hasFilter)
-                <a href="/user/publications/{{$user->id}}" class="btn btn-accent pull-right" name="remove_filter">Quitar Filtros</a>
+                <a href="/user/postulations/{{$user->id}}" class="btn btn-accent pull-right" name="remove_filter">Quitar Filtros</a>
             @endif
 
             <input class="btn btn-accent pull-right" type="submit" name="filter_button" value="Filtrar">
@@ -37,17 +35,17 @@
             <thead>
             <tr>
                 <th>Gauchada</th>
-                {{--<th>Estado</th>--}}
+                <th>Estado</th>
             </tr>
             </thead>
             <tbody>
             @foreach($postulations as $postulation)
                 <tr>
-                    <td>{{var_dump($postulation->publications)}}</td>
-                    {{--<td><a href="/dashboard/publications/show/{{$postulation->publications->id}}">{{$postulation->publications->title}}</a></td>
+                    @if(!(($postulation->calification==null)&&($postulation->deleted_at!=null)))
+                    <td><a href="/dashboard/publications/show/{{$postulation->id}}">{{$postulation->title}}</a></td>
                     <td>
-                        @if($postulation->publications->calification!=null)
-                            @if($postulation->publications->calification->user_id!=$user->id)
+                        @if($postulation->calification!=null)
+                            @if($postulation->calification->user_id!=$user->id)
                                 Rechazado
                             @else
                                 Aceptado
@@ -55,7 +53,8 @@
                         @else
                             Pendiente
                         @endif
-                    </td>--}}
+                    </td>
+                @endif
                 </tr>
             @endforeach
             </tbody>
