@@ -336,6 +336,7 @@ class UsersController extends Controller
             if(Auth::id()!=$user->id){
                 $error='No tienes permiso para editar este perfil';
                 \Session::flash('error',$error);
+                return Redirect::to('/');
             }
             else{
                 $user->picture='/images/users/default_photo_profile.jpg';
@@ -348,7 +349,7 @@ class UsersController extends Controller
                     \Session::flash('error',$error);
                 }
             }
-        } catch (ModelNotFoundException $e) {
+        } catch (\ModelNotFoundException $e) {
             $error='No se ha podido borrar la foto';
             \Session::flash('error',$error);
         }
@@ -378,15 +379,16 @@ class UsersController extends Controller
                     $publications=Publication::has('postulations','=',0)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
                     break;
                 case 2:
-                    /*$partialQ=Publication::has('califications')->select('id')->get();*/
-                    $publications=Publication::has('postulations')/*->whereNotIn('id', $partialQ)*/->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
+                    $partialQ=Publication::has('calification')->select('id')->get();
+                    $publications=Publication::has('postulations')->whereNotIn('id', $partialQ)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
                     break;
                 case 3:
                     $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
                     $publications=Publication::withTrashed()->whereIn('id', $partialQ)->get();
                     break;
                 case 4:
-                    $publications=Publication::withTrashed()->join('califications','publications.id','=','califications.publication_id')->where('label_id','>',1)->where('publications.user_id','=',$request->user)->get();
+                    $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','>',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
+                    $publications=Publication::withTrashed()->whereIn('id',$partialQ)->get();
                     break;
                 case 5:
                     $publications=Publication::where('finish_date','<=',Carbon::now())->where('user_id','=',$request->user)->get();
@@ -403,16 +405,9 @@ class UsersController extends Controller
 
     public function getPostulations($userId){
         try{
+            $publications=Postulation::where('user_id','=',$userId)->select('publication_id')->get();
+            $postulations=Publication::withTrashed()->whereIn('id',$publications)->get();
             $user=User::findOrFail($userId);
-            if(count($user->postulations)>0){
-                foreach($user->postulations as $postulation){
-                    $publications[]=$postulation->publication_id;
-                }
-                $postulations=Publication::withTrashed()->whereIn('id',$publications)->get();
-            }
-            else{
-                $postulations=Publication::withTrashed()->join('postulations','publications.id','=','postulations.publications_id')->where('postulations.user_id','=',$userId)->get();
-            }
             $hasFilter=false;
             return view('pages.admin.users.postulations', compact('postulations','hasFilter','user'));
         }
@@ -425,23 +420,23 @@ class UsersController extends Controller
 
     public function postFilterPostulations(Request $request){
         try{
-            $user=User::findOrFail($request->user); 
-            foreach($user->postulations as $postulation){
-                $publications[]=$postulation->publication_id;
-            }
             $state=$request->state;
             switch ($state) {
                 case 1:
-                    $postulations=Publication::withTrashed()->join('califications','publications.id','=','califications.publication_id')->where('califications.user_id','=',$request->user)->whereIn('publications.id',$publications)->get();
+                    $partialQ=Calification::where('user_id','=',$request->user)->select('publication_id')->get();
+                    $postulations=Publication::withTrashed()->whereIn('publications.id',$partialQ)->get();
                     break;
                 case 2:
-                    $postulations=Publication::withTrashed()->join('califications','publications.id','=','califications.publication_id')->where('califications.user_id','<>',$request->user)->whereIn('publications.id',$publications)->get();
+                    $partialQ=Calification::where('user_id','<>',$request->user)->select('publication_id')->get();
+                    $postulations=Publication::withTrashed()->whereIn('publications.id',$partialQ)->get();
                     break;
                 case 3:
-                    $postulations=Publication::withTrashed()->whereIn('id',$publications)->has('calification','<=',0)->get();
+                    $partialQ=Postulation::where('user_id','=',$request->user)->select('publication_id')->get();
+                    $postulations=Publication::withTrashed()->whereIn('id',$partialQ)->has('calification','<=',0)->get();
                     break;
             }    
             $hasFilter=true;
+            $user=User::findOrFail($request->user); 
             return view('pages.admin.users.postulations', compact('postulations','hasFilter','user','state'));
         }
         catch(ModelNotFoundException $e){

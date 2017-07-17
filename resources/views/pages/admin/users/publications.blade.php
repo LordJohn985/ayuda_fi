@@ -9,7 +9,7 @@
             <div class=form-group>
                 <label>Estado</label>
                 <select class="form-control" name="state">
-                    <option value="1"{{(isset($state)&&($state==1))?'selected="selected"':''}}>Sin postulantes</option>
+                    <option value="1"{{(isset($state)&&($state==1))?'selected="selected"':''}}>Sin postulantes</option> 
                     <option value="2"{{(isset($state)&&($state==2))?'selected="selected"':''}}>Con postulantes</option>
                     <option value="3"{{(isset($state)&&($state==3))?'selected="selected"':''}}>Calificacion pendiente</option>
                     <option value="4"{{(isset($state)&&($state==4))?'selected="selected"':''}}>Calificacion puesta</option>

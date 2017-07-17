@@ -27,7 +27,7 @@ use \App\Label
         </div>
         
         <div class='form-group'>
-            <a href="#">Ver postulaciones de este usuario</a>
+            <a href="/user/postulations/{{$user->id}}">Ver postulaciones de este usuario</a>
         </div>  
         
         <div class='form-group'>
