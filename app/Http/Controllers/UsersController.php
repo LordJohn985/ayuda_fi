@@ -378,8 +378,8 @@ class UsersController extends Controller
                     $publications=Publication::has('postulations','=',0)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
                     break;
                 case 2:
-                    /*$partialQ=Publication::has('califications')->select('id')->get();*/
-                    $publications=Publication::has('postulations')/*->whereNotIn('id', $partialQ)*/->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
+                    $partialQ=Publication::has('calification')->select('id')->get();
+                    $publications=Publication::has('postulations')->whereNotIn('id', $partialQ)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
                     break;
                 case 3:
                     $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
