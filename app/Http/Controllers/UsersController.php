@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 
@@ -371,26 +370,19 @@ class UsersController extends Controller
     }
 
     public function postFilterPublications(Request $request){
-        $user=User::findOrFail($request->user);
         try{
+            $user=User::findOrFail($request->user);
             $state=$request->state;
             switch ($state){
                 case 1:
-                    $publications=Publication::has('postulations','=',0)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
+                    $partialQ=Publication::join('califications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
+                    $publications=Publication::whereIn('id',$partialQ)->orWhere('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
                     break;
                 case 2:
-                    $partialQ=Publication::has('calification')->select('id')->get();
-                    $publications=Publication::has('postulations')->whereNotIn('id', $partialQ)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
-                    break;
-                case 3:
-                    $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
-                    $publications=Publication::withTrashed()->whereIn('id', $partialQ)->get();
-                    break;
-                case 4:
                     $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','>',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
                     $publications=Publication::withTrashed()->whereIn('id',$partialQ)->get();
                     break;
-                case 5:
+                case 3:
                     $publications=Publication::where('finish_date','<=',Carbon::now())->where('user_id','=',$request->user)->get();
             }
             $hasFilter=true;

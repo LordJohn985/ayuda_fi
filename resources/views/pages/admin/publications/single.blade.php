@@ -46,7 +46,7 @@
             <div class=form-group>
                 <label>Categoría</label>
                 <select class="form-control" name="category">
-                    @foreach(\App\Category::all() as $category)
+                    @foreach(\App\Category::where('active','=',1)->get() as $category)
                         @if($publicationIsNew)
                             <option value="{{$category->id}}">{{$category->name}}</option>
                         @else

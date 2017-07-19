@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\Session\Session;
-
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -186,6 +186,38 @@ class CategoriesController extends Controller
         }*/
     }
 
+    public function getDeactivateCategory($category_id){
+        try{
+            $category=Category::findOrFail($category_id);
+            $category->active=0;
+            $category->save();
+            $success='La categoria ha sido deshabilitada';
+            \Session::flash('success',$success);
+        }
+        catch(\ModelNotFoundException $e){
+            $error='La categoria elegida no existe';
+            \Session::flash('error',$error);
+        }
+        finally{
+            return Redirect::to('/dashboard/categories/list');
+        }
+    }
 
+    public function getActivateCategory($category_id){
+        try{
+            $category=Category::findOrFail($category_id);
+            $category->active=1;
+            $category->save();
+            $success='La categoria ha sido habilitada';
+            \Session::flash('success',$success);
+        }
+        catch(\ModelNotFoundException $e){
+            $error='La categoria elegida no existe';
+            \Session::flash('error',$error);
+        }
+        finally{
+            return Redirect::to('/dashboard/categories/list');
+        }            
+    }
 
 }
