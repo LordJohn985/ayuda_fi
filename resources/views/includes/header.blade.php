@@ -55,12 +55,12 @@
                 </ul>-->
             @endif <!-- header when a commmon user is logged in-->
                 <ul class="nav navbar-nav navbar-right">
-                    <li style="padding: 20px; font-weight: bold;">Bienvenido {{auth::user()->name}}</li>
+                    <li style="padding: 20px; font-weight: bold;">Bienvenido <a href="/user/{{auth::id()}}" style="display: inline">{{auth::user()->name}}</a> </li>
                     <li><img src="/images/institucional/logo_gauchada.png" style="height: 60px" alt=""></li>
-                    <li>
+                    <li style="padding: 10px">
                         <a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <span class="glyphicon glyphicon-log-out"></span>
-                            Logout
+                            Desloguearse
                         </a>
                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
@@ -72,8 +72,8 @@
             <div class="collapse navbar-collapse" id="myNavbarON">
                 <ul class="nav navbar-nav navbar-right">
                     <li><img src="/images/institucional/logo_gauchada.png" style="height: 60px" alt=""></li>
-                    <li><a href="{{ url('/register') }}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    <li><a href="{{ url('/register') }}"><span class="glyphicon glyphicon-user"></span> Registrarse</a></li>
+                    <li style="padding: 10px"><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Loguearse</a></li>
                 </ul>
             </div>
             @endif

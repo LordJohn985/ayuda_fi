@@ -15,7 +15,7 @@ class ReputationsController extends Controller
 {
     public function getListReputations(){
     	$reputations=Reputation::all();
-    	return view('pages.admin.reputations.home',compact("reputations"));
+    	return view('pages.admin.reputations.list',compact("reputations"));
     }
 
     public function getCreateReputation(){

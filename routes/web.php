@@ -34,6 +34,8 @@ Route::group(['middleware' => 'checkRole'], function () {
     Route::get('dashboard/categories/edit/{id}','CategoriesController@getUpdateCategory');
     Route::post('dashboard/categories/edit/{id}','CategoriesController@postUpdateCategory');
     Route::get('dashboard/categories/delete/{id}','CategoriesController@getDeleteCategory');
+    Route::get('dashboard/categories/deactivate/{id}','CategoriesController@getDeactivateCategory');
+    Route::get('dashboard/categories/activate/{id}','CategoriesController@getActivateCategory');
     #                               END   CATEGORIES                               #
 
 

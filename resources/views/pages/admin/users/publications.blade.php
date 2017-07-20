@@ -1,19 +1,17 @@
 @extends('layouts.admin.base')
 
 @section('content')
-    {{--<section class="content">--}}
+    <section class="content">
 
 
 	<form  action='/user/publications/filter' method="POST" enctype="multipart/form-data">
-        <div class="content">
+        <div>
             <div class=form-group>
                 <label>Estado</label>
                 <select class="form-control" name="state">
-                    <option value="1"{{(isset($state)&&($state==1))?'selected="selected"':''}}>Sin postulantes</option>
-                    <option value="2"{{(isset($state)&&($state==2))?'selected="selected"':''}}>Con postulantes</option>
-                    <option value="3"{{(isset($state)&&($state==3))?'selected="selected"':''}}>Calificacion pendiente</option>
-                    <option value="4"{{(isset($state)&&($state==4))?'selected="selected"':''}}>Calificacion puesta</option>
-                    <option value="5"{{(isset($state)&&($state==5))?'selected="selected"':''}}>Vencida</option>
+                    <option value="1"{{(isset($state)&&($state==1))?'selected="selected"':''}}>Sin calificacion</option> 
+                    <option value="2"{{(isset($state)&&($state==2))?'selected="selected"':''}}>Con calificacion</option>
+                    <option value="3"{{(isset($state)&&($state==3))?'selected="selected"':''}}>Vencida</option>
                 </select>
                 <input type="hidden" name='user' value='{{$user->id}}' >
             </div>
@@ -27,12 +25,14 @@
         {{ csrf_field() }}
     </form>
 
-    <div class="content table-responsive">
-        <h2>Gauchadas de {{$user->name}}  {{$user->last_name}}</h2>
+        <br>
+
+    <div>
+        <h2>Gauchadas de <a href="/user/{{$user->id}}">{{$user->name}} {{$user->last_name}}</a></h2>
     </div>
 
-
-    <div class="content table-responsive">
+        <br>
+    <div class="table-responsive">
         <table id="tableExample2" class="table table-striped table-hover">
             <thead>
             <tr>
@@ -66,5 +66,5 @@
             </tbody>
         </table>
     </div>
-    {{--</section>--}}
+    </section>
 @stop

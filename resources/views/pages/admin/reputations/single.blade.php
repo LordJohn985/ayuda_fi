@@ -4,7 +4,7 @@
 @section('content')
 
     <section class="content">
-            <p><a href="/reputations">Volver</a></p>
+            <p><a href="/reputations" class="btn btn-warning">Volver</a></p>
 
         @if($reputationIsNew)
             <h2 class="">Crear reputacion</h2>

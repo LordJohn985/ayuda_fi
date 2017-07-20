@@ -3,7 +3,7 @@
 @section('content')
 
 	<div class='content table-responsive'>
-		<p><a href="/reputations/create">Crear nueva reputacion</a></p>
+		<p><a href="/reputations/create" class="btn btn-warning">Crear nueva reputacion</a></p>
 		<br>
 		<table id="tableExample2" class="table table-striped table-hover">
 			<thead>
