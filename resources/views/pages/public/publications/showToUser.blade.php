@@ -1,4 +1,7 @@
 use App\City;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+
 @extends('layouts.admin.base')
 
 
@@ -33,7 +36,7 @@ use App\City;
         @if(!$canSomeoneAply)
             {{--No es posible postularse--}}
             <div style="border: solid; border-color: #ff9a00; border-radius: 5px; padding: 10px;">
-                @if($publication->calification->user_id == auth::id())
+                @if($publication->calification->user_id == myId)
                     <label>Ya has sido seleccionado y calificado en esta gauchada, o la gauchada ha expirado.</label>
                 @else
                     <label>El candidato ya fue calificado o la gauchada ha expirado.</label>
