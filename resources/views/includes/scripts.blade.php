@@ -44,6 +44,17 @@
                 "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>t<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 "lengthMenu": [ [6, 25, 50, -1], [6, 25, 50, "All"] ],
                 "iDisplayLength": 6,
+                "language": {
+                    "emptyTable": "No hay datos disponibles.",
+                    "search": "Buscar:",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "paginate": {
+                        "previous": "Anterior",
+                        "next": "Siguiente"
+                    }
+                },
                 "columnDefs": [ {
                     "targets": 'no-sort',
                     "orderable": false,
@@ -62,6 +73,17 @@
                 "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>t<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 "lengthMenu": [ [6, 25, 50, -1], [6, 25, 50, "All"] ],
                 "iDisplayLength": 6,
+                "language": {
+                    "emptyTable": "No hay datos disponibles.",
+                    "search": "Buscar:",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "paginate": {
+                        "previous": "Anterior",
+                        "next": "Siguiente"
+                    }
+                },
                 "columnDefs": [ {
                     "targets": 'no-sort',
                     "orderable": false,
@@ -80,6 +102,17 @@
                 "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>t<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 "lengthMenu": [ [6, 25, 50, -1], [6, 25, 50, "All"] ],
                 "iDisplayLength": 6,
+                "language": {
+                    "emptyTable": "No hay datos disponibles.",
+                    "search": "Buscar:",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "paginate": {
+                        "previous": "Anterior",
+                        "next": "Siguiente"
+                    }
+                },
                 "columnDefs": [ {
                     "targets": 'no-sort',
                     "orderable": false,
@@ -98,6 +131,17 @@
                 "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>t<'row'<'col-sm-6'i><'col-sm-6'p>>",
                 "lengthMenu": [ [6, 25, 50, -1], [6, 25, 50, "All"] ],
                 "iDisplayLength": 6,
+                "language": {
+                    "emptyTable": "No hay datos disponibles.",
+                    "search": "Buscar:",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+                    "lengthMenu": "Mostrar _MENU_ entradas",
+                    "paginate": {
+                        "previous": "Anterior",
+                        "next": "Siguiente"
+                    }
+                },
                 "columnDefs": [ {
                     "targets": 'no-sort',
                     "orderable": false,

@@ -8,6 +8,9 @@
                 <div class=form-group>
                     <label>Estado</label>
                     <select class="form-control" name="state">
+                        @if(!$hasFilter)
+                        <option value="all">Todas</option>
+                        @endif
                         <option value="1"{{(isset($state)&&($state==1))?'selected="selected"':''}}>Aceptado</option>
                         <option value="2"{{(isset($state)&&($state==2))?'selected="selected"':''}}>Rechazado</option>
                         <option value="3"{{(isset($state)&&($state==3))?'selected="selected"':''}}>Pendiente</option>

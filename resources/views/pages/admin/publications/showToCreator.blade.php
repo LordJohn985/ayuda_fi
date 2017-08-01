@@ -1,5 +1,3 @@
-use App\City;
-
 @extends('layouts.admin.base')
 
 @section('content')
