@@ -479,7 +479,7 @@ class PublicationsController extends Controller
     public function getHome()
     {
         $hasFilter = false;
-        $califications=Calification::withTrashed()->select('publication_id')->get();
+        $califications=Calification::select('publication_id')->get();
         $publications = Publication::where('finish_date', '>=', Carbon::now())->whereNotIn('id',$califications)->get();
         if(Auth::check()){
             return view('home', compact('publications', 'hasFilter'));
