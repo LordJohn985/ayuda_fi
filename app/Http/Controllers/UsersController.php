@@ -313,7 +313,9 @@ class UsersController extends Controller
             $postulations=Postulation::where('postulations.user_id',$userId)->join('publications','postulations.publication_id','=','publications.id')->get();
             $publications=$user->publications;
             //$califications=Calification::where('califications.user_id',$userId)->where('califications.label_id','>','1')->join('publications','califications.publication_id','=','publications.id')->join('labels','califications.label_id','=','label.id')->get();
-            $califications=DB::select("select publication_id,califications.content as content,name,title from `califications` inner join `publications` on `califications`.`publication_id` = `publications`.`id` inner join `labels` on `califications`.`label_id` = `labels`.`id` where `califications`.`user_id` = 2 and `califications`.`label_id` > 1 and `califications`.`deleted_at` is null");
+            $califications=Calification::where('califications.user_id','=',$userId)->join('publications','califications.publication_id','=','publications.id')->get();
+            //$califications=DB::select("select publication_id,califications.content as content,name,title from `califications` inner join `publications` on `califications`.`publication_id` = `publications`.`id` inner join `labels` on `califications`.`label_id` = `labels`.`id` where `califications`.`user_id` = 2 and `califications`.`label_id` > 1 and `califications`.`deleted_at` is null");
+            //$califications=Calification::where('label_id','>',1)->where('user')
             if($userId==Auth::id()){
                 return view('pages.admin.users.showToSelf',compact('user','postulations','publications','califications'));
             }
@@ -354,94 +356,6 @@ class UsersController extends Controller
             \Session::flash('error',$error);
         }
         return Redirect::to('/user/'.$userId);
-    }
-
-    public function getPublications($userId){
-        try{
-            $user=User::findOrFail($userId);
-            $publications=Publication::withTrashed()->where('user_id','=',$userId)->get();
-            $hasFilter=false;
-            return view('pages.admin.users.publications',compact('publications','hasFilter','user'));
-        }
-        catch(\ModelNotFoundException $e){
-            $error='El usuario no existe';
-            \Session::flash('error',$error);
-            return Redirect::to('/');
-        }
-    }
-
-    public function postFilterPublications(Request $request){
-        try{
-            $user=User::findOrFail($request->user);
-            $state=$request->state;
-            switch ($state){
-                case 1:
-                    $partialQ=Publication::join('califications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
-                    $publications=Publication::whereIn('id',$partialQ)->orWhere('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
-                    break;
-                case 2:
-
-                    /*$partialQ=Publication::has('calification')->select('id')->get();
-                    $publications=Publication::has('postulations')->whereNotIn('id', $partialQ)->where('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();*/
-
-                    $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','>',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
-                    $publications=Publication::withTrashed()->whereIn('id',$partialQ)->get();
-
-                    break;
-                case 3:
-                    $publications=Publication::where('finish_date','<=',Carbon::now())->where('user_id','=',$request->user)->get();
-            }
-            $hasFilter=true;
-            return view('pages.admin.users.publications', compact('publications', 'hasFilter','user','state'));
-        }
-        catch(\ModelNotFoundException $e){
-            $error='El usuario no existe';
-            \Session::flash('error',$error);
-            return Redirect::to('/');
-        }
-    }
-
-    public function getPostulations($userId){
-        try{
-            $publications=Postulation::where('user_id','=',$userId)->select('publication_id')->get();
-            $postulations=Publication::withTrashed()->whereIn('id',$publications)->get();
-            $user=User::findOrFail($userId);
-            $hasFilter=false;
-            return view('pages.admin.users.postulations', compact('postulations','hasFilter','user'));
-        }
-        catch(ModelNotFoundException $e){
-            $error='El usuario no existe';
-            \Session::flash('error',$error);
-            return Redirect::to('/');
-        }
-    }
-
-    public function postFilterPostulations(Request $request){
-        try{
-            $state=$request->state;
-            switch ($state) {
-                case 1:
-                    $partialQ=Calification::where('user_id','=',$request->user)->select('publication_id')->get();
-                    $postulations=Publication::withTrashed()->whereIn('publications.id',$partialQ)->get();
-                    break;
-                case 2:
-                    $partialQ=Calification::where('user_id','<>',$request->user)->select('publication_id')->get();
-                    $postulations=Publication::withTrashed()->whereIn('publications.id',$partialQ)->get();
-                    break;
-                case 3:
-                    $partialQ=Postulation::where('user_id','=',$request->user)->select('publication_id')->get();
-                    $postulations=Publication::withTrashed()->whereIn('id',$partialQ)->has('calification','<=',0)->get();
-                    break;
-            }    
-            $hasFilter=true;
-            $user=User::findOrFail($request->user); 
-            return view('pages.admin.users.postulations', compact('postulations','hasFilter','user','state'));
-        }
-        catch(ModelNotFoundException $e){
-            $error='El usuario no existe';
-            \Session::flash('error',$error);
-            return Redirect::to('/');
-        }  
     }
 
     public function getRanking(){

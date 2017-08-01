@@ -81,6 +81,7 @@ class PublicationsController extends Controller
         }
 
         #CREATE PUBLICATION
+
         $publication = new Publication();
         $publication->title = $request->title;
         $publication->finish_date = $request->finish_date;
@@ -90,6 +91,21 @@ class PublicationsController extends Controller
         $publication->category_id = $request->category;
         $publication->image = '/images/publications/default_publication_pic.jpg';
         $publication->user_id = Auth::user()->id;
+
+        try{
+            $category=Category::findOrFail($request->category);
+            if($category->active<1){
+                $error='La categoria se encuentra deshabilitada';
+                \Session::flash('error',$error);
+                $publicationIsNew = true;       
+                return view('pages.admin.publications.single' ,compact('publicationIsNew','errors','publication'));
+            }
+        }catch(ModelNotFoundException $e){
+            $error='La categoria no existe';
+            \Sesssion::flash('error',$error);
+            $publicationIsNew = true;
+            return view('pages.admin.publications.single' ,compact('publicationIsNew','errors','publication'));
+        }
 
         #CHARGE PUBLICATION COST
         $user = User::findOrFail(Auth::user()->id);
@@ -499,6 +515,105 @@ class PublicationsController extends Controller
         }else{
             return view('welcome', compact('publications', 'hasFilter', 'filterCategory', 'filterCity', 'filterTitle'));
         }
+    }
+
+    public function getUserPublications($userId){
+        try{
+            $user=User::findOrFail($userId);
+            $publications=Publication::withTrashed()->where('user_id','=',$userId)->get();
+            $hasFilter=false;
+            return view('pages.admin.users.publications',compact('publications','hasFilter','user'));
+        }
+        catch(\ModelNotFoundException $e){
+            $error='El usuario no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
+    }
+
+    public function postFilterUserPublications(Request $request){
+        try{
+            $user=User::findOrFail($request->user);
+            $state=$request->state;
+            if($state!='all'){
+                $hasFilter=true;    
+                    $publications=Publication::all()->where('user_id','=',$request->user);
+            }
+            else{
+                $hasFilter=false;
+                switch ($state){
+                    case 1:
+                        $partialQ=Publication::join('califications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
+                        $publications=Publication::whereIn('id',$partialQ)->orWhere('user_id','=',$request->user)->where('finish_date','>',Carbon::now())->get();
+                        break;
+                    case 2:
+                        $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','>',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
+                        $publications=Publication::withTrashed()->whereIn('id',$partialQ)->get();
+                        break;
+                    case 3:
+                        $publications=Publication::where('finish_date','<=',Carbon::now())->where('user_id','=',$request->user)->get();
+                        break;
+                }
+            }
+            return view('pages.admin.users.publications', compact('publications', 'hasFilter','user','state'));
+        }
+        catch(\ModelNotFoundException $e){
+            $error='El usuario no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
+    }
+
+    public function getUserPostulations($userId){
+        try{
+            $publications=Postulation::where('user_id','=',$userId)->select('publication_id')->get();
+            $postulations=Publication::withTrashed()->whereIn('id',$publications)->get();
+            $user=User::findOrFail($userId);
+            $hasFilter=false;
+            return view('pages.admin.users.postulations', compact('postulations','hasFilter','user'));
+        }
+        catch(ModelNotFoundException $e){
+            $error='El usuario no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
+    }
+
+    public function postFilterUserPostulations(Request $request){
+        try{
+            $state=$request->state;
+            if($state=='all'){
+                $hasFilter=false;
+                $publications=Postulation::where('user_id','=',$request->user)->select('publication_id')->get();
+                $postulations=Publication::withTrashed()->whereIn('id',$publications)->get();
+            }
+            else{
+                $hasFilter=true;
+                if($state>1){
+                    $partialQ=Postulation::where('user_id','=',$request->user)->select('publication_id')->get();
+                }
+                switch ($state) {
+                    case 1:
+                        $partialQ=Calification::where('user_id','=',$request->user)->select('publication_id')->get();
+                        $postulations=Publication::withTrashed()->whereIn('publications.id',$partialQ)->get();
+                        break;
+                    case 2:
+                        $partialQ1=Calification::whereIn('publication_id',$partialQ)->where('user_id','<>',$request->user)->select('publication_id')->get();
+                        $postulations=Publication::withTrashed()->whereIn('publications.id',$partialQ1)->get();
+                        break;
+                    case 3:
+                        $postulations=Publication::withTrashed()->whereIn('id',$partialQ)->has('calification','<=',0)->get();
+                        break;
+                }
+            }
+            $user=User::findOrFail($request->user); 
+            return view('pages.admin.users.postulations', compact('postulations','hasFilter','user','state'));
+        }
+        catch(ModelNotFoundException $e){
+            $error='El usuario no existe';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }  
     }
 
     public function setOriginalPhoto($publicationId){

@@ -102,10 +102,10 @@ Route::get('/contact-us', 'HomeController@getContactUs');
 Route::get('/news', 'HomeController@getNews');
 Route::get('/user/{id}','UsersController@getShowUser');
 Route::get('/user','UsersController@emptyUser');
-Route::get('/user/publications/{id}','UsersController@getPublications');
-Route::post('/user/publications/filter/','UsersController@postFilterPublications');
-Route::get('/user/postulations/{id}','UsersController@getPostulations');
-Route::post('/user/postulations/filter/','UsersController@postFilterPostulations');
+Route::get('/user/publications/{id}','PublicationsController@getUserPublications');
+Route::post('/user/publications/filter/','PublicationsController@postFilterUserPublications');
+Route::get('/user/postulations/{id}','PublicationsController@getUserPostulations');
+Route::post('/user/postulations/filter/','PublicationsController@postFilterUserPostulations');
 
 ##PUBLICATIONS
 Route::post('publications/filter','PublicationsController@postFilterPublications');
