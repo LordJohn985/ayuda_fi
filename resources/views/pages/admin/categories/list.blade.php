@@ -9,7 +9,7 @@
             <table id="tableExample2"  class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th class="no-sort" >Name</th>
+                    <th class="no-sort" >Nombre</th>
                     <th>Modificar</th>
                     <th>Eliminar</th>
                     <th>Habilitar/Deshabilitar</th>
