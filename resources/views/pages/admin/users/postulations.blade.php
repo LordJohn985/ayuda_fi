@@ -46,20 +46,18 @@
                 <tbody>
                 @foreach($postulations as $postulation)
                     <tr>
-                        @if(!(($postulation->calification==null)&&($postulation->deleted_at!=null)))
-                            <td><a href="/dashboard/publications/show/{{$postulation->id}}">{{$postulation->title}}</a></td>
-                            <td>
-                                @if($postulation->calification!=null)
-                                    @if($postulation->calification->user_id!=$user->id)
-                                        Rechazado
-                                    @else
-                                        Aceptado
-                                    @endif
+                        <td><a href="/dashboard/publications/show/{{$postulation->id}}">{{$postulation->title}}</a></td>
+                        <td>
+                            @if($postulation->calification!=null)
+                                @if($postulation->calification->user_id!=$user->id)
+                                    Rechazado
                                 @else
-                                    Pendiente
+                                    Aceptado
                                 @endif
-                            </td>
-                        @endif
+                            @else
+                                Pendiente
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

@@ -90,6 +90,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('dashboard/publications/delete/{id}','PublicationsController@getDeletePublication');
     Route::get('/user/setOriginalPhoto/{id}','UsersController@setOriginalPhoto');
     Route::get('/publication/setOriginalPhoto/{id}','PublicationsController@setOriginalPhoto');
+    Route::get('/user/postulations/{id}','PublicationsController@getUserPostulations');
+    Route::post('/user/postulations/filter/','PublicationsController@postFilterUserPostulations');
 });
 
 
@@ -104,8 +106,6 @@ Route::get('/user/{id}','UsersController@getShowUser');
 Route::get('/user','UsersController@emptyUser');
 Route::get('/user/publications/{id}','PublicationsController@getUserPublications');
 Route::post('/user/publications/filter/','PublicationsController@postFilterUserPublications');
-Route::get('/user/postulations/{id}','PublicationsController@getUserPostulations');
-Route::post('/user/postulations/filter/','PublicationsController@postFilterUserPostulations');
 
 ##PUBLICATIONS
 Route::post('publications/filter','PublicationsController@postFilterPublications');

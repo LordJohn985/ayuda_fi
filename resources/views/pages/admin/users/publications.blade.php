@@ -45,26 +45,24 @@
             </thead>
             <tbody>
             @foreach($publications as $publication)
-                @if(!(($publication->calification==null)&&($publication->deleted_at!=null)))
-                    <tr>
-                        <td><a href="/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
-                        <td>
-                            @if($publication->calification!=null)
-                                @if($publication->calification->label_id==1)
-                                    Calificacion pendiente
-                                @else
-                                    Calificacion puesta
-                                @endif
-                            @elseif(strtotime($publication->finish_date)<=strtotime(date('Y-m-d')))
-                                Vencida
-                            @elseif(count($publication->postulations)>0)
-                                Con postulantes
+                <tr>
+                    <td><a href="/dashboard/publications/show/{{$publication->id}}">{{$publication->title}}</a></td>
+                    <td>
+                        @if($publication->calification!=null)
+                            @if($publication->calification->label_id==1)
+                                Calificacion pendiente
                             @else
-                                Sin postulantes
+                                Calificacion puesta
                             @endif
-                        </td>
-                    </tr>
-                @endif
+                        @elseif(strtotime($publication->finish_date)<=strtotime(date('Y-m-d')))
+                            Vencida
+                        @elseif(count($publication->postulations)>0)
+                            Con postulantes
+                        @else
+                            Sin postulantes
+                        @endif
+                    </td>
+                </tr>
             @endforeach
             </tbody>
         </table>

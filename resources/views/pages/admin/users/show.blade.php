@@ -17,9 +17,9 @@ use \App\Label
                 <a href="/user/publications/{{$user->id}}" class="btn btn-warning">Ver gauchadas que creo este usuario</a>
             </div>
             <br>
-            <div class='form-group' style="display: inline-block">
+            {{--<div class='form-group' style="display: inline-block">
                 <a href="/user/postulations/{{$user->id}}" class="btn btn-warning">Ver postulaciones de este usuario</a>
-            </div>
+            </div>--}}
         </div>
 
         <div class='form-group col-md-6'>

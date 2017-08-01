@@ -431,8 +431,8 @@ class PublicationsController extends Controller
         try{
             $calification->save();
             $this->updateUserOnCalification($calification);
-            $publication = Publication::find($publicationId);
-            $publication->delete();
+            /*$publication = Publication::find($publicationId);
+            $publication->delete();*/
             $success = 'El usuario fue calificado exitosamente.';
             \Session::flash('success', $success);
         }catch (\PDOException $e){
@@ -479,11 +479,7 @@ class PublicationsController extends Controller
     public function getHome()
     {
         $hasFilter = false;
-        $califications=Calification::all();
-        foreach ($califications as $calification) {
-            $calif[]=$calification->publication_id;
-        }
-        $publications = Publication::all()->where('finish_date', '>=', Carbon::now())->whereNotIn('id',$calif);
+        $publications = Publication::where('finish_date', '>=', Carbon::now())->has('calification','<=',0)->get();
         if(Auth::check()){
             return view('home', compact('publications', 'hasFilter'));
         }else{
@@ -496,10 +492,10 @@ class PublicationsController extends Controller
 
         if ($request->title!=null){
             $filterTitle = $request->title;
-            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$filterTitle%"]])->get();
+            $publications = Publication::where([['finish_date', '>=', Carbon::now()],['title', 'LIKE', "%$filterTitle%"]])->has('calification','<=',0)->get();
         }
         else{
-            $publications = Publication::all()->where('finish_date', '>=', Carbon::now());
+            $publications = Publication::where('finish_date', '>=', Carbon::now())->has('calification','<=',0)->get();
         }
         if ($request->category!="all"){
             $filterCategory = $request->category;
@@ -522,7 +518,7 @@ class PublicationsController extends Controller
     public function getUserPublications($userId){
         try{
             $user=User::findOrFail($userId);
-            $publications=Publication::withTrashed()->where('user_id','=',$userId)->get();
+            $publications=Publication::where('user_id','=',$userId)->get();
             $hasFilter=false;
             return view('pages.admin.users.publications',compact('publications','hasFilter','user'));
         }
@@ -550,7 +546,7 @@ class PublicationsController extends Controller
                         break;
                     case 2:
                         $partialQ=Calification::join('publications','publications.id','=','califications.publication_id')->where('label_id','>',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();
-                        $publications=Publication::withTrashed()->whereIn('id',$partialQ)->get();
+                        $publications=Publication::whereIn('id',$partialQ)->get();
                         break;
                     case 3:
                         $publications=Publication::where('finish_date','<=',Carbon::now())->where('user_id','=',$request->user)->get();
@@ -567,9 +563,14 @@ class PublicationsController extends Controller
     }
 
     public function getUserPostulations($userId){
+        if(Auth::id()!=$userId){
+            $error='No tienes permisos para ver las postulaciones de este usuario';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
         try{
             $publications=Postulation::where('user_id','=',$userId)->select('publication_id')->get();
-            $postulations=Publication::withTrashed()->whereIn('id',$publications)->get();
+            $postulations=Publication::whereIn('id',$publications)->get();
             $user=User::findOrFail($userId);
             $hasFilter=false;
             return view('pages.admin.users.postulations', compact('postulations','hasFilter','user'));
@@ -582,12 +583,17 @@ class PublicationsController extends Controller
     }
 
     public function postFilterUserPostulations(Request $request){
+        if(Auth::id()!=$request->user){
+            $error='No tienes permisos para ver las postulaciones de este usuario';
+            \Session::flash('error',$error);
+            return Redirect::to('/');
+        }
         try{
             $state=$request->state;
             if($state=='all'){
                 $hasFilter=false;
                 $publications=Postulation::where('user_id','=',$request->user)->select('publication_id')->get();
-                $postulations=Publication::withTrashed()->whereIn('id',$publications)->get();
+                $postulations=Publication::whereIn('id',$publications)->get();
             }
             else{
                 $hasFilter=true;
@@ -597,14 +603,14 @@ class PublicationsController extends Controller
                 switch ($state) {
                     case 1:
                         $partialQ=Calification::where('user_id','=',$request->user)->select('publication_id')->get();
-                        $postulations=Publication::withTrashed()->whereIn('publications.id',$partialQ)->get();
+                        $postulations=Publication::whereIn('publications.id',$partialQ)->get();
                         break;
                     case 2:
                         $partialQ1=Calification::whereIn('publication_id',$partialQ)->where('user_id','<>',$request->user)->select('publication_id')->get();
-                        $postulations=Publication::withTrashed()->whereIn('publications.id',$partialQ1)->get();
+                        $postulations=Publication::whereIn('publications.id',$partialQ1)->get();
                         break;
                     case 3:
-                        $postulations=Publication::withTrashed()->whereIn('id',$partialQ)->has('calification','<=',0)->get();
+                        $postulations=Publication::whereIn('id',$partialQ)->has('calification','<=',0)->get();
                         break;
                 }
             }
