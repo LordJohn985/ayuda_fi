@@ -9,12 +9,12 @@ class CalificationTableSeeder extends Seeder
     {
         #CALIFICACION PARA LISTAR POSTULANTES CON POSTULANTE ELEGIDO
         App\Calification::create([
-            'user_id' => 2,
+            'user_id' => 3,
             'publication_id' => 4]);
 
         #CALIFICACION PARA PUBLICAR GAUCHADA
         App\Calification::create([
-            'user_id' => 2,
+            'user_id' => 3,
             'publication_id' => 9]);
     }
 

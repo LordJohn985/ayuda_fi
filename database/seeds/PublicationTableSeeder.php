@@ -15,7 +15,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU postularse a gauchada',
             'city_id' => 15,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 3
         ]);
 
@@ -25,7 +25,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU listar postulantes',
             'city_id' => 25,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 2
         ]);
 
@@ -34,7 +34,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU listar postulantes',
             'city_id' => 12,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 1
         ]);
 
@@ -43,7 +43,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU listar postulantes',
             'city_id' => 33,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 4
         ]);
 
@@ -52,7 +52,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::yesterday(),
             'content' => 'esta gauchada se usará para testear la HU listar postulantes',
             'city_id' => 42,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 1,
         ]);
 
@@ -61,7 +61,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU listar postulantes',
             'city_id' => 42,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 1,
             'deleted_at' => Carbon::now(),
         ]);
@@ -72,7 +72,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU calificar postulante',
             'city_id' => 50,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 6,
         ]);
 
@@ -81,7 +81,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU calificar postulante',
             'city_id' => 42,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 1,
         ]);
 
@@ -90,7 +90,7 @@ class PublicationTableSeeder extends Seeder
             'finish_date' => Carbon::now()->addMonths(2),
             'content' => 'esta gauchada se usará para testear la HU calificar postulante',
             'city_id' => 20,
-            'user_id' => 1,
+            'user_id' => 2,
             'category_id'=> 1,
         ]);
 
