@@ -30,10 +30,12 @@
                             @endif
                         </td>
                         <td>
-                            @if($category->active==1)
-                                <a href="/dashboard/categories/deactivate/{{$category->id}}" class="btn-delete" onclick="return confirm('¿Está seguro que desea deshabilitar esta categoria?')">Deshabilitar</a>
-                            @else
-                                <a href="/dashboard/categories/activate/{{$category->id}}" class="btn-delete">Habilitar</a>
+                            @if(($category->id)>1)
+                                @if($category->active==1)
+                                    <a href="/dashboard/categories/deactivate/{{$category->id}}" class="btn-delete" onclick="return confirm('¿Está seguro que desea deshabilitar esta categoria?')">Deshabilitar</a>
+                                @else
+                                    <a href="/dashboard/categories/activate/{{$category->id}}" class="btn-delete">Habilitar</a>
+                                @endif
                             @endif
                         </td>
                     </tr>

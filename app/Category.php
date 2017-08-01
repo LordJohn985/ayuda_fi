@@ -4,12 +4,12 @@ namespace App;
 
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+/*use Illuminate\Database\Eloquent\SoftDeletes;*/
 
 class Category extends Model
 {
 
-    use softDeletes;
+    /*use softDeletes;*/
     /**
      * The attributes that should be mutated to dates.
      *

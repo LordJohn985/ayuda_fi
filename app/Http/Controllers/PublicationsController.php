@@ -176,9 +176,10 @@ class PublicationsController extends Controller
 
             }else {
                 #view returned to a logged user who is no the creator of the publication
+                $myId= Auth::id();
                 $userIsCandidate = Postulation::where('publication_id','=', $publicationId)->where('user_id','=', auth::id())->get();
                 /*$userMadeQuestion = Question::where('publication_id','=', $publicationId)->where('user_id','=', auth::id())->get();*/
-                return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication"));
+                return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication", "myId"));
             }
         }
 
