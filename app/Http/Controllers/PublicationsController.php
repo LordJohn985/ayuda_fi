@@ -536,12 +536,12 @@ class PublicationsController extends Controller
         try{
             $user=User::findOrFail($request->user);
             $state=$request->state;
-            if($state!='all'){
-                $hasFilter=true;    
-                    $publications=Publication::all()->where('user_id','=',$request->user);
+            if($state=='all'){
+                $hasFilter=false;    
+                $publications=Publication::all()->where('user_id','=',$request->user);
             }
             else{
-                $hasFilter=false;
+                $hasFilter=true;
                 switch ($state){
                     case 1:
                         $partialQ=Publication::join('califications','publications.id','=','califications.publication_id')->where('label_id','=',1)->where('publications.user_id','=',$request->user)->select('publications.id')->get();

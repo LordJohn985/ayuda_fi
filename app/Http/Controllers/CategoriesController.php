@@ -33,7 +33,6 @@ class CategoriesController extends Controller
 
         ];
         $validator = \Illuminate\Support\Facades\Validator::make($fields, $rules);
-
         if($validator->fails()){
             $errors = $validator->errors()->all();
             \Session::flash('error', implode(',',$errors));
