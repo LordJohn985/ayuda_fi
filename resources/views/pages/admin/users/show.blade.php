@@ -48,7 +48,7 @@ use \App\Label
                             <tr>
                                 <td><a href="/publications/show/{{$calification->publication_id}}">{{$calification->title}}</a></td>
                                 <td>{{$calification->content}}</td>
-                                <td>{{$calification->name}}</td>
+                                <td>{{$calification->label->name}}</td>
                             </tr>
                         @endforeach
                     </tbody>

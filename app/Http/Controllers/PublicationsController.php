@@ -162,7 +162,7 @@ class PublicationsController extends Controller
     public function getShowPublication($publicationId){
         $publication = Publication::withTrashed()->find($publicationId);
         $publicationIsExpired = (($publication->finish_date < Carbon::now())||($publication->deleted_at!==null));
-        $canSomeoneAply = !(($publication->finish_date < Carbon::now()) || (Calification::where('publication_id','=', $publicationId)->count()!==0)||($publication->deleted_at!==null));
+        $canSomeoneAply = !(($publication->finish_date < Carbon::now()) || (Calification::withTrashed()->where('publication_id','=', $publicationId)->count()!==0)||($publication->deleted_at!==null));
         $questionsAll = Question::where('publication_id','=', $publicationId)->get();
         $userIsLoggedIn = auth::check();
         if($userIsLoggedIn){
@@ -479,7 +479,8 @@ class PublicationsController extends Controller
     public function getHome()
     {
         $hasFilter = false;
-        $publications = Publication::where('finish_date', '>=', Carbon::now())->has('calification','<=',0)->get();
+        $califications=Calification::withTrashed()->select('publication_id')->get();
+        $publications = Publication::where('finish_date', '>=', Carbon::now())->whereNotIn('id',$califications)->get();
         if(Auth::check()){
             return view('home', compact('publications', 'hasFilter'));
         }else{
