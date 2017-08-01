@@ -181,6 +181,7 @@ class PublicationsController extends Controller
                 return view("pages.public.publications.showToUser", compact("userIsCandidate", "canSomeoneAply", "publication"));
             }
         }
+
         #view returned to a visitor, who is not logged into the system
         return view("show", compact("publication", "canSomeoneAply",'questionsAll'));
     }
