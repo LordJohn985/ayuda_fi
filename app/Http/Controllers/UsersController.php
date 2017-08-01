@@ -310,16 +310,14 @@ class UsersController extends Controller
     public function getShowUser($userId){
         try{
             $user=User::findOrFail($userId);
-            $postulations=Postulation::where('postulations.user_id',$userId)->join('publications','postulations.publication_id','=','publications.id')->get();
-            $publications=$user->publications;
             //$califications=Calification::where('califications.user_id',$userId)->where('califications.label_id','>','1')->join('publications','califications.publication_id','=','publications.id')->join('labels','califications.label_id','=','label.id')->get();
             $califications=Calification::where('califications.user_id','=',$userId)->where('label_id','>',1)->join('publications','califications.publication_id','=','publications.id')->get();
             //$califications=DB::select("select publication_id,califications.content as content,name,title from `califications` inner join `publications` on `califications`.`publication_id` = `publications`.`id` inner join `labels` on `califications`.`label_id` = `labels`.`id` where `califications`.`user_id` = 2 and `califications`.`label_id` > 1 and `califications`.`deleted_at` is null");
             //$califications=Calification::where('label_id','>',1)->where('user')
             if($userId==Auth::id()){
-                return view('pages.admin.users.showToSelf',compact('user','postulations','publications','califications'));
+                return view('pages.admin.users.showToSelf',compact('user','califications'));
             }
-            return view('pages.admin.users.show',compact('user','postulations','publications','califications'));
+            return view('pages.admin.users.show',compact('user','califications'));
         }
         catch(ModelNotFoundException $e){
             $error='El usuario no existe';
