@@ -375,9 +375,9 @@ class UsersController extends Controller
             #OBTENER LISTA DE COMPRAS
             $purchases = DB::table('purchases')
                 ->join('users', 'users.id', '=', 'purchases.user_id')
-                ->select('users.id as user_id', 'name', 'last_name', 'count', 'total', 'purchases.created_at as purchase_date')
-                ->whereDate('purchases.created_at','>=',$request->date_from)
-                ->whereDate('purchases.created_at','<=',$request->date_to)
+                ->select('users.id as user_id', 'name', 'last_name', 'count', 'total', 'purchase_date')
+                ->whereDate('purchases.purchase_date','>=',$request->date_from)
+                ->whereDate('purchases.purchase_date','<=',$request->date_to)
                 ->get();
 
             #COMPRUEBA SI HAY DATOS PARA ESE RANGO DE FECHAS
@@ -392,8 +392,8 @@ class UsersController extends Controller
 
                     #EARNING TOTAL
                     $total_gral = DB::table('purchases')
-                        ->whereDate('purchases.created_at','>=',$request->date_from)
-                        ->whereDate('purchases.created_at','<=',$request->date_to)
+                        ->whereDate('purchases.purchase_date','>=',$request->date_from)
+                        ->whereDate('purchases.purchase_date','<=',$request->date_to)
                         ->sum('total');
 
                     $date_from = $request->date_from;
@@ -413,7 +413,7 @@ class UsersController extends Controller
         try{
 
             #FULL LIST OF PURCHASES
-            $purchases =DB::select("select users.id as user_id, name, last_name, count, total, purchases.created_at as purchase_date from `purchases` inner join `users` on `purchases`.`user_id` = `users`.`id` order by purchases.created_at desc");
+            $purchases =DB::select("select users.id as user_id, name, last_name, count, total, purchase_date from `purchases` inner join `users` on `purchases`.`user_id` = `users`.`id` order by purchase_date desc");
 
             #EARNING TOTAL
             $total_gral = DB::table('purchases')->sum('total');

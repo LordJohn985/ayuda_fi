@@ -12,7 +12,7 @@ class PostulationTableSeeder extends Seeder
         App\Postulation::create([
             'comment' => 'comentario 1',
             'publication_id' => 3,
-            'user_id' => 2]);
+            'user_id' => 1]);
         App\Postulation::create([
             'comment' => 'comentario 2',
             'publication_id' => 3,
@@ -70,13 +70,13 @@ class PostulationTableSeeder extends Seeder
         App\Postulation::create([
             'comment' => 'me eligieron',
             'publication_id' => 4,
-            'user_id' => 2]);
+            'user_id' => 3]);
 
         #POSTULANTE PARA PUBLICAR GAUCHADA
         App\Postulation::create([
             'comment' => 'no dejo publicar',
             'publication_id' => 9,
-            'user_id' => 2]);
+            'user_id' => 3]);
     }
 
 }
